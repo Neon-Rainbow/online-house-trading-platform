@@ -2,14 +2,25 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"online-house-trading-platform/api/auth"
+	"online-house-trading-platform/api/user"
 )
 
-func setupRouter() *gin.Engine {
+// SetupRouter 设置web服务器路由
+func SetupRouter() *gin.Engine {
 	router := gin.Default()
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+
+	//加载静态文件
+	router.Static("/static", "static")
+
+	//加载模板文件
+	router.LoadHTMLGlob("static/**/*")
+
+	//设置路由,地址为/auth
+	auth.SetUpAuthAPI(router)
+
+	//设置路由,地址为/user/profile
+	user.SetUpUserAPI(router)
+
 	return router
 }
