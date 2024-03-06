@@ -9,12 +9,11 @@ import (
 
 // SetUpUserAPI 用于设置用户个人信息相关的路由
 func SetUpUserAPI(router *gin.Engine) {
-	userGroup := router.Group("/user")
+	userGroup := router.Group("/user/:user_id")
 	{
 		userProfileGroup := userGroup.Group("/profile")
 		{
 			userProfileGroup.GET("/", profile.ProfileGet)
-			//userGroup.POST("/", ProfilePost)
 			userProfileGroup.GET("/update", profile.ProfileUpdateGet)
 			userProfileGroup.POST("/update", profile.ProfileUpdatePost)
 		}
@@ -22,6 +21,7 @@ func SetUpUserAPI(router *gin.Engine) {
 		userGroup.DELETE("/favourites", DeleteFavouritesDelete)
 
 		userGroup.GET("/release", ReleaseGet)
+		userGroup.PUT("/release", ReleasePut)
 		userGroup.POST("/release", ReleasePost)
 		userGroup.DELETE("/release", ReleaseDelete)
 

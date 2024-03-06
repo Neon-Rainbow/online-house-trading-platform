@@ -6,9 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func HousesAppointmentGet(c *gin.Context) {
+// HousesAppointmentPost 用于实现用户预约房屋
+func HousesAppointmentPost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "/houses/appointment",
-		"method":  "GET",
+		"method":  "POST",
 	})
 }

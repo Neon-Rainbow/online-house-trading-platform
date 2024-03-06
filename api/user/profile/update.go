@@ -9,6 +9,7 @@ func ProfileUpdateGet(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "/user/profile/update",
 		"method":  "GET",
+		"user_id": c.Param("user_id"),
 	})
 }
 
@@ -17,5 +18,6 @@ func ProfileUpdatePost(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "/user/profile/update",
 		"method":  "POST",
+		"user_id": c.Param("user_id"),
 	})
 }

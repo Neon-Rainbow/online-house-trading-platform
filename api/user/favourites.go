@@ -11,6 +11,7 @@ func ViewFavouritesGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "/user/favourites",
 		"method":  "GET",
+		"user_id": c.Param("user_id"),
 	})
 }
 
@@ -19,5 +20,6 @@ func DeleteFavouritesDelete(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "/user/favourites",
 		"method":  "Delete",
+		"user_id": c.Param("user_id"),
 	})
 }

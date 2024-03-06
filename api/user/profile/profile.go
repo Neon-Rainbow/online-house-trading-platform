@@ -11,6 +11,7 @@ func ProfileGet(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "/user/profile",
 		"method":  "GET",
+		"user_id": c.Param("user_id"),
 	})
 }
 

@@ -1,3 +1,4 @@
+// Package houses 用来处理房屋相关的请求,包括添加房屋,删除房屋,收藏房屋等
 package houses
 
 import (
@@ -19,6 +20,8 @@ func SetUpHousesAPI(r *gin.Engine) {
 		housesGroup.GET("/delete", DeleteGet)
 		housesGroup.POST("/delete", DeletePost)
 
-		housesGroup.POST("/appointment", HousesAppointmentGet)
+		housesGroup.POST("/appointment", HousesAppointmentPost)
+
+		housesGroup.POST("/collect", CollectHousesPost)
 	}
 }
