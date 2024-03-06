@@ -1,3 +1,4 @@
+// Package auth 用于处理用户的登录和注册请求
 package auth
 
 import "github.com/gin-gonic/gin"
@@ -11,5 +12,7 @@ func SetUpAuthAPI(r *gin.Engine) {
 
 		userGroup.GET("/register", RegisterGet)
 		userGroup.POST("/register", RegisterPost)
+
+		userGroup.POST("/logout", LogoutPost)
 	}
 }
