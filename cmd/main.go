@@ -1,18 +1,23 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"online-house-trading-platform/api"
-	_ "online-house-trading-platform/pkg/model"
+	"online-house-trading-platform/pkg/database"
 )
 
 func main() {
-	fmt.Println("Hello, World!")
+	log.Println("Hello, World!")
+
+	db := database.InitializeDB()
+	if db == nil {
+		log.Fatal("数据库初始化失败")
+	}
+
 	router := api.SetupRouter()
-	
+
 	err := router.Run(":8080")
 	if err != nil {
-		log.Printf("Server start failed: %v", err)
+		log.Fatalf("服务器连接失败: %v", err)
 	}
 }
