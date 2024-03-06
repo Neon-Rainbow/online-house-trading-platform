@@ -4,6 +4,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// House 房屋模型
 type House struct {
 	gorm.Model
 	Owner       string  `json:"name"`     // 房屋所有者
