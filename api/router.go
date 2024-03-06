@@ -21,7 +21,7 @@ func SetupRouter() *gin.Engine {
 	//设置路由,地址为/auth
 	auth.SetUpAuthAPI(router)
 
-	//设置路由,地址为/user/profile
+	//设置路由,地址为/user
 	user.SetUpUserAPI(router)
 
 	//设置路由,地址为/houses

@@ -1,9 +1,11 @@
 package auth
 
 import (
-	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
 	"online-house-trading-platform/pkg/model"
+
+	"github.com/gin-gonic/gin"
 )
 
 // RegisterGet 用于处理用户的注册界面的GET请求
@@ -21,7 +23,7 @@ func RegisterPost(c *gin.Context) {
 	if err != nil {
 		log.Printf("error: %v", err)
 	}
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"message":  "/auth/register",
 		"method":   "POST",
 		"username": user.Username,
