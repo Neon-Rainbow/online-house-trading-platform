@@ -10,6 +10,8 @@ func SetUpHousesAPI(r *gin.Engine) {
 	{
 		housesGroup.GET("/", HouseListGet)
 
+		housesGroup.GET("/:id", HouseByIDGet)
+
 		housesGroup.GET("/add", AddGet)
 		housesGroup.POST("/add", AddPost)
 
