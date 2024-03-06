@@ -2,7 +2,9 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+
 	"online-house-trading-platform/api/auth"
+	"online-house-trading-platform/api/houses"
 	"online-house-trading-platform/api/user"
 )
 
@@ -21,6 +23,9 @@ func SetupRouter() *gin.Engine {
 
 	//设置路由,地址为/user/profile
 	user.SetUpUserAPI(router)
+
+	//设置路由,地址为/houses
+	houses.SetUpHousesAPI(router)
 
 	return router
 }
