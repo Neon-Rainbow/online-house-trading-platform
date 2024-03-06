@@ -14,7 +14,7 @@ func main() {
 		log.Fatal("数据库初始化失败")
 	}
 
-	router := api.SetupRouter()
+	router := api.SetupRouter(db)
 
 	err := router.Run(":8080")
 	if err != nil {

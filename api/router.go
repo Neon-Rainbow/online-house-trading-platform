@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 
 	"online-house-trading-platform/api/auth"
 	"online-house-trading-platform/api/houses"
@@ -9,7 +10,7 @@ import (
 )
 
 // SetupRouter 设置web服务器路由
-func SetupRouter() *gin.Engine {
+func SetupRouter(db *gorm.DB) *gin.Engine {
 	router := gin.Default()
 
 	//加载静态文件
@@ -19,7 +20,7 @@ func SetupRouter() *gin.Engine {
 	router.LoadHTMLGlob("static/**/*")
 
 	//设置路由,地址为/auth
-	auth.SetUpAuthAPI(router)
+	auth.SetUpAuthAPI(router, db)
 
 	//设置路由,地址为/user
 	user.SetUpUserAPI(router)
