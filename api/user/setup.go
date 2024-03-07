@@ -3,30 +3,37 @@ package user
 
 import (
 	"online-house-trading-platform/api/user/profile"
+	"online-house-trading-platform/middleware"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // SetUpUserAPI 用于设置用户个人信息相关的路由
-func SetUpUserAPI(router *gin.Engine) {
+func SetUpUserAPI(router *gin.Engine, db *gorm.DB) {
 	userGroup := router.Group("/user/:user_id")
 	{
-		userProfileGroup := userGroup.Group("/profile")
+		userProfileGroup := userGroup.Group("/profile").Use(middleware.DBMiddleware(db))
 		{
 			userProfileGroup.GET("/", profile.ProfileGet)
 			userProfileGroup.GET("/update", profile.ProfileUpdateGet)
 			userProfileGroup.POST("/update", profile.ProfileUpdatePost)
 		}
-		userGroup.GET("/favourites", ViewFavouritesGet)
-		userGroup.DELETE("/favourites", DeleteFavouritesDelete)
 
-		userGroup.GET("/release", ReleaseGet)
-		userGroup.PUT("/release", ReleasePut)
-		userGroup.POST("/release", ReleasePost)
-		userGroup.DELETE("/release", ReleaseDelete)
+		userOtherGroup := userGroup.Group("/").Use(middleware.DBMiddleware(db))
+		{
+			userOtherGroup.GET("/favourites", ViewFavouritesGet)
+			userOtherGroup.DELETE("/favourites", DeleteFavouritesDelete)
 
-		userGroup.GET("/appointment", UserAppointmentGet)
-		userGroup.POST("/appointment", UserAppointmentPost)
-		userGroup.DELETE("/appointment", UserAppointmentDelete)
+			userOtherGroup.GET("/release", ReleaseGet)
+			userOtherGroup.PUT("/release", ReleasePut)
+			userOtherGroup.POST("/release", ReleasePost)
+			userOtherGroup.DELETE("/release", ReleaseDelete)
+
+			userOtherGroup.GET("/appointment", UserAppointmentGet)
+			userOtherGroup.POST("/appointment", UserAppointmentPost)
+			userOtherGroup.DELETE("/appointment", UserAppointmentDelete)
+		}
+
 	}
 }

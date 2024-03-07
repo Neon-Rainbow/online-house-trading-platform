@@ -23,10 +23,10 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	auth.SetUpAuthAPI(router, db)
 
 	//设置路由,地址为/user
-	user.SetUpUserAPI(router)
+	user.SetUpUserAPI(router, db)
 
 	//设置路由,地址为/houses
-	houses.SetUpHousesAPI(router)
+	houses.SetUpHousesAPI(router, db)
 
 	return router
 }

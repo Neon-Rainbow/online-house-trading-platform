@@ -2,12 +2,15 @@
 package houses
 
 import (
+	"online-house-trading-platform/middleware"
+
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // SetUpHousesAPI 建设了一个房屋API,用于处理用户的添加房屋和删除房屋,url为/houses
-func SetUpHousesAPI(r *gin.Engine) {
-	housesGroup := r.Group("/houses")
+func SetUpHousesAPI(r *gin.Engine, db *gorm.DB) {
+	housesGroup := r.Group("/houses").Use(middleware.DBMiddleware(db))
 	{
 		housesGroup.GET("/", HouseListGet)
 

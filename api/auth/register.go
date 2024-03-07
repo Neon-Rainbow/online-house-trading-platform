@@ -12,7 +12,7 @@ import (
 
 // RegisterGet 用于处理用户的注册界面的GET请求
 func RegisterGet(c *gin.Context) {
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"message": "/auth/register",
 		"method":  "GET",
 	})
