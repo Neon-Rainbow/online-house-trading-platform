@@ -11,6 +11,7 @@ import (
 )
 
 // RegisterGet 用于处理用户的注册界面的GET请求
+// 返回状态码200和注册界面的信息
 func RegisterGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "/auth/register",
@@ -19,6 +20,9 @@ func RegisterGet(c *gin.Context) {
 }
 
 // RegisterPost 用于处理用户的注册界面的POST请求
+// 注册成功后返回状态码200和注册成功的信息
+// 注册失败后返回如果时因为用户名或邮箱已存在则返回状态码400和错误信息,若是其他原因则返回状态码500和错误信息
+// 格式为json,如{"error":"用户名已存在"}
 func RegisterPost(c *gin.Context) {
 	db, exists := c.MustGet("db").(*gorm.DB)
 	if !exists {
@@ -30,7 +34,8 @@ func RegisterPost(c *gin.Context) {
 	err := c.ShouldBind(&user)
 	if err != nil {
 		log.Printf("Error binding data: %v", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "请求参数错误"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "请求参数错误"})
 		return
 	}
 	if user.Username == "" || user.Password == "" || user.Email == "" {
@@ -41,6 +46,8 @@ func RegisterPost(c *gin.Context) {
 	}
 
 	err = db.Create(&user).Error
+
+	//判断注册信息是否合法,若非法则将错误信息返回给前端
 	if err != nil {
 		if strings.Contains(err.Error(), "1062") {
 			if strings.Contains(err.Error(), "idx_users_username") {

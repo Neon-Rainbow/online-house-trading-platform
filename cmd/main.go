@@ -6,6 +6,7 @@ import (
 	"online-house-trading-platform/pkg/database"
 )
 
+// main 函数用于启动服务器,服务器端口为8080
 func main() {
 	log.Println("Hello, World!")
 

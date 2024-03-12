@@ -9,6 +9,7 @@ import (
 )
 
 // LoginGet 用于处理用户的登录界面的GET请求
+// 返回状态码200和登录界面的信息
 func LoginGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "/auth/login",
@@ -17,6 +18,7 @@ func LoginGet(c *gin.Context) {
 }
 
 // LoginPost 用于处理用户的登录界面的POST请求
+// 返回状态码200和登录成功的信息
 func LoginPost(c *gin.Context) {
 	var user model.User
 	err := c.ShouldBind(&user)
