@@ -18,6 +18,7 @@ func HousesAppointmentPost(c *gin.Context) {
 		return
 	}
 
+	// 从请求中获取预约信息,将预约信息绑定到model.Reserve结构体中
 	var reserve model.Reserve
 	err := c.ShouldBind(&reserve)
 	if err != nil {
@@ -27,6 +28,7 @@ func HousesAppointmentPost(c *gin.Context) {
 		return
 	}
 
+	// 将预约信息存入数据库
 	err = db.Create(&reserve).Error
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -35,6 +37,7 @@ func HousesAppointmentPost(c *gin.Context) {
 		return
 	}
 
+	// 如果预约成功,则返回预约成功的信息
 	c.JSON(http.StatusOK, gin.H{
 		"message": "预约成功",
 		"url":     "/houses/appointment",

@@ -16,12 +16,11 @@ func SetUpHousesAPI(r *gin.Engine, db *gorm.DB) {
 
 		housesGroup.GET("/:id", HouseByIDGet)
 
-		//下面四个请求均重定向到了/user/release中
-		housesGroup.GET("/add", AddGet)
-		housesGroup.POST("/add", AddPost)
-
-		housesGroup.GET("/delete", DeleteGet)
-		housesGroup.POST("/delete", DeletePost)
+		//下面的四个接口由于业务逻辑的修改,现在已经弃用
+		//housesGroup.GET("/add", AddGet)
+		//housesGroup.POST("/add", AddPost)
+		//housesGroup.GET("/delete", DeleteGet)
+		//housesGroup.POST("/delete", DeletePost)
 
 		housesGroup.POST("/appointment", HousesAppointmentPost)
 

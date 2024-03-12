@@ -51,19 +51,24 @@ func RegisterPost(c *gin.Context) {
 	if err != nil {
 		if strings.Contains(err.Error(), "1062") {
 			if strings.Contains(err.Error(), "idx_users_username") {
+				// 用户名重名,返回状态码400和错误信息
 				c.JSON(http.StatusBadRequest, gin.H{"error": "用户名已存在"})
 				return
 			} else if strings.Contains(err.Error(), "idx_users_email") {
+				// 邮箱已经被注册,返回状态码400和错误信息
 				c.JSON(http.StatusBadRequest, gin.H{"error": "邮箱已被注册"})
 				return
 			}
 		}
 		log.Printf("Error creating user: %v", err)
+		// 其他错误,返回状态码500和错误信息
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "注册失败"})
 		return
 	}
 
+	// 注册成功,返回状态码200和注册成功的信息
 	c.JSON(http.StatusOK, gin.H{
 		"message": "注册成功",
+		"url":     "/auth/register",
 	})
 }

@@ -32,7 +32,7 @@ func CollectHousesPost(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "注册成功",
+		"message": "收藏成功",
 		"url":     "/houses/collect",
 	})
 }
