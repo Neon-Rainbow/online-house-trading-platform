@@ -25,7 +25,7 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	router.Static("/web/static", "static")
 
 	//加载模板文件
-	router.LoadHTMLGlob("/web/templates/*")
+	//router.LoadHTMLGlob("")
 
 	//设置路由,地址为/auth
 	auth.SetUpAuthAPI(router, db)
