@@ -67,6 +67,7 @@
 <body>
     <div class="container">
         <h1>登录</h1>
+<<<<<<< HEAD
         <form action="/auth/login" method="POST">
             <label for="username"></label>
             <input type="text" id="username" placeholder="用户名/邮箱">
@@ -74,8 +75,13 @@
             <label for="password"></label>
             <input type="password" id="password" placeholder="密码">
 
+=======
+        <form action="your_backend_processing_page.php" method="POST">
+            <input type="text" id="username" name="username" placeholder="用户名/邮箱">
+            <input type="password" id="password" name="password" placeholder="密码">
+>>>>>>> refs/remotes/origin/main
             <label>
-                <input type="checkbox" id="remember-me"> 记住我
+                <input type="checkbox" id="remember-me" name="remember-me"> 记住我
             </label>
             <div class="forgot-password">
                 <a href="#">忘记密码?</a>
@@ -84,4 +90,4 @@
         </form>
     </div>
 </body>
-
+</html>
