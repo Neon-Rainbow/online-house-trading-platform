@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -68,11 +67,11 @@
 <body>
     <div class="container">
         <h1>登录</h1>
-        <form  method="POST">
-            <input type="text" id="username" placeholder="用户名/邮箱">
-            <input type="password" id="password" placeholder="密码">
+        <form action="your_backend_processing_page.php" method="POST">
+            <input type="text" id="username" name="username" placeholder="用户名/邮箱">
+            <input type="password" id="password" name="password" placeholder="密码">
             <label>
-                <input type="checkbox" id="remember-me"> 记住我
+                <input type="checkbox" id="remember-me" name="remember-me"> 记住我
             </label>
             <div class="forgot-password">
                 <a href="#">忘记密码?</a>
@@ -88,4 +87,4 @@
     </div>
     
 </body>
-
+</html>
