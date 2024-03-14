@@ -25,7 +25,12 @@ func LoginPost(c *gin.Context) {
 	err := c.ShouldBind(&user)
 	if err != nil {
 		log.Printf("error: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "请求参数错误",
+		})
+		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"message":  "/auth/login",
 		"method":   "POST",
