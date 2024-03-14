@@ -13,10 +13,11 @@ import (
 // RegisterGet 用于处理用户的注册界面的GET请求
 // 返回状态码200和注册界面的信息
 func RegisterGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "/auth/register",
-		"method":  "GET",
-	})
+	//c.JSON(http.StatusOK, gin.H{
+	//	"message": "/auth/register",
+	//	"method":  "GET",
+	//})
+	c.HTML(http.StatusOK, "register.html", nil)
 }
 
 // RegisterPost 用于处理用户的注册界面的POST请求
