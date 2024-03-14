@@ -67,9 +67,13 @@
 <body>
     <div class="container">
         <h1>登录</h1>
-        <form action="your_backend_processing_page.php" method="POST">
-            <input type="text" id="username" name="username" placeholder="用户名/邮箱">
-            <input type="password" id="password" name="password" placeholder="密码">
+        <form action="/auth/login" method="POST">
+            <label for="username"></label>
+            <input type="text" id="username" name="username" placeholder="用户名/邮箱" required>
+
+            <label for="password"></label>
+            <input type="password" id="password" name="password" placeholder="密码" required>
+
             <label>
                 <input type="checkbox" id="remember-me" name="remember-me"> 记住我
             </label>
@@ -78,13 +82,6 @@
             </div>
             <input type="submit" value="登录">
         </form>
-        <div class="social-login">
-            <a href="#">使用微信登录</a>
-            <a href="#">使用QQ登录</a>
-            <a href="#">使用支付宝登录</a>
-        </div>
-       
     </div>
-    
 </body>
 </html>

@@ -32,6 +32,9 @@ func RegisterPost(c *gin.Context) {
 
 	var user model.User
 	err := c.ShouldBind(&user)
+
+	user.Password = encryptPassword(user.Password) // 对密码进行加密
+
 	if err != nil {
 		log.Printf("Error binding data: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{
