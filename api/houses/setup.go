@@ -22,8 +22,9 @@ func SetUpHousesAPI(r *gin.Engine, db *gorm.DB) {
 		//housesGroup.GET("/delete", DeleteGet)
 		//housesGroup.POST("/delete", DeletePost)
 
-		housesGroup.POST("/appointment", HousesAppointmentPost)
+		//预约和收藏需要使用JWT中间件,即需要用户登录后才能进行操作
+		housesGroup.POST("/appointment", middleware.JWTAuthMiddleware(), HousesAppointmentPost)
 
-		housesGroup.POST("/collect", CollectHousesPost)
+		housesGroup.POST("/collect", middleware.JWTAuthMiddleware(), CollectHousesPost)
 	}
 }
