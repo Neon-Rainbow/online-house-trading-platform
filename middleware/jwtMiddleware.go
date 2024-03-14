@@ -21,7 +21,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 
 		parts := strings.SplitN(authHeader, " ", 2)
 
-		mc, err := jwt.ParseToken(parts[1])
+		mc, err := jwt.ParseToken(parts[0])
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"error": "无效的token",
