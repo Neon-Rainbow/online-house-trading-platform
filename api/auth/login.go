@@ -71,7 +71,9 @@ func LoginPost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "登录成功",
 		"data": gin.H{
-			"token": token,
+			"token":    token,
+			"user_id":  dbUser.ID,
+			"username": dbUser.Username,
 		},
 	})
 	log.Printf("用户登录成功: %v", user.Username)

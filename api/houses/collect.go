@@ -1,6 +1,7 @@
 package houses
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"online-house-trading-platform/pkg/model"
@@ -18,18 +19,40 @@ func CollectHousesPost(c *gin.Context) {
 		})
 		return
 	}
-	var favourite model.Favourite
-	err := c.ShouldBind(&favourite)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "请求参数错误",
+
+	userID, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "无法获取用户ID",
 		})
 		return
 	}
+	userIDUint, ok := userID.(uint) // 确保user_id是uint类型
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "用户ID类型错误",
+		})
+		return
+	}
+
+	var favourite model.Favourite
+	err := c.ShouldBind(&favourite)
+	fmt.Println(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":  "请求参数错误",
+			"detail": err.Error(),
+		})
+		return
+	}
+
+	favourite.UserID = userIDUint
+
 	err = db.Create(&favourite).Error
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "收藏失败",
+			"error":  "收藏失败",
+			"detail": err.Error(),
 		})
 		return
 	}
