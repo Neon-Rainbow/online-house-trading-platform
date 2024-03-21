@@ -1,14 +1,13 @@
 package jwt
 
 import (
+	"online-house-trading-platform/config"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
 const tokenExpireDuration = time.Hour * 24 // token 过期时间
-
-var mySecret = []byte("穿梭时间的画面的钟,从反方向开始移动") // 自定义密钥
 
 type MyClaims struct {
 	Username string `json:"username"`
@@ -18,6 +17,8 @@ type MyClaims struct {
 
 // GenerateToken 用于生成JWT
 func GenerateToken(username string, userId uint) (string, error) {
+	var jwtSecret = config.AppConfig.JWTSecret
+	var mySecret = []byte(jwtSecret) // 自定义密钥
 	c := MyClaims{
 		Username: username,
 		UserID:   userId,
@@ -33,6 +34,8 @@ func GenerateToken(username string, userId uint) (string, error) {
 
 // ParseToken 用于解析JWT
 func ParseToken(tokenString string) (*MyClaims, error) {
+	var jwtSecret = config.AppConfig.JWTSecret
+	var mySecret = []byte(jwtSecret) // 自定义密钥
 	token, err := jwt.ParseWithClaims(tokenString, &MyClaims{},
 		func(token *jwt.Token) (interface{}, error) {
 			return mySecret, nil
