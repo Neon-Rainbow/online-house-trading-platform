@@ -1,6 +1,7 @@
 package houses
 
 import (
+	"log"
 	"net/http"
 	"online-house-trading-platform/pkg/model"
 
@@ -37,4 +38,6 @@ func CollectHousesPost(c *gin.Context) {
 		"message": "收藏成功",
 		"url":     "/houses/collect",
 	})
+
+	log.Printf("收藏成功 收藏信息: %v", favourite)
 }

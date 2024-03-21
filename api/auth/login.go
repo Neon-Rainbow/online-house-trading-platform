@@ -60,7 +60,7 @@ func LoginPost(c *gin.Context) {
 		})
 		return
 	}
-	token, err := jwt.GenerateToken(user.Username, user.ID)
+	token, err := jwt.GenerateToken(user.Username, dbUser.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "无法生成token",
@@ -74,5 +74,6 @@ func LoginPost(c *gin.Context) {
 			"token": token,
 		},
 	})
+	log.Printf("用户登录成功: %v", user.Username)
 
 }

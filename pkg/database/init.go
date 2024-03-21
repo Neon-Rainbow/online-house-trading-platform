@@ -63,6 +63,8 @@ func InitializeDB() *gorm.DB {
 	if err != nil {
 		return nil
 	}
+	
+	log.Printf("数据库连接成功")
 
 	return db
 }

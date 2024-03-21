@@ -1,6 +1,8 @@
 package houses
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 	"online-house-trading-platform/pkg/model"
 
@@ -18,6 +20,7 @@ func HousesAppointmentPost(c *gin.Context) {
 		return
 	}
 
+	fmt.Println(c)
 	// 从请求中获取预约信息,将预约信息绑定到model.Reserve结构体中
 	var reserve model.Reserve
 	err := c.ShouldBind(&reserve)
@@ -42,4 +45,5 @@ func HousesAppointmentPost(c *gin.Context) {
 		"message": "预约成功",
 		"url":     "/houses/appointment",
 	})
+	log.Printf("预约成功 预约信息: %v", reserve)
 }

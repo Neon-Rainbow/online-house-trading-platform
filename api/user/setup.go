@@ -13,14 +13,20 @@ import (
 func SetUpUserAPI(router *gin.Engine, db *gorm.DB) {
 	userGroup := router.Group("/user/:user_id")
 	{
-		userProfileGroup := userGroup.Group("/profile").Use(middleware.JWTAuthMiddleware(), middleware.DBMiddleware(db))
+		userProfileGroup := userGroup.Group("/profile").Use(
+			middleware.JWTAuthMiddleware(),
+			middleware.UserIDMatchMiddleware(),
+			middleware.DBMiddleware(db))
 		{
 			userProfileGroup.GET("/", profile.ProfileGet)
 			userProfileGroup.GET("/update", profile.ProfileUpdateGet)
 			userProfileGroup.POST("/update", profile.ProfileUpdatePost)
 		}
 
-		userOtherGroup := userGroup.Group("/").Use(middleware.JWTAuthMiddleware(), middleware.DBMiddleware(db))
+		userOtherGroup := userGroup.Group("/").Use(
+			middleware.JWTAuthMiddleware(),
+			middleware.UserIDMatchMiddleware(),
+			middleware.DBMiddleware(db))
 		{
 			userOtherGroup.GET("/favourites", ViewFavouritesGet)
 			userOtherGroup.DELETE("/favourites", DeleteFavouritesDelete)

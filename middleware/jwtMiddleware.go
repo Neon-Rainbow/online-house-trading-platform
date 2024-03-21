@@ -17,6 +17,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 				"error": "请求未携带token，无权限访问",
 			})
 			c.Abort()
+			c.Redirect(http.StatusUnauthorized, "/login")
 			return
 		}
 
@@ -38,7 +39,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		}
 
 		log.Printf("authHeader: %v", authHeader)
-		log.Printf("parts: %v", parts)
+		//log.Printf("parts: %v", parts)
 
 		mc, err := jwt.ParseToken(tkn)
 		if err != nil {
@@ -48,6 +49,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 			c.Abort()
 			return
 		}
+		//fmt.Println(mc)
 		c.Set("user_id", mc.UserID)
 		c.Set("username", mc.Username)
 		c.Next()

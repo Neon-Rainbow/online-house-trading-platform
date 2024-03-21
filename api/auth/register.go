@@ -75,4 +75,5 @@ func RegisterPost(c *gin.Context) {
 		"message": "注册成功",
 		"url":     "/auth/register",
 	})
+	log.Printf("用户注册成功: %v", user.Username)
 }
