@@ -12,7 +12,9 @@ import (
 func CollectHousesPost(c *gin.Context) {
 	db, exists := c.MustGet("db").(*gorm.DB)
 	if !exists {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "无法获取数据库连接"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "无法获取数据库连接",
+		})
 		return
 	}
 	var favourite model.Favourite
