@@ -7,4 +7,5 @@ import (
 
 func SetUpRootAPI(router *gin.Engine, db *gorm.DB) {
 	router.GET("/", HomePageGet)
+	router.GET("/learn_more", LearnMoreGet)
 }
