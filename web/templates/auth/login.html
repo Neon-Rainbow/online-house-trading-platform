@@ -1,86 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>登陆</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
     <style>
-          body {
-            background-image: url(https://seopic.699pic.com/photo/40191/2523.jpg_wh1200.jpg);
-            background-repeat: no-repeat;
-            background-size: cover; /* 让背景图片覆盖整个页面 */
-            background-position: center; /* 让背景图片在页面中居中 */
-            font-family: Arial, sans-serif;
-            margin: 0; /* 去除body的默认边距 */
-            padding: 0; /* 去除body的默认内边距 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://img.zcool.cn/community/012d4e59fd680fa801216a4b120623.gif');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh; /* 设置最小高度为视口高度 */
+            overflow-y: auto; /* 允许垂直滚动 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        
+
         .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
+            width: 30%; /* 设置容器宽度 */
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 100px;
-        }
-        
-        h1 {
             text-align: center;
         }
-        
-        input[type="text"],
-        input[type="password"] {
-            width: 95%;
+
+        .container h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-size: 16px;
+        }
+
+        .form-group input {
+            width: calc(100% - 12px);
             padding: 10px;
-            margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: 16px;
         }
-        
-        input[type="submit"] {
+
+        button[type="submit"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px 20px;
             background-color: #4CAF50;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
         }
-        
-        .forgot-password {
-            text-align: right;
-            margin-bottom: 10px;
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
         }
-        
-        .social-login {
-            text-align: center;
-            margin-top: 20px;
-        }
-        
-        .social-login a {
-            display: inline-block;
-            margin: 0 5px;
-            text-decoration: none;
-            color: #333;
-        }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>登录</h1>
-        <form action="/auth/login" method="POST">
-            <label for="username"></label>
-            <input type="text" id="username" name="username" placeholder="用户名/邮箱" required>
-
-            <label for="password"></label>
-            <input type="password" id="password" name="password" placeholder="密码" required>
-
-            <label>
-                <input type="checkbox" id="remember-me" name="remember-me"> 记住我
-            </label>
-            <div class="forgot-password">
-                <a href="#">忘记密码?</a>
+        <h2>登录</h2>
+        <form action="/auth/login" method="post">
+            <div class="form-group">
+                <label for="username">用户名:</label>
+                <input type="text" id="username" name="username" required>
             </div>
-            <input type="submit" value="登录">
+            <div class="form-group">
+                <label for="password">密码:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">登录</button>
         </form>
     </div>
 </body>
