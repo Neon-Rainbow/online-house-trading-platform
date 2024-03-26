@@ -25,7 +25,7 @@ func uploadFile(c *gin.Context) {
 	//遍历所有文件
 	for index, file := range files {
 		log.Printf("index: %v, file: %v", index, file.Filename)
-		dst := fmt.Sprintf("./uploads/%v/%v_%v", c.Param("user_id"), file.Filename, index)
+		dst := fmt.Sprintf("./uploads/%v/%v_%v", c.MustGet("house_id"), file.Filename, index)
 		err := c.SaveUploadedFile(file, dst)
 		if err != nil {
 			log.Printf("保存文件失败,错误原因: %v", err)
@@ -55,11 +55,7 @@ func deleteFile(c *gin.Context, filename string) {
 
 // ReleaseGet 用于处理用户发布信息界面的GET请求
 func ReleaseGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "/user/release",
-		"method":  "GET",
-		"user_id": c.Param("user_id"),
-	})
+	c.HTML(http.StatusOK, "upload.html", nil)
 }
 
 // ReleasePost 用于处理用户发布信息界面的POST请求,用于发布新的房源

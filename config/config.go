@@ -1,3 +1,4 @@
+// Package config 用于加载配置文件的包
 package config
 
 import (
@@ -20,6 +21,7 @@ type Config struct {
 	Port           int    `json:"port"`
 }
 
+// AppConfig 用于存储配置文件的内容
 var AppConfig *Config
 
 // LoadConfig 用于加载配置文件

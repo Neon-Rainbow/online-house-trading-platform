@@ -4,9 +4,9 @@
 
 该接口用于实现用户对房屋的预约。用户需要在请求头部添加有效的JWT令牌才能正常访问此接口。
 
-### 鉴权
+## 中间件
 
-- 需要在请求头中携带有效的JWT令牌，格式为`Authorization: Bearer <token>`或`Authorization: <token>`。
++ jwtMiddleware: 验证用户是否已登陆.详细文档查看[这里](../middleware/jwt.md)
 
 ### 请求
 
