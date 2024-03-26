@@ -51,13 +51,18 @@ func LoginPost(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": "数据库查询出错",
 			})
+			log.Printf("查询用户 %v 时数据库查询出错, 错误原因为 %v", user.Username, err)
 		}
 		return
 	}
+
+	clientIP := c.ClientIP()
+
 	if encryptPassword(user.Password) != dbUser.Password {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"error": "密码错误",
 		})
+		log.Printf("用户 %v 登陆时密码错误, ip: %v", user.Username, clientIP)
 		return
 	}
 	token, err := jwt.GenerateToken(user.Username, dbUser.ID)
@@ -65,6 +70,7 @@ func LoginPost(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "无法生成token",
 		})
+		log.Printf("用户 %v 的token无法生成,错误原因为 %v", user.Username, err)
 		return
 	}
 
@@ -76,6 +82,6 @@ func LoginPost(c *gin.Context) {
 			"username": dbUser.Username,
 		},
 	})
-	log.Printf("用户登录成功: %v", user.Username)
+	log.Printf("用户登录成功: %v, ip: %v", user.Username, clientIP)
 
 }
