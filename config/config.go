@@ -16,6 +16,8 @@ type Config struct {
 	} `json:"database"`
 	JWTSecret      string `json:"jwtSecret"`
 	PasswordSecret string `json:"passwordSecret"`
+	LogFilePath    string `json:"logFilePath"`
+	Port           int    `json:"port"`
 }
 
 var AppConfig *Config
