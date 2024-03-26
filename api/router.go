@@ -28,7 +28,7 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	router := gin.Default()
 
 	//加载静态文件
-	router.Static("./web/static", "static")
+	router.Static("/static", "./web/static")
 
 	//加载模板文件
 	router.LoadHTMLGlob("./web/templates/**/*")
