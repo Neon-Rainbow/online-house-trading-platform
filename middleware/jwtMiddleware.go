@@ -16,8 +16,8 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"error": "请求未携带token，无权限访问",
 			})
+			log.Printf("本次请求未携带token，无权限访问\n请求IP: %v\n请求头部: %v", c.ClientIP(), c.Request.Header)
 			c.Abort()
-			c.Redirect(http.StatusUnauthorized, "/login")
 			return
 		}
 
@@ -34,6 +34,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"error": "请求携带的token格式错误，无权限访问",
 			})
+			log.Printf("本次请求携带的token格式错误，无权限访问\n请求IP: %v\n请求头部: %v", c.ClientIP(), c.Request.Header)
 			c.Abort()
 			return
 		}
@@ -46,6 +47,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"error": "无效的token",
 			})
+			log.Printf("本次请求携带的token无效，无权限访问\n请求IP: %v\n请求头部: %v", c.ClientIP(), c.Request.Header)
 			c.Abort()
 			return
 		}
