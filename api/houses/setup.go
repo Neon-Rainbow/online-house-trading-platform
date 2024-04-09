@@ -12,7 +12,7 @@ import (
 func SetUpHousesAPI(r *gin.Engine, db *gorm.DB) {
 	housesGroup := r.Group("/houses").Use(middleware.DBMiddleware(db))
 	{
-		housesGroup.GET("/", HouseListGet)
+		housesGroup.GET("/", GetHouseList)
 
 		housesGroup.GET("/:id", HouseByIDGet)
 

@@ -11,10 +11,10 @@ import (
 	"gorm.io/gorm"
 )
 
-// GetHouseInfo 用于获取指定ID的房屋信息
+// GetHouseInfo 用于给定ID,然后获取指定ID的房屋信息
 func GetHouseInfo(db *gorm.DB, houseID uint) (*model.House, error) {
 	var house model.House
-	result := db.First(&house, houseID)
+	result := db.Preload("Images").First(&house, houseID)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			return nil, errors.New("house not found")
@@ -25,7 +25,7 @@ func GetHouseInfo(db *gorm.DB, houseID uint) (*model.House, error) {
 	return &house, nil
 }
 
-// HouseByIDGet 用于获取指定ID的房屋信息
+// HouseByIDGet 用于获取URL中指定ID的房屋信息
 // URL: GET /api/houses/:id
 func HouseByIDGet(c *gin.Context) {
 	db, exists := c.MustGet("db").(*gorm.DB)
