@@ -12,3 +12,10 @@ type User struct {
 	Email    string `json:"email" gorm:"uniqueIndex;not null;type:varchar(255)" form:"email"`
 	Role     string `json:"role" form:"role"`
 }
+
+// UserAvatar 用户头像
+type UserAvatar struct {
+	gorm.Model
+	UserID uint   `gorm:"not null" json:"user_id"`
+	URL    string `gorm:"not null" json:"url"`
+}
