@@ -59,7 +59,7 @@ func InitializeDB() *gorm.DB {
 	}
 
 	// 使用AutoMigrate迁移模型
-	err = db.AutoMigrate(&model.User{}, &model.House{}, &model.Favourite{}, &model.Reserve{})
+	err = db.AutoMigrate(&model.User{}, &model.House{}, &model.HouseImage{}, &model.Favourite{}, &model.Reserve{})
 	if err != nil {
 		return nil
 	}
