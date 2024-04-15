@@ -12,17 +12,18 @@ import (
 )
 
 // uploadFile 用于处理上传文件的请求
-func uploadFile(c *gin.Context) {
+func uploadFile(c *gin.Context) ([]model.HouseImage, error) {
 	form, err := c.MultipartForm()
 	if err != nil {
 		log.Printf("上传文件失败,错误原因: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "上传文件失败",
 		})
-		return
+		return nil, err
 	}
 
 	files := form.File["files"]
+	var images []model.HouseImage
 
 	//遍历所有文件
 	for index, file := range files {
@@ -34,12 +35,17 @@ func uploadFile(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": "保存文件失败",
 			})
-			return
+			return nil, err
 		}
+		image := model.HouseImage{
+			HouseID: c.MustGet("house_id").(uint),
+			URL:     dst,
+		}
+		images = append(images, image)
 		log.Printf("文件保存成功,保存路径: %v", dst)
 	}
-
 	log.Printf("共计上传文件数量: %v", len(files))
+	return images, nil
 }
 
 // deleteFile 用于删除文件
@@ -71,11 +77,22 @@ func ReleasePost(c *gin.Context) {
 		return
 	}
 
-	uploadFile(c) // 上传文件
+	images, err := uploadFile(c) // 上传文件
+	// 保存图片
+	for _, img := range images {
+		err := db.Create(&img).Error
+		if err != nil {
+			log.Printf("保存图片失败,错误原因: %v", err)
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "保存图片失败",
+			})
+			return
+		}
+	}
 
 	// 绑定数据
 	var house model.House
-	err := c.ShouldBind(&house)
+	err = c.ShouldBind(&house)
 	if err != nil {
 		log.Printf("绑定数据失败,错误原因: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -84,7 +101,7 @@ func ReleasePost(c *gin.Context) {
 		return
 	}
 
-	err := db.Create(&house).Error
+	err = db.Create(&house).Error
 	if err != nil {
 		log.Printf("创建房屋失败,错误原因: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
