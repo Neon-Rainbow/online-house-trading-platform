@@ -15,6 +15,10 @@ const (
 	RegisterUsernameExists                        // 用户名已存在
 	RegisterEmailExists                           // 邮箱已存在
 	RegisterCreateUserError                       // 创建用户失败
+	ReserveInvalidParam                           // 预约请求参数错误
+	ReserveError                                  // 预约失败
+	GetUserIDError                                // 获取用户ID错误
+	UserIDTypeError                               // 用户ID类型错误
 )
 
 // codeMessageMap 用于存放code和message的映射关系
@@ -31,6 +35,10 @@ var codeMessageMap = map[ResCode]string{
 	RegisterUsernameExists:  "注册时用户名已存在",
 	RegisterEmailExists:     "注册时邮箱已存在",
 	RegisterCreateUserError: "创建用户失败",
+	ReserveInvalidParam:     "预约请求参数错误",
+	ReserveError:            "预约失败",
+	GetUserIDError:          "获取用户ID错误",
+	UserIDTypeError:         "用户ID类型错误",
 }
 
 // Message 返回code对应的消息
