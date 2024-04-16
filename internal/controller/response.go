@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"online-house-trading-platform/codes"
 	"online-house-trading-platform/pkg/model"
 
 	"github.com/gin-gonic/gin"
@@ -9,16 +10,16 @@ import (
 
 // ResponseData 用于封装API的返回数据
 type ResponseData struct {
-	Code    ResCode     `json:"code"`
-	Message interface{} `json:"message"`
-	Data    interface{} `json:"data"`
+	Code    codes.ResCode `json:"code"`
+	Message interface{}   `json:"message"`
+	Data    interface{}   `json:"data"`
 }
 
 // ResponseSuccess 用于返回成功信息
 func ResponseSuccess(c *gin.Context, data interface{}) {
 	responseData := &ResponseData{
-		Code:    CodeSuccess,
-		Message: CodeSuccess.Message(),
+		Code:    codes.CodeSuccess,
+		Message: codes.CodeSuccess.Message(),
 		Data:    data,
 	}
 	c.JSON(http.StatusOK, responseData)
@@ -40,7 +41,7 @@ func ResponseError(c *gin.Context, error model.Error) {
 	c.JSON(http.StatusOK, responseData)
 }
 
-func ResponseErrorWithCode(c *gin.Context, code ResCode) {
+func ResponseErrorWithCode(c *gin.Context, code codes.ResCode) {
 	responseData := &ResponseData{
 		Code:    code,
 		Message: code.Message(),

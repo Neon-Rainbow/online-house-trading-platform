@@ -28,8 +28,18 @@ func setupAuthAPI(r *gin.Engine, db *gorm.DB) {
 	}
 }
 
+func setupHouseAPI(r *gin.Engine, db *gorm.DB) {
+	housesGroup := r.Group("/houses").Use(middleware.DBMiddleware(db))
+	{
+		housesGroup.GET("/", controller.GetAllHouses)
+		housesGroup.GET("/:id", controller.GetHouseInfoByID)
+		housesGroup.POST("/appointment", middleware.JWTAuthMiddleware(), controller.HousesAppointmentPost)
+		housesGroup.POST("/collect", middleware.JWTAuthMiddleware(), controller.CollectPost)
+	}
+}
+
 // SetupRouters 设置web服务器路由
-func SetupRouters(db *gorm.DB) {
+func SetupRouters(db *gorm.DB) *gin.Engine {
 
 	router := gin.Default()
 
@@ -42,8 +52,13 @@ func SetupRouters(db *gorm.DB) {
 	//设置路由,地址为/auth
 	setupAuthAPI(router, db)
 
+	//设置路由,地址为/houses
+	setupHouseAPI(router, db)
+
 	//404界面
 	router.NoRoute(func(c *gin.Context) {
 		c.HTML(http.StatusNotFound, "404.html", nil)
 	})
+
+	return router
 }

@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
-	"online-house-trading-platform/api"
 	"online-house-trading-platform/config"
 	"online-house-trading-platform/logger"
 	"online-house-trading-platform/pkg/database"
+	"online-house-trading-platform/router"
 )
 
 // main 函数用于启动服务器,服务器端口为8080
@@ -29,9 +29,9 @@ func main() {
 		log.Fatal("数据库初始化失败")
 	}
 
-	router := api.SetupRouter(db)
+	route := router.SetupRouters(db)
 
-	err := router.Run(fmt.Sprintf(":%d", config.AppConfig.Port))
+	err := route.Run(fmt.Sprintf(":%d", config.AppConfig.Port))
 
 	if err != nil {
 		log.Fatalf("服务器连接失败: %v", err)

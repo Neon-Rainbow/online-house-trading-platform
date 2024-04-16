@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/logic"
 	"online-house-trading-platform/pkg/model"
 
@@ -19,7 +20,7 @@ func LoginPost(c *gin.Context) {
 
 	err := c.ShouldBind(&loginReq)
 	if err != nil {
-		ResponseErrorWithCode(c, LoginInvalidParam)
+		ResponseErrorWithCode(c, codes.LoginInvalidParam)
 	}
 
 	loginResp, apiError := logic.LoginHandle(c, loginReq)

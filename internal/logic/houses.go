@@ -1,7 +1,7 @@
 package logic
 
 import (
-	"online-house-trading-platform/internal/controller"
+	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/dao"
 	"online-house-trading-platform/pkg/model"
 
@@ -12,12 +12,12 @@ import (
 func FetchAllHouses(c *gin.Context) ([]model.House, *model.Error) {
 	db, err := dao.GetDB(c)
 	if err != nil {
-		return nil, &model.Error{StatusCode: controller.GetDBError}
+		return nil, &model.Error{StatusCode: codes.GetDBError}
 	}
 
 	houses, err := dao.GetAllHouseInformation(db)
 	if err != nil {
-		return nil, &model.Error{StatusCode: controller.GetHouseListError}
+		return nil, &model.Error{StatusCode: codes.GetHouseListError}
 	}
 	return houses, nil
 }
@@ -26,12 +26,12 @@ func FetchAllHouses(c *gin.Context) ([]model.House, *model.Error) {
 func FetchCertainHouseInformationByID(c *gin.Context, houseID uint) (*model.House, *model.Error) {
 	db, err := dao.GetDB(c)
 	if err != nil {
-		return nil, &model.Error{StatusCode: controller.GetDBError}
+		return nil, &model.Error{StatusCode: codes.GetDBError}
 	}
 
 	house, err := dao.GetHouseInformationByID(db, houseID)
 	if err != nil {
-		return nil, &model.Error{StatusCode: controller.GetHouseInfoError}
+		return nil, &model.Error{StatusCode: codes.GetHouseInfoError}
 	}
 	return house, nil
 

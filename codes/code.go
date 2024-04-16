@@ -1,4 +1,4 @@
-package controller
+package codes
 
 type ResCode int64
 

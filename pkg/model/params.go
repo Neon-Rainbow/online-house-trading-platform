@@ -1,6 +1,8 @@
 package model
 
-import "online-house-trading-platform/internal/controller"
+import (
+	"online-house-trading-platform/codes"
+)
 
 // LoginRequest 用于处理用户登录请求
 type LoginRequest struct {
@@ -24,6 +26,6 @@ type RegisterRequest struct {
 }
 
 type Error struct {
-	StatusCode controller.ResCode
+	StatusCode codes.ResCode
 	Message    string
 }

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/logic"
 	"strconv"
 
@@ -21,7 +22,7 @@ func GetHouseInfoByID(c *gin.Context) {
 	houseID := c.Param("house_id")
 	houseIDUint, err := strconv.ParseUint(houseID, 10, 64)
 	if err != nil {
-		ResponseErrorWithCode(c, HouseIDInvalid)
+		ResponseErrorWithCode(c, codes.HouseIDInvalid)
 	}
 	house, apiError := logic.FetchCertainHouseInformationByID(c, uint(houseIDUint))
 	if apiError != nil {

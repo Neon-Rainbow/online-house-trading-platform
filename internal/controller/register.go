@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/logic"
 	"online-house-trading-platform/pkg/model"
 
@@ -17,7 +18,7 @@ func RegisterPost(c *gin.Context) {
 	var registerReq model.RegisterRequest
 	err := c.ShouldBind(&registerReq)
 	if err != nil {
-		ResponseErrorWithCode(c, RegisterInvalidParam)
+		ResponseErrorWithCode(c, codes.RegisterInvalidParam)
 	}
 
 	apiError := logic.RegisterHandle(c, registerReq)
