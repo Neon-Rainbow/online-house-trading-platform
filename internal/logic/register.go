@@ -29,11 +29,12 @@ func RegisterHandle(c *gin.Context, req model.RegisterRequest) *model.Error {
 	if emailExists {
 		return &model.Error{StatusCode: controller.RegisterEmailExists}
 	}
-	var user model.User
-	user.Username = req.Username
-	user.Password = EncryptPassword(req.Password)
-	user.Email = req.Email
-	user.Role = req.Role
+	user := model.User{
+		Username: req.Username,
+		Password: EncryptPassword(req.Password),
+		Email:    req.Email,
+		Role:     req.Role,
+	}
 	err = dao.CreateUser(db, &user)
 	if err != nil {
 		return &model.Error{StatusCode: controller.RegisterCreateUserError}

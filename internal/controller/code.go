@@ -19,6 +19,9 @@ const (
 	ReserveError                                  // 预约失败
 	GetUserIDError                                // 获取用户ID错误
 	UserIDTypeError                               // 用户ID类型错误
+	GetHouseListError                             // 获取房屋列表错误
+	GetHouseInfoError                             // 获取某一个房屋信息错误
+	HouseIDInvalid                                // 房屋ID无效
 )
 
 // codeMessageMap 用于存放code和message的映射关系
@@ -39,6 +42,9 @@ var codeMessageMap = map[ResCode]string{
 	ReserveError:            "预约失败",
 	GetUserIDError:          "获取用户ID错误",
 	UserIDTypeError:         "用户ID类型错误",
+	GetHouseListError:       "获取房屋列表错误",
+	GetHouseInfoError:       "获取某一个房屋信息错误",
+	HouseIDInvalid:          "房屋ID无效",
 }
 
 // Message 返回code对应的消息
