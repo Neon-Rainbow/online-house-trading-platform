@@ -5,16 +5,11 @@ import (
 	"online-house-trading-platform/internal/dao"
 	"online-house-trading-platform/pkg/model"
 
-	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // FetchAllHouses 用于获取所有房屋信息
-func FetchAllHouses(c *gin.Context) ([]model.House, *model.Error) {
-	db, err := dao.GetDB(c)
-	if err != nil {
-		return nil, &model.Error{StatusCode: codes.GetDBError}
-	}
-
+func FetchAllHouses(db *gorm.DB) ([]model.House, *model.Error) {
 	houses, err := dao.GetAllHouseInformation(db)
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.GetHouseListError}
@@ -23,16 +18,10 @@ func FetchAllHouses(c *gin.Context) ([]model.House, *model.Error) {
 }
 
 // FetchCertainHouseInformationByID 用于获取指定ID的房屋信息
-func FetchCertainHouseInformationByID(c *gin.Context, houseID uint) (*model.House, *model.Error) {
-	db, err := dao.GetDB(c)
-	if err != nil {
-		return nil, &model.Error{StatusCode: codes.GetDBError}
-	}
-
+func FetchCertainHouseInformationByID(db *gorm.DB, houseID uint) (*model.House, *model.Error) {
 	house, err := dao.GetHouseInformationByID(db, houseID)
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.GetHouseInfoError}
 	}
 	return house, nil
-
 }

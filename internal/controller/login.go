@@ -7,6 +7,7 @@ import (
 	"online-house-trading-platform/pkg/model"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // LoginGet 用于处理用户的登录界面的GET请求
@@ -16,6 +17,11 @@ func LoginGet(c *gin.Context) {
 
 // LoginPost 用于处理用户的登录界面的POST请求
 func LoginPost(c *gin.Context) {
+	db, exist := c.MustGet("db").(*gorm.DB)
+	if !exist {
+		ResponseErrorWithCode(c, codes.GetDBError)
+	}
+
 	var loginReq model.LoginRequest
 
 	err := c.ShouldBind(&loginReq)
@@ -23,7 +29,7 @@ func LoginPost(c *gin.Context) {
 		ResponseErrorWithCode(c, codes.LoginInvalidParam)
 	}
 
-	loginResp, apiError := logic.LoginHandle(c, loginReq)
+	loginResp, apiError := logic.LoginHandle(db, loginReq)
 	if apiError != nil {
 		ResponseError(c, *apiError)
 	}

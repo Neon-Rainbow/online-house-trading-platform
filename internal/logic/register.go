@@ -5,16 +5,11 @@ import (
 	"online-house-trading-platform/internal/dao"
 	"online-house-trading-platform/pkg/model"
 
-	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // RegisterHandle 用于处理用户注册逻辑
-func RegisterHandle(c *gin.Context, req model.RegisterRequest) *model.Error {
-	db, err := dao.GetDB(c)
-	if err != nil {
-		return &model.Error{StatusCode: codes.GetDBError}
-	}
-
+func RegisterHandle(db *gorm.DB, req model.RegisterRequest) *model.Error {
 	if req.Username == "" || req.Password == "" || req.Email == "" {
 		return &model.Error{StatusCode: codes.RegisterInvalidParam}
 	}

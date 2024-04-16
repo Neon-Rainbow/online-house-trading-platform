@@ -6,16 +6,11 @@ import (
 	"online-house-trading-platform/pkg/jwt"
 	"online-house-trading-platform/pkg/model"
 
-	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // LoginHandle 用于处理用户登录逻辑
-func LoginHandle(c *gin.Context, req model.LoginRequest) (*model.LoginResponse, *model.Error) {
-	db, err := dao.GetDB(c)
-	if err != nil {
-		return nil, &model.Error{StatusCode: codes.GetDBError}
-	}
-
+func LoginHandle(db *gorm.DB, req model.LoginRequest) (*model.LoginResponse, *model.Error) {
 	dbUser, err := dao.GetUserByUsername(db, req.Username)
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.LoginUserNotExist}

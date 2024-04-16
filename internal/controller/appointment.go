@@ -6,10 +6,16 @@ import (
 	"online-house-trading-platform/pkg/model"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // HousesAppointmentPost 用于处理用户预约房屋的GET请求
 func HousesAppointmentPost(c *gin.Context) {
+	db, exist := c.MustGet("db").(*gorm.DB)
+	if !exist {
+		ResponseErrorWithCode(c, codes.GetDBError)
+	}
+
 	userID, exists := c.Get("user_id")
 	if !exists {
 		ResponseErrorWithCode(c, codes.GetUserIDError)
@@ -24,7 +30,7 @@ func HousesAppointmentPost(c *gin.Context) {
 	if err != nil {
 		ResponseErrorWithCode(c, codes.ReserveInvalidParam)
 	}
-	apiError := logic.AppointmentHandle(c, &reserve, userIDUint)
+	apiError := logic.AppointmentHandle(db, &reserve, userIDUint)
 
 	if apiError != nil {
 		ResponseError(c, *apiError)

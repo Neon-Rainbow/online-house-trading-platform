@@ -5,21 +5,16 @@ import (
 	"online-house-trading-platform/internal/dao"
 	"online-house-trading-platform/pkg/model"
 
-	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // CollectHandle 用来处理用户收藏房屋的请求
-func CollectHandle(c *gin.Context, favourite *model.Favourite, userID uint) *model.Error {
-	db, err := dao.GetDB(c)
-	if err != nil {
-		return &model.Error{StatusCode: codes.GetDBError}
-	}
-
+func CollectHandle(db *gorm.DB, favourite *model.Favourite, userID uint) *model.Error {
 	if favourite.HouseID == 0 || favourite.UserID == 0 {
 		return &model.Error{StatusCode: codes.ReserveInvalidParam}
 	}
 	favourite.UserID = userID
-	err = dao.CreateFavorite(db, favourite)
+	err := dao.CreateFavorite(db, favourite)
 	if err != nil {
 		return &model.Error{StatusCode: codes.ReserveError}
 	}
