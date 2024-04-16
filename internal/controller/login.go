@@ -22,7 +22,7 @@ func LoginPost(c *gin.Context) {
 		ResponseErrorWithCode(c, LoginInvalidParam)
 	}
 
-	loginResp, apiError := logic.Login(c, loginReq)
+	loginResp, apiError := logic.LoginHandle(c, loginReq)
 	if apiError != nil {
 		ResponseError(c, *apiError)
 	}
