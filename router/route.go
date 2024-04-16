@@ -38,6 +38,11 @@ func setupHouseAPI(r *gin.Engine, db *gorm.DB) {
 	}
 }
 
+func SetupRootAPI(router *gin.Engine, db *gorm.DB) {
+	router.GET("/", controller.HomePageGet)
+	router.GET("/learn_more", controller.LearnMoreGet)
+}
+
 // SetupRouters 设置web服务器路由
 func SetupRouters(db *gorm.DB) *gin.Engine {
 
@@ -48,6 +53,9 @@ func SetupRouters(db *gorm.DB) *gin.Engine {
 
 	//加载模板文件
 	router.LoadHTMLGlob("./web/templates/**/*")
+
+	//设置路由,地址为/
+	SetupRootAPI(router, db)
 
 	//设置路由,地址为/auth
 	setupAuthAPI(router, db)

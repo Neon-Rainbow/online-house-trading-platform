@@ -25,6 +25,7 @@ type RegisterRequest struct {
 	Role     string `json:"role"`
 }
 
+// Error 用于处理错误信息
 type Error struct {
 	StatusCode codes.ResCode
 	Message    string
