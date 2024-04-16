@@ -61,6 +61,25 @@ func deleteFile(c *gin.Context, filename string) {
 	log.Printf("文件删除成功,文件路径: %v", filename)
 }
 
+// saveImages 用于保存图片信息到数据库
+func saveImages(db *gorm.DB, images []model.HouseImage) error {
+	for _, img := range images {
+		if err := db.Create(&img).Error; err != nil {
+			return fmt.Errorf("保存图片失败: %w", err)
+		}
+	}
+	return nil
+}
+
+// bindHouseData 从请求中绑定房屋数据
+func bindHouseData(c *gin.Context) (model.House, error) {
+	var house model.House
+	if err := c.ShouldBind(&house); err != nil {
+		return house, fmt.Errorf("绑定数据失败: %w", err)
+	}
+	return house, nil
+}
+
 // ReleaseGet 用于处理用户发布信息界面的GET请求
 func ReleaseGet(c *gin.Context) {
 	c.HTML(http.StatusOK, "upload.html", nil)
