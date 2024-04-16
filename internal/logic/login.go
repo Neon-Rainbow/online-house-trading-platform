@@ -1,9 +1,6 @@
 package logic
 
 import (
-	"crypto/md5"
-	"encoding/hex"
-	"online-house-trading-platform/config"
 	"online-house-trading-platform/internal/controller"
 	"online-house-trading-platform/internal/dao"
 	"online-house-trading-platform/pkg/jwt"
@@ -11,15 +8,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
-
-// EncryptPassword 用于对密码进行加密,使用了md5加密算法
-func EncryptPassword(password string) string {
-	// secret 用于存储密码加密的密钥
-	var secret = config.AppConfig.PasswordSecret
-	h := md5.New()
-	h.Write([]byte(secret))
-	return hex.EncodeToString(h.Sum([]byte(password)))
-}
 
 // LoginHandle 用于处理用户登录逻辑
 func LoginHandle(c *gin.Context, req model.LoginRequest) (*model.LoginResponse, *model.Error) {
