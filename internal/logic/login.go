@@ -21,8 +21,8 @@ func EncryptPassword(password string) string {
 	return hex.EncodeToString(h.Sum([]byte(password)))
 }
 
-// Login 用于处理用户登录逻辑
-func Login(c *gin.Context, req model.LoginRequest) (*model.LoginResponse, *model.Error) {
+// LoginHandle 用于处理用户登录逻辑
+func LoginHandle(c *gin.Context, req model.LoginRequest) (*model.LoginResponse, *model.Error) {
 	db, err := dao.GetDB(c)
 	if err != nil {
 		return nil, &model.Error{StatusCode: controller.GetDBError}
