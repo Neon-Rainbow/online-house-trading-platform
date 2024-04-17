@@ -88,13 +88,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "预约成功",
+                        "description": "预约成功\" example:{\"code\": codes.CodeSuccess, \"message\": \"预约成功\", \"data\": {}}",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseData"
                         }
                     },
                     "400": {
-                        "description": "预约失败,具体原因查看json中的message字段和code字段",
+                        "description": "预约失败,具体原因查看json中的message字段和code字段\" example:{\"code\": codes.GetDBError, \"message\": \"数据库错误\"}",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseData"
                         }
