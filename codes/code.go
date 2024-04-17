@@ -22,6 +22,11 @@ const (
 	GetHouseListError                             // 获取房屋列表错误
 	GetHouseInfoError                             // 获取某一个房屋信息错误
 	HouseIDInvalid                                // 房屋ID无效
+	ReleaseBindDataError                          // 绑定数据错误
+	CreateDirError                                // 创建文件夹错误
+	SaveFileError                                 // 保存文件错误
+	CreateHouseError                              // 创建房屋错误
+	CreateHouseImageError                         // 创建房屋图片错误
 )
 
 // codeMessageMap 用于存放code和message的映射关系
@@ -45,6 +50,11 @@ var codeMessageMap = map[ResCode]string{
 	GetHouseListError:       "获取房屋列表错误",
 	GetHouseInfoError:       "获取某一个房屋信息错误",
 	HouseIDInvalid:          "房屋ID无效",
+	ReleaseBindDataError:    "绑定数据错误",
+	CreateDirError:          "创建文件夹错误",
+	SaveFileError:           "保存文件错误",
+	CreateHouseError:        "创建房屋错误",
+	CreateHouseImageError:   "创建房屋图片错误",
 }
 
 // Message 返回code对应的消息

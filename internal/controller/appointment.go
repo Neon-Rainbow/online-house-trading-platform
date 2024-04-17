@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// HousesAppointmentPost 用于处理用户预约房屋的GET请求
+// HousesAppointmentPost 用于处理用户预约房屋的POST请求
 // @Summary 预约房屋
 // @Description 用户预约房屋
 // @Tags 预约

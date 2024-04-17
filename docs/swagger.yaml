@@ -20,10 +20,18 @@ definitions:
     - 1016
     - 1017
     - 1018
+    - 1019
+    - 1020
+    - 1021
+    - 1022
+    - 1023
     type: integer
     x-enum-comments:
       CheckUserExistsError: 检查用户是否存在错误
       CodeSuccess: 成功
+      CreateDirError: 创建文件夹错误
+      CreateHouseError: 创建房屋错误
+      CreateHouseImageError: 创建房屋图片错误
       GenerateJWTTokenError: 无法生成jwt token
       GetDBError: 数据库错误
       GetHouseInfoError: 获取某一个房屋信息错误
@@ -38,8 +46,10 @@ definitions:
       RegisterEmailExists: 邮箱已存在
       RegisterInvalidParam: 注册请求参数错误
       RegisterUsernameExists: 用户名已存在
+      ReleaseBindDataError: 绑定数据错误
       ReserveError: 预约失败
       ReserveInvalidParam: 预约请求参数错误
+      SaveFileError: 保存文件错误
       UserIDTypeError: 用户ID类型错误
     x-enum-varnames:
     - CodeSuccess
@@ -61,6 +71,11 @@ definitions:
     - GetHouseListError
     - GetHouseInfoError
     - HouseIDInvalid
+    - ReleaseBindDataError
+    - CreateDirError
+    - SaveFileError
+    - CreateHouseError
+    - CreateHouseImageError
   controller.ResponseData:
     properties:
       code:
@@ -72,12 +87,13 @@ definitions:
       message:
         description: 返回的信息
     type: object
+  model.HouseRequest:
+    type: object
 host: localhost:8080
 info:
   contact:
-    email: support@swagger.io
+    email: Haonan_Fang@Outlook.com
     name: FHN
-    url: http://www.swagger.io/support
   description: 这是在线房屋交易平台的API文档, 用于提供房屋交易相关的接口, 包括用户注册、登录、房屋信息的增删改查等功能, 以及房屋图片的上传和获取等功能
   license:
     name: Apache 2.0
@@ -127,13 +143,11 @@ paths:
       - application/json
       responses:
         "200":
-          description: '预约成功" example:{"code": codes.CodeSuccess, "message": "预约成功",
-            "data": {}}'
+          description: 预约成功
           schema:
             $ref: '#/definitions/controller.ResponseData'
         "400":
-          description: '预约失败,具体原因查看json中的message字段和code字段" example:{"code": codes.GetDBError,
-            "message": "数据库错误"}'
+          description: 预约失败,具体原因查看json中的message字段和code字段
           schema:
             $ref: '#/definitions/controller.ResponseData'
       summary: 预约房屋
@@ -323,4 +337,53 @@ paths:
       summary: LearnMore
       tags:
       - LearnMore
+  /release:
+    get:
+      consumes:
+      - application/json
+      description: 获取发布房屋信息页面
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      produces:
+      - text/html
+      responses:
+        "200":
+          description: 发布房屋信息页面
+          schema:
+            type: string
+      summary: 获取发布房屋信息页面
+      tags:
+      - 发布
+    post:
+      consumes:
+      - application/json
+      description: 发布房屋信息
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      - description: 发布房屋信息请求
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/model.HouseRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 发布成功
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+        "400":
+          description: 发布失败
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+      summary: 发布房屋信息
+      tags:
+      - 发布
 swagger: "2.0"

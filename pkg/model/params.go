@@ -1,6 +1,7 @@
 package model
 
 import (
+	"mime/multipart"
 	"online-house-trading-platform/codes"
 )
 
@@ -23,6 +24,17 @@ type RegisterRequest struct {
 	Password string `json:"password"`
 	Email    string `json:"email"`
 	Role     string `json:"role"`
+}
+
+// HouseRequest 是从前端接收房源数据的结构体。
+type HouseRequest struct {
+	Owner       string                  `json:"owner"`       // 房屋所有者名称
+	OwnerID     uint                    `json:"owner_id"`    // 房屋所有者ID
+	Title       string                  `json:"title"`       // 房屋标题
+	Description string                  `json:"description"` // 房屋描述
+	Price       float64                 `json:"price"`       // 房屋价格
+	Address     string                  `json:"address"`     // 房屋地址
+	Images      []*multipart.FileHeader `json:"images"`      // 房屋相关的图片文件列表
 }
 
 // Error 用于处理错误信息

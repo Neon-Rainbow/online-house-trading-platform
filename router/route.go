@@ -42,7 +42,27 @@ func setupHouseAPI(r *gin.Engine, db *gorm.DB) {
 	}
 }
 
-func SetupRootAPI(router *gin.Engine, db *gorm.DB) {
+// setupUserAPI 建设了一个用户API,用于处理用户的个人信息,url为/user/:user_id
+func setupUserAPI(r *gin.Engine, db *gorm.DB) {
+	userGroup := r.Group("/user/:user_id").Use(
+		middleware.JWTAuthMiddleware(),
+		middleware.UserIDMatchMiddleware(),
+		middleware.DBMiddleware(db))
+	{
+		userGroup.GET("/release", controller.ReleaseGet)
+		userGroup.POST("/release", controller.ReleasePost)
+	}
+	userProfileGroup := r.Group("/user/:user_id/profile").Use(
+		middleware.JWTAuthMiddleware(),
+		middleware.UserIDMatchMiddleware(),
+		middleware.DBMiddleware(db))
+	//TODO: 这里需要继续写
+	{
+		userProfileGroup.GET("/")
+	}
+}
+
+func setupRootAPI(router *gin.Engine, db *gorm.DB) {
 	router.GET("/", controller.HomePageGet)
 	router.GET("/learn_more", controller.LearnMoreGet)
 }
@@ -59,13 +79,16 @@ func SetupRouters(db *gorm.DB) *gin.Engine {
 	router.LoadHTMLGlob("./web/templates/**/*")
 
 	//设置路由,地址为/
-	SetupRootAPI(router, db)
+	setupRootAPI(router, db)
 
 	//设置路由,地址为/auth
 	setupAuthAPI(router, db)
 
 	//设置路由,地址为/houses
 	setupHouseAPI(router, db)
+
+	//设置路由,地址为/user
+	setupUserAPI(router, db)
 
 	//404界面
 	router.NoRoute(func(c *gin.Context) {

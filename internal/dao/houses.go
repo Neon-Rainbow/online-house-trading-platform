@@ -35,3 +35,13 @@ func GetHouseInformationByID(db *gorm.DB, houseID uint) (*model.House, error) {
 	}
 	return house, nil
 }
+
+// CreateHouse 用于创建房屋记录
+func CreateHouse(db *gorm.DB, house *model.House) error {
+	return db.Create(house).Error
+}
+
+// CreateHouseImages 用于在数据库中创建多个房屋图片记录
+func CreateHouseImages(db *gorm.DB, images []model.HouseImage) error {
+	return db.Create(&images).Error
+}

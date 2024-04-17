@@ -12,8 +12,7 @@ const docTemplate = `{
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "name": "FHN",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
+            "email": "Haonan_Fang@Outlook.com"
         },
         "license": {
             "name": "Apache 2.0",
@@ -88,13 +87,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "预约成功\" example:{\"code\": codes.CodeSuccess, \"message\": \"预约成功\", \"data\": {}}",
+                        "description": "预约成功",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseData"
                         }
                     },
                     "400": {
-                        "description": "预约失败,具体原因查看json中的message字段和code字段\" example:{\"code\": codes.GetDBError, \"message\": \"数据库错误\"}",
+                        "description": "预约失败,具体原因查看json中的message字段和code字段",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseData"
                         }
@@ -385,6 +384,81 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/release": {
+            "get": {
+                "description": "获取发布房屋信息页面",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/html"
+                ],
+                "tags": [
+                    "发布"
+                ],
+                "summary": "获取发布房屋信息页面",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "发布房屋信息页面",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "发布房屋信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "发布"
+                ],
+                "summary": "发布房屋信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "description": "发布房屋信息请求",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.HouseRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "发布成功",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "发布失败",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -409,11 +483,19 @@ const docTemplate = `{
                 1015,
                 1016,
                 1017,
-                1018
+                1018,
+                1019,
+                1020,
+                1021,
+                1022,
+                1023
             ],
             "x-enum-comments": {
                 "CheckUserExistsError": "检查用户是否存在错误",
                 "CodeSuccess": "成功",
+                "CreateDirError": "创建文件夹错误",
+                "CreateHouseError": "创建房屋错误",
+                "CreateHouseImageError": "创建房屋图片错误",
                 "GenerateJWTTokenError": "无法生成jwt token",
                 "GetDBError": "数据库错误",
                 "GetHouseInfoError": "获取某一个房屋信息错误",
@@ -428,8 +510,10 @@ const docTemplate = `{
                 "RegisterEmailExists": "邮箱已存在",
                 "RegisterInvalidParam": "注册请求参数错误",
                 "RegisterUsernameExists": "用户名已存在",
+                "ReleaseBindDataError": "绑定数据错误",
                 "ReserveError": "预约失败",
                 "ReserveInvalidParam": "预约请求参数错误",
+                "SaveFileError": "保存文件错误",
                 "UserIDTypeError": "用户ID类型错误"
             },
             "x-enum-varnames": [
@@ -451,7 +535,12 @@ const docTemplate = `{
                 "UserIDTypeError",
                 "GetHouseListError",
                 "GetHouseInfoError",
-                "HouseIDInvalid"
+                "HouseIDInvalid",
+                "ReleaseBindDataError",
+                "CreateDirError",
+                "SaveFileError",
+                "CreateHouseError",
+                "CreateHouseImageError"
             ]
         },
         "controller.ResponseData": {
@@ -472,6 +561,9 @@ const docTemplate = `{
                     "description": "返回的信息"
                 }
             }
+        },
+        "model.HouseRequest": {
+            "type": "object"
         }
     }
 }`
