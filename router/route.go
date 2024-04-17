@@ -5,7 +5,11 @@ import (
 	"online-house-trading-platform/internal/controller"
 	"online-house-trading-platform/middleware"
 
+	docs "online-house-trading-platform/docs"
+
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/gorm"
 )
 
@@ -67,6 +71,10 @@ func SetupRouters(db *gorm.DB) *gin.Engine {
 	router.NoRoute(func(c *gin.Context) {
 		c.HTML(http.StatusNotFound, "404.html", nil)
 	})
+
+	docs.SwaggerInfo.BasePath = "/api/v1"
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	return router
 }

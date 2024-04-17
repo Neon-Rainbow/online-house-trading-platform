@@ -10,9 +10,9 @@ import (
 
 // ResponseData 用于封装API的返回数据
 type ResponseData struct {
-	Code    codes.ResCode `json:"code"`
-	Message interface{}   `json:"message"`
-	Data    interface{}   `json:"data"`
+	Code    codes.ResCode `json:"code"`    // 自定义的返回码
+	Message interface{}   `json:"message"` // 返回的信息
+	Data    interface{}   `json:"data"`    // 返回的数据
 }
 
 // ResponseSuccess 用于返回成功信息

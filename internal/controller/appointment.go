@@ -10,6 +10,15 @@ import (
 )
 
 // HousesAppointmentPost 用于处理用户预约房屋的GET请求
+// @Summary 预约房屋
+// @Description 用户预约房屋
+// @Tags 预约
+// @Accept json
+// @Produce json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Success 200 {object} controller.ResponseData "预约成功"
+// @failure 200 {object} controller.ResponseData "预约失败"
+// @Router /appointment [post]
 func HousesAppointmentPost(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {

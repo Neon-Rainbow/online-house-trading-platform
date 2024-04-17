@@ -11,11 +11,26 @@ import (
 )
 
 // LoginGet 用于处理用户的登录界面的GET请求
+// @Summary 登录界面
+// @Description 显示用户登录界面
+// @Tags 登录
+// @Accept json
+// @Produce json
+// @Success 200 {string} html "登录界面"
+// @Router /auth/login [get]
 func LoginGet(c *gin.Context) {
 	c.HTML(http.StatusOK, "login.html", nil)
 }
 
 // LoginPost 用于处理用户的登录界面的POST请求
+// @Summary 登录接口
+// @Description 用户登录接口
+// @Tags 登录
+// @Accept json
+// @Produce json
+// @Param object query model.LoginRequest false "查询参数"
+// @Success 200 {object} controller.ResponseData "登录成功"
+// @Router /auth/login [post]
 func LoginPost(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {

@@ -1,0 +1,282 @@
+definitions:
+  codes.ResCode:
+    enum:
+    - 1000
+    - 1001
+    - 1002
+    - 1003
+    - 1004
+    - 1005
+    - 1006
+    - 1007
+    - 1008
+    - 1009
+    - 1010
+    - 1011
+    - 1012
+    - 1013
+    - 1014
+    - 1015
+    - 1016
+    - 1017
+    - 1018
+    type: integer
+    x-enum-comments:
+      CheckUserExistsError: 检查用户是否存在错误
+      CodeSuccess: 成功
+      GenerateJWTTokenError: 无法生成jwt token
+      GetDBError: 数据库错误
+      GetHouseInfoError: 获取某一个房屋信息错误
+      GetHouseListError: 获取房屋列表错误
+      GetUserIDError: 获取用户ID错误
+      HouseIDInvalid: 房屋ID无效
+      LoginInvalidParam: 请求参数错误
+      LoginInvalidPassword: 密码错误
+      LoginServerBusy: 服务繁忙
+      LoginUserNotExist: 用户不存在
+      RegisterCreateUserError: 创建用户失败
+      RegisterEmailExists: 邮箱已存在
+      RegisterInvalidParam: 注册请求参数错误
+      RegisterUsernameExists: 用户名已存在
+      ReserveError: 预约失败
+      ReserveInvalidParam: 预约请求参数错误
+      UserIDTypeError: 用户ID类型错误
+    x-enum-varnames:
+    - CodeSuccess
+    - LoginInvalidParam
+    - LoginUserNotExist
+    - LoginInvalidPassword
+    - LoginServerBusy
+    - GetDBError
+    - GenerateJWTTokenError
+    - RegisterInvalidParam
+    - CheckUserExistsError
+    - RegisterUsernameExists
+    - RegisterEmailExists
+    - RegisterCreateUserError
+    - ReserveInvalidParam
+    - ReserveError
+    - GetUserIDError
+    - UserIDTypeError
+    - GetHouseListError
+    - GetHouseInfoError
+    - HouseIDInvalid
+  controller.ResponseData:
+    properties:
+      code:
+        allOf:
+        - $ref: '#/definitions/codes.ResCode'
+        description: 自定义的返回码
+      data:
+        description: 返回的数据
+      message:
+        description: 返回的信息
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: FHN
+    url: http://www.swagger.io/support
+  description: 这是在线房屋交易平台的API文档, 用于提供房屋交易相关的接口, 包括用户注册、登录、房屋信息的增删改查等功能, 以及房屋图片的上传和获取等功能
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: 在线房屋交易平台API文档
+  version: "1.0"
+paths:
+  /:
+    get:
+      consumes:
+      - application/json
+      description: 显示首页
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 首页
+          schema:
+            type: string
+      summary: 首页
+      tags:
+      - 首页
+  /appointment:
+    post:
+      consumes:
+      - application/json
+      description: 用户预约房屋
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 预约失败
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+      summary: 预约房屋
+      tags:
+      - 预约
+  /auth/login:
+    get:
+      consumes:
+      - application/json
+      description: 显示用户登录界面
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登录界面
+          schema:
+            type: string
+      summary: 登录界面
+      tags:
+      - 登录
+    post:
+      consumes:
+      - application/json
+      description: 用户登录接口
+      parameters:
+      - in: query
+        name: password
+        type: string
+      - in: query
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登录成功
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+      summary: 登录接口
+      tags:
+      - 登录
+  /auth/register:
+    get:
+      consumes:
+      - application/json
+      description: 显示用户注册界面
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 注册界面
+          schema:
+            type: string
+      summary: 注册界面
+      tags:
+      - 注册
+    post:
+      consumes:
+      - application/json
+      description: 用户注册接口
+      parameters:
+      - in: query
+        name: email
+        type: string
+      - in: query
+        name: password
+        type: string
+      - in: query
+        name: role
+        type: string
+      - in: query
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 注册失败
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+      summary: 注册接口
+      tags:
+      - 注册
+  /collect:
+    post:
+      consumes:
+      - application/json
+      description: 用户收藏房屋
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 收藏失败
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+      summary: 收藏房屋
+      tags:
+      - 收藏
+  /house:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有房屋信息
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+      summary: 获取所有房屋信息
+      tags:
+      - 房屋
+  /house/{house_id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取某个房屋的详细信息
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      - description: 房屋ID
+        in: path
+        name: house_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取失败
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+      summary: 获取某个房屋的详细信息
+      tags:
+      - 房屋
+  /learn_more:
+    get:
+      consumes:
+      - application/json
+      description: 显示LearnMore页面
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: LearnMore页面
+          schema:
+            type: string
+      summary: LearnMore
+      tags:
+      - LearnMore
+swagger: "2.0"

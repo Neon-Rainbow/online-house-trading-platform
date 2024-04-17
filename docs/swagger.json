@@ -1,0 +1,407 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "这是在线房屋交易平台的API文档, 用于提供房屋交易相关的接口, 包括用户注册、登录、房屋信息的增删改查等功能, 以及房屋图片的上传和获取等功能",
+        "title": "在线房屋交易平台API文档",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "FHN",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "paths": {
+        "/": {
+            "get": {
+                "description": "显示首页",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "首页"
+                ],
+                "summary": "首页",
+                "responses": {
+                    "200": {
+                        "description": "首页",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/appointment": {
+            "post": {
+                "description": "用户预约房屋",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "预约"
+                ],
+                "summary": "预约房屋",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "预约失败",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "get": {
+                "description": "显示用户登录界面",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "登录"
+                ],
+                "summary": "登录界面",
+                "responses": {
+                    "200": {
+                        "description": "登录界面",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "用户登录接口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "登录"
+                ],
+                "summary": "登录接口",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "password",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "username",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "登录成功",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "get": {
+                "description": "显示用户注册界面",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "注册"
+                ],
+                "summary": "注册界面",
+                "responses": {
+                    "200": {
+                        "description": "注册界面",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "用户注册接口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "注册"
+                ],
+                "summary": "注册接口",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "password",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "role",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "username",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "注册失败",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/collect": {
+            "post": {
+                "description": "用户收藏房屋",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "收藏"
+                ],
+                "summary": "收藏房屋",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "收藏失败",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/house": {
+            "get": {
+                "description": "获取所有房屋信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "房屋"
+                ],
+                "summary": "获取所有房屋信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/house/{house_id}": {
+            "get": {
+                "description": "获取某个房屋的详细信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "房屋"
+                ],
+                "summary": "获取某个房屋的详细信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "房屋ID",
+                        "name": "house_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取失败",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/learn_more": {
+            "get": {
+                "description": "显示LearnMore页面",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "LearnMore"
+                ],
+                "summary": "LearnMore",
+                "responses": {
+                    "200": {
+                        "description": "LearnMore页面",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "codes.ResCode": {
+            "type": "integer",
+            "enum": [
+                1000,
+                1001,
+                1002,
+                1003,
+                1004,
+                1005,
+                1006,
+                1007,
+                1008,
+                1009,
+                1010,
+                1011,
+                1012,
+                1013,
+                1014,
+                1015,
+                1016,
+                1017,
+                1018
+            ],
+            "x-enum-comments": {
+                "CheckUserExistsError": "检查用户是否存在错误",
+                "CodeSuccess": "成功",
+                "GenerateJWTTokenError": "无法生成jwt token",
+                "GetDBError": "数据库错误",
+                "GetHouseInfoError": "获取某一个房屋信息错误",
+                "GetHouseListError": "获取房屋列表错误",
+                "GetUserIDError": "获取用户ID错误",
+                "HouseIDInvalid": "房屋ID无效",
+                "LoginInvalidParam": "请求参数错误",
+                "LoginInvalidPassword": "密码错误",
+                "LoginServerBusy": "服务繁忙",
+                "LoginUserNotExist": "用户不存在",
+                "RegisterCreateUserError": "创建用户失败",
+                "RegisterEmailExists": "邮箱已存在",
+                "RegisterInvalidParam": "注册请求参数错误",
+                "RegisterUsernameExists": "用户名已存在",
+                "ReserveError": "预约失败",
+                "ReserveInvalidParam": "预约请求参数错误",
+                "UserIDTypeError": "用户ID类型错误"
+            },
+            "x-enum-varnames": [
+                "CodeSuccess",
+                "LoginInvalidParam",
+                "LoginUserNotExist",
+                "LoginInvalidPassword",
+                "LoginServerBusy",
+                "GetDBError",
+                "GenerateJWTTokenError",
+                "RegisterInvalidParam",
+                "CheckUserExistsError",
+                "RegisterUsernameExists",
+                "RegisterEmailExists",
+                "RegisterCreateUserError",
+                "ReserveInvalidParam",
+                "ReserveError",
+                "GetUserIDError",
+                "UserIDTypeError",
+                "GetHouseListError",
+                "GetHouseInfoError",
+                "HouseIDInvalid"
+            ]
+        },
+        "controller.ResponseData": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "自定义的返回码",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/codes.ResCode"
+                        }
+                    ]
+                },
+                "data": {
+                    "description": "返回的数据"
+                },
+                "message": {
+                    "description": "返回的信息"
+                }
+            }
+        }
+    }
+}

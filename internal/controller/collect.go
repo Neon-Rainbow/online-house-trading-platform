@@ -10,6 +10,15 @@ import (
 )
 
 // CollectPost 用于处理用户收藏房屋的Post请求
+// @Summary 收藏房屋
+// @Description 用户收藏房屋
+// @Tags 收藏
+// @Accept json
+// @Produce json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Success 200 {object} controller.ResponseData "收藏成功"
+// @failure 200 {object} controller.ResponseData "收藏失败"
+// @Router /collect [post]
 func CollectPost(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
