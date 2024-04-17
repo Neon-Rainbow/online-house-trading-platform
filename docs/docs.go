@@ -66,11 +66,35 @@ const docTemplate = `{
                         "description": "Bearer 用户令牌",
                         "name": "Authorization",
                         "in": "header"
+                    },
+                    {
+                        "description": "房屋ID",
+                        "name": "house_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "description": "预约时间",
+                        "name": "time",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "预约失败",
+                        "description": "预约成功",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "预约失败,具体原因查看json中的message字段和code字段",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseData"
                         }
@@ -127,6 +151,12 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "登录成功",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "预约失败,具体原因查看json中的message字段和code字段",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseData"
                         }
@@ -192,7 +222,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "注册失败",
+                        "description": "注册成功",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "预约失败,具体原因查看json中的message字段和code字段",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseData"
                         }
@@ -219,11 +255,26 @@ const docTemplate = `{
                         "description": "Bearer 用户令牌",
                         "name": "Authorization",
                         "in": "header"
+                    },
+                    {
+                        "description": "房屋ID",
+                        "name": "house_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "收藏失败",
+                        "description": "收藏成功",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "预约失败,具体原因查看json中的message字段和code字段",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseData"
                         }
@@ -255,6 +306,12 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "获取成功",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "预约失败,具体原因查看json中的message字段和code字段",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseData"
                         }
@@ -318,6 +375,12 @@ const docTemplate = `{
                         "description": "LearnMore页面",
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "预约失败,具体原因查看json中的message字段和code字段",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
                         }
                     }
                 }

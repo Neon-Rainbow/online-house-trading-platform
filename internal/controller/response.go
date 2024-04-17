@@ -47,5 +47,5 @@ func ResponseErrorWithCode(c *gin.Context, code codes.ResCode) {
 		Message: code.Message(),
 		Data:    nil,
 	}
-	c.JSON(http.StatusOK, responseData)
+	c.JSON(http.StatusBadRequest, responseData)
 }

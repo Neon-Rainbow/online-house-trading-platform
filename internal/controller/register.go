@@ -30,7 +30,7 @@ func RegisterGet(c *gin.Context) {
 // @Produce json
 // @Param object query model.RegisterRequest false "查询参数"
 // @Success 200 {object} controller.ResponseData "注册成功"
-// @failure 200 {object} controller.ResponseData "注册失败"
+// @Failure 400 {object} controller.ResponseData "预约失败,具体原因查看json中的message字段和code字段"
 // @Router /auth/register [post]
 func RegisterPost(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)

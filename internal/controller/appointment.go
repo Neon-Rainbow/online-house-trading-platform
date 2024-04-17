@@ -16,8 +16,10 @@ import (
 // @Accept json
 // @Produce json
 // @Param Authorization header string false "Bearer 用户令牌"
+// @Param house_id body uint true "房屋ID"
+// @Param time body time true "预约时间"
 // @Success 200 {object} controller.ResponseData "预约成功"
-// @failure 200 {object} controller.ResponseData "预约失败"
+// @Failure 400 {object} controller.ResponseData "预约失败,具体原因查看json中的message字段和code字段"
 // @Router /appointment [post]
 func HousesAppointmentPost(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)

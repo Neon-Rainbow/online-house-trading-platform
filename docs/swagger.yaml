@@ -111,11 +111,27 @@ paths:
         in: header
         name: Authorization
         type: string
+      - description: 房屋ID
+        in: body
+        name: house_id
+        required: true
+        schema:
+          type: integer
+      - description: 预约时间
+        in: body
+        name: time
+        required: true
+        schema:
+          type: string
       produces:
       - application/json
       responses:
         "200":
-          description: 预约失败
+          description: 预约成功
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+        "400":
+          description: 预约失败,具体原因查看json中的message字段和code字段
           schema:
             $ref: '#/definitions/controller.ResponseData'
       summary: 预约房屋
@@ -152,6 +168,10 @@ paths:
       responses:
         "200":
           description: 登录成功
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+        "400":
+          description: 预约失败,具体原因查看json中的message字段和code字段
           schema:
             $ref: '#/definitions/controller.ResponseData'
       summary: 登录接口
@@ -193,7 +213,11 @@ paths:
       - application/json
       responses:
         "200":
-          description: 注册失败
+          description: 注册成功
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+        "400":
+          description: 预约失败,具体原因查看json中的message字段和code字段
           schema:
             $ref: '#/definitions/controller.ResponseData'
       summary: 注册接口
@@ -209,11 +233,21 @@ paths:
         in: header
         name: Authorization
         type: string
+      - description: 房屋ID
+        in: body
+        name: house_id
+        required: true
+        schema:
+          type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: 收藏失败
+          description: 收藏成功
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+        "400":
+          description: 预约失败,具体原因查看json中的message字段和code字段
           schema:
             $ref: '#/definitions/controller.ResponseData'
       summary: 收藏房屋
@@ -234,6 +268,10 @@ paths:
       responses:
         "200":
           description: 获取成功
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+        "400":
+          description: 预约失败,具体原因查看json中的message字段和code字段
           schema:
             $ref: '#/definitions/controller.ResponseData'
       summary: 获取所有房屋信息
@@ -276,6 +314,10 @@ paths:
           description: LearnMore页面
           schema:
             type: string
+        "400":
+          description: 预约失败,具体原因查看json中的message字段和code字段
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
       summary: LearnMore
       tags:
       - LearnMore

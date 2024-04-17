@@ -17,6 +17,7 @@ import (
 // @Produce json
 // @Param Authorization header string false "Bearer 用户令牌"
 // @Success 200 {object} controller.ResponseData "获取成功"
+// @Failure 400 {object} controller.ResponseData "预约失败,具体原因查看json中的message字段和code字段"
 // @Router /house [get]
 func GetAllHouses(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)

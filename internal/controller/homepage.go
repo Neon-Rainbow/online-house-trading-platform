@@ -25,6 +25,7 @@ func HomePageGet(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {string} html "LearnMore页面"
+// @Failure 400 {object} controller.ResponseData "预约失败,具体原因查看json中的message字段和code字段"
 // @Router /learn_more [get]
 func LearnMoreGet(c *gin.Context) {
 	c.HTML(http.StatusOK, "learn_more.html", nil)

@@ -30,6 +30,7 @@ func LoginGet(c *gin.Context) {
 // @Produce json
 // @Param object query model.LoginRequest false "查询参数"
 // @Success 200 {object} controller.ResponseData "登录成功"
+// @Failure 400 {object} controller.ResponseData "预约失败,具体原因查看json中的message字段和code字段"
 // @Router /auth/login [post]
 func LoginPost(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
