@@ -40,3 +40,10 @@ func GetUserFavourites(db *gorm.DB, id uint) ([]model.Favourite, error) {
 	result := db.Where("user_id = ?", id).Find(&favourites)
 	return favourites, result.Error
 }
+
+// GetUserProfile 用于获取用户的个人信息
+func GetUserProfile(db *gorm.DB, idUint uint) (*model.User, error) {
+	var userProfile *model.User
+	result := db.Preload("Avatar").First(&userProfile, idUint)
+	return userProfile, result.Error
+}

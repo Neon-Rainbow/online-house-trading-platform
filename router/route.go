@@ -59,7 +59,7 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 		middleware.DBMiddleware(db))
 	//TODO: 这里需要继续写
 	{
-		userProfileGroup.GET("/")
+		userProfileGroup.GET("/", controller.ProfileGet)
 	}
 }
 
