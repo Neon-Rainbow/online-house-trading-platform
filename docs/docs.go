@@ -385,6 +385,96 @@ const docTemplate = `{
                 }
             }
         },
+        "/profile/profile": {
+            "put": {
+                "description": "修改个人信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "个人信息"
+                ],
+                "summary": "修改个人信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "description": "用户信息",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "修改成功",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "修改失败",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/profile/{user_id}": {
+            "get": {
+                "description": "获取个人信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "个人信息"
+                ],
+                "summary": "获取个人信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "获取失败",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
         "/release": {
             "get": {
                 "description": "获取发布房屋信息页面",
@@ -533,9 +623,13 @@ const docTemplate = `{
                 1021,
                 1022,
                 1023,
-                1024
+                1024,
+                1025,
+                1026,
+                1027
             ],
             "x-enum-comments": {
+                "BindDataError": "绑定数据错误",
                 "CheckUserExistsError": "检查用户是否存在错误",
                 "CodeSuccess": "成功",
                 "CreateDirError": "创建文件夹错误",
@@ -547,11 +641,13 @@ const docTemplate = `{
                 "GetHouseListError": "获取房屋列表错误",
                 "GetUserFavouritesError": "获取用户收藏错误",
                 "GetUserIDError": "获取用户ID错误",
+                "GetUserProfileError": "获取用户信息错误",
                 "HouseIDInvalid": "房屋ID无效",
                 "LoginInvalidParam": "请求参数错误",
                 "LoginInvalidPassword": "密码错误",
                 "LoginServerBusy": "服务繁忙",
                 "LoginUserNotExist": "用户不存在",
+                "ModifyUserProfileError": "修改用户信息错误",
                 "RegisterCreateUserError": "创建用户失败",
                 "RegisterEmailExists": "邮箱已存在",
                 "RegisterInvalidParam": "注册请求参数错误",
@@ -587,7 +683,10 @@ const docTemplate = `{
                 "SaveFileError",
                 "CreateHouseError",
                 "CreateHouseImageError",
-                "GetUserFavouritesError"
+                "GetUserFavouritesError",
+                "GetUserProfileError",
+                "BindDataError",
+                "ModifyUserProfileError"
             ]
         },
         "controller.ResponseData": {
@@ -611,6 +710,23 @@ const docTemplate = `{
         },
         "model.HouseRequest": {
             "type": "object"
+        },
+        "model.RegisterRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
         }
     }
 }`

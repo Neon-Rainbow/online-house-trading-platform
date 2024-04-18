@@ -18,7 +18,7 @@ import (
 // @Param Authorization header string false "Bearer 用户令牌"
 // @Param user_id path string true "用户ID"
 // @Success 200 {object} controller.ResponseData "获取成功"
-// @Failure 200 {object} controller.ResponseData "获取失败"
+// @Failure 400 {object} controller.ResponseData "获取失败"
 // @Router /profile/{user_id} [get]
 func ProfileGet(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
