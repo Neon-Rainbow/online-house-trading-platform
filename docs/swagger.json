@@ -228,52 +228,6 @@
                 }
             }
         },
-        "/collect": {
-            "post": {
-                "description": "用户收藏房屋",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "收藏"
-                ],
-                "summary": "收藏房屋",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer 用户令牌",
-                        "name": "Authorization",
-                        "in": "header"
-                    },
-                    {
-                        "description": "房屋ID",
-                        "name": "house_id",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "收藏成功",
-                        "schema": {
-                            "$ref": "#/definitions/controller.ResponseData"
-                        }
-                    },
-                    "400": {
-                        "description": "预约失败,具体原因查看json中的message字段和code字段",
-                        "schema": {
-                            "$ref": "#/definitions/controller.ResponseData"
-                        }
-                    }
-                }
-            }
-        },
         "/house": {
             "get": {
                 "description": "获取所有房屋信息",
@@ -342,6 +296,52 @@
                 "responses": {
                     "200": {
                         "description": "获取失败",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/houses/collect": {
+            "post": {
+                "description": "用户收藏房屋",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "收藏"
+                ],
+                "summary": "收藏房屋",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "description": "房屋ID",
+                        "name": "house_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "收藏成功",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "预约失败,具体原因查看json中的message字段和code字段",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseData"
                         }
@@ -452,6 +452,50 @@
                     }
                 }
             }
+        },
+        "/user/{user_id}/collects": {
+            "post": {
+                "description": "获取用户收藏的房屋",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "收藏"
+                ],
+                "summary": "获取用户收藏的房屋",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "预约失败,具体原因查看json中的message字段和code字段",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -481,7 +525,8 @@
                 1020,
                 1021,
                 1022,
-                1023
+                1023,
+                1024
             ],
             "x-enum-comments": {
                 "CheckUserExistsError": "检查用户是否存在错误",
@@ -493,6 +538,7 @@
                 "GetDBError": "数据库错误",
                 "GetHouseInfoError": "获取某一个房屋信息错误",
                 "GetHouseListError": "获取房屋列表错误",
+                "GetUserFavouritesError": "获取用户收藏错误",
                 "GetUserIDError": "获取用户ID错误",
                 "HouseIDInvalid": "房屋ID无效",
                 "LoginInvalidParam": "请求参数错误",
@@ -533,7 +579,8 @@
                 "CreateDirError",
                 "SaveFileError",
                 "CreateHouseError",
-                "CreateHouseImageError"
+                "CreateHouseImageError",
+                "GetUserFavouritesError"
             ]
         },
         "controller.ResponseData": {

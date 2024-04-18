@@ -36,6 +36,7 @@ func LoginPost(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
 		ResponseErrorWithCode(c, codes.GetDBError)
+		return
 	}
 
 	var loginReq model.LoginRequest
@@ -43,12 +44,15 @@ func LoginPost(c *gin.Context) {
 	err := c.ShouldBind(&loginReq)
 	if err != nil {
 		ResponseErrorWithCode(c, codes.LoginInvalidParam)
+		return
 	}
 
 	loginResp, apiError := logic.LoginHandle(db, loginReq)
 	if apiError != nil {
 		ResponseError(c, *apiError)
+		return
 	}
 
 	ResponseSuccess(c, loginResp)
+	return
 }

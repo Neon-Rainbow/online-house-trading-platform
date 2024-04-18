@@ -27,6 +27,7 @@ const (
 	SaveFileError                                 // 保存文件错误
 	CreateHouseError                              // 创建房屋错误
 	CreateHouseImageError                         // 创建房屋图片错误
+	GetUserFavouritesError                        // 获取用户收藏错误
 )
 
 // codeMessageMap 用于存放code和message的映射关系
@@ -55,6 +56,7 @@ var codeMessageMap = map[ResCode]string{
 	SaveFileError:           "保存文件错误",
 	CreateHouseError:        "创建房屋错误",
 	CreateHouseImageError:   "创建房屋图片错误",
+	GetUserFavouritesError:  "获取用户收藏错误",
 }
 
 // Message 返回code对应的消息

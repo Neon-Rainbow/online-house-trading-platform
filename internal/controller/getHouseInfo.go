@@ -23,13 +23,16 @@ func GetAllHouses(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
 		ResponseErrorWithCode(c, codes.GetDBError)
+		return
 	}
 
 	houses, err := logic.FetchAllHouses(db)
 	if err != nil {
 		ResponseError(c, *err)
+		return
 	}
 	ResponseSuccess(c, houses)
+	return
 }
 
 // GetHouseInfoByID 用于获取某个房屋的详细信息

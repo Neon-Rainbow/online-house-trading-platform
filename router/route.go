@@ -51,6 +51,7 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 	{
 		userGroup.GET("/release", controller.ReleaseGet)
 		userGroup.POST("/release", controller.ReleasePost)
+		userGroup.GET("/favourites", controller.GetUserFavourites)
 	}
 	userProfileGroup := r.Group("/user/:user_id/profile").Use(
 		middleware.JWTAuthMiddleware(),

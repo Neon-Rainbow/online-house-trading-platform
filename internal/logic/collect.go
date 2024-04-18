@@ -20,3 +20,11 @@ func CollectHandle(db *gorm.DB, favourite *model.Favourite, userID uint) *model.
 	}
 	return nil
 }
+
+func GetUserFavourites(db *gorm.DB, userID uint) ([]model.Favourite, *model.Error) {
+	favourites, err := dao.GetUserFavourites(db, userID)
+	if err != nil {
+		return nil, &model.Error{StatusCode: codes.GetUserFavouritesError}
+	}
+	return favourites, nil
+}

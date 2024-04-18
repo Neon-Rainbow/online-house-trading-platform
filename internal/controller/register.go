@@ -20,6 +20,7 @@ import (
 // @Router /auth/register [get]
 func RegisterGet(c *gin.Context) {
 	c.HTML(http.StatusOK, "register.html", nil)
+	return
 }
 
 // RegisterPost 用于处理用户的注册界面的POST请求
@@ -36,18 +37,22 @@ func RegisterPost(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
 		ResponseErrorWithCode(c, codes.GetDBError)
+		return
 	}
 
 	var registerReq model.RegisterRequest
 	err := c.ShouldBind(&registerReq)
 	if err != nil {
 		ResponseErrorWithCode(c, codes.RegisterInvalidParam)
+		return
 	}
 
 	apiError := logic.RegisterHandle(db, registerReq)
 	if apiError != nil {
 		ResponseError(c, *apiError)
+		return
 	}
 
 	ResponseSuccess(c, nil)
+	return
 }

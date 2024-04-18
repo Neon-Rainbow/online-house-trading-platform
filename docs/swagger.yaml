@@ -25,6 +25,7 @@ definitions:
     - 1021
     - 1022
     - 1023
+    - 1024
     type: integer
     x-enum-comments:
       CheckUserExistsError: 检查用户是否存在错误
@@ -36,6 +37,7 @@ definitions:
       GetDBError: 数据库错误
       GetHouseInfoError: 获取某一个房屋信息错误
       GetHouseListError: 获取房屋列表错误
+      GetUserFavouritesError: 获取用户收藏错误
       GetUserIDError: 获取用户ID错误
       HouseIDInvalid: 房屋ID无效
       LoginInvalidParam: 请求参数错误
@@ -76,6 +78,7 @@ definitions:
     - SaveFileError
     - CreateHouseError
     - CreateHouseImageError
+    - GetUserFavouritesError
   controller.ResponseData:
     properties:
       code:
@@ -239,36 +242,6 @@ paths:
       summary: 注册接口
       tags:
       - 注册
-  /collect:
-    post:
-      consumes:
-      - application/json
-      description: 用户收藏房屋
-      parameters:
-      - description: Bearer 用户令牌
-        in: header
-        name: Authorization
-        type: string
-      - description: 房屋ID
-        in: body
-        name: house_id
-        required: true
-        schema:
-          type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 收藏成功
-          schema:
-            $ref: '#/definitions/controller.ResponseData'
-        "400":
-          description: 预约失败,具体原因查看json中的message字段和code字段
-          schema:
-            $ref: '#/definitions/controller.ResponseData'
-      summary: 收藏房屋
-      tags:
-      - 收藏
   /house:
     get:
       consumes:
@@ -318,6 +291,36 @@ paths:
       summary: 获取某个房屋的详细信息
       tags:
       - 房屋
+  /houses/collect:
+    post:
+      consumes:
+      - application/json
+      description: 用户收藏房屋
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      - description: 房屋ID
+        in: body
+        name: house_id
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 收藏成功
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+        "400":
+          description: 预约失败,具体原因查看json中的message字段和code字段
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+      summary: 收藏房屋
+      tags:
+      - 收藏
   /learn_more:
     get:
       consumes:
@@ -386,4 +389,33 @@ paths:
       summary: 发布房屋信息
       tags:
       - 发布
+  /user/{user_id}/collects:
+    post:
+      consumes:
+      - application/json
+      description: 获取用户收藏的房屋
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      - description: 用户ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+        "400":
+          description: 预约失败,具体原因查看json中的message字段和code字段
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+      summary: 获取用户收藏的房屋
+      tags:
+      - 收藏
 swagger: "2.0"

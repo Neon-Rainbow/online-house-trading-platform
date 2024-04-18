@@ -33,3 +33,10 @@ func CheckUserExists(db *gorm.DB, username, email string) (bool, bool, error) {
 
 	return usernameExists, emailExists, nil
 }
+
+// GetUserFavourites 用于获取用户的收藏
+func GetUserFavourites(db *gorm.DB, id uint) ([]model.Favourite, error) {
+	var favourites []model.Favourite
+	result := db.Where("user_id = ?", id).Find(&favourites)
+	return favourites, result.Error
+}
