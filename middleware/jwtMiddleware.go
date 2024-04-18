@@ -2,7 +2,8 @@ package middleware
 
 import (
 	"log"
-	"net/http"
+	"online-house-trading-platform/codes"
+	"online-house-trading-platform/internal/controller"
 	"online-house-trading-platform/pkg/jwt"
 	"strings"
 
@@ -13,9 +14,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 	return func(c *gin.Context) {
 		authHeader := c.Request.Header.Get("Authorization")
 		if authHeader == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{
-				"error": "请求未携带token，无权限访问",
-			})
+			controller.ResponseErrorWithCode(c, codes.RequestWithoutTokenError)
 			log.Printf("本次请求未携带token，无权限访问\n请求IP: %v\n请求头部: %v", c.ClientIP(), c.Request.Header)
 			c.Abort()
 			return
@@ -31,9 +30,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		} else if len(parts) == 2 && parts[0] == "Bearer" {
 			tkn = parts[1]
 		} else {
-			c.JSON(http.StatusUnauthorized, gin.H{
-				"error": "请求携带的token格式错误，无权限访问",
-			})
+			controller.ResponseErrorWithCode(c, codes.InvalidTokenFormatError)
 			log.Printf("本次请求携带的token格式错误，无权限访问\n请求IP: %v\n请求头部: %v", c.ClientIP(), c.Request.Header)
 			c.Abort()
 			return
@@ -44,9 +41,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 
 		mc, err := jwt.ParseToken(tkn)
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{
-				"error": "无效的token",
-			})
+			controller.ResponseErrorWithCode(c, codes.InvalidTokenError)
 			log.Printf("本次请求携带的token无效，无权限访问\n请求IP: %v\n请求头部: %v", c.ClientIP(), c.Request.Header)
 			c.Abort()
 			return

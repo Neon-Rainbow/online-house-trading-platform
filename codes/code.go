@@ -9,7 +9,10 @@ const (
 	LoginInvalidPassword                             // 密码错误
 	LoginServerBusy                                  // 服务繁忙
 	GetDBError                                       // 数据库错误
-	GenerateJWTTokenError                            //无法生成jwt token
+	GenerateJWTTokenError                            // 无法生成jwt token
+	RequestWithoutTokenError                         // 请求未携带token，无权限访问
+	InvalidTokenFormatError                          // token格式错误
+	InvalidTokenError                                // token无效
 	RegisterInvalidParam                             // 注册请求参数错误
 	CheckUserExistsError                             // 检查用户是否存在错误
 	RegisterUsernameExists                           // 用户名已存在
@@ -43,6 +46,9 @@ var codeMessageMap = map[ResCode]string{
 	LoginServerBusy:            "服务繁忙",
 	GetDBError:                 "数据库错误",
 	GenerateJWTTokenError:      "无法生成jwt token",
+	RequestWithoutTokenError:   "请求未携带token，无权限访问",
+	InvalidTokenFormatError:    "token格式错误",
+	InvalidTokenError:          "token无效",
 	RegisterInvalidParam:       "注册请求参数错误",
 	CheckUserExistsError:       "检查用户是否存在错误",
 	RegisterUsernameExists:     "注册时用户名已存在",

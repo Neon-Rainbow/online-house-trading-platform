@@ -29,9 +29,9 @@ func ResponseSuccess(c *gin.Context, data interface{}) {
 func ResponseError(c *gin.Context, error model.Error) {
 	var msg string
 	if error.Message == "" {
-		msg = error.Message
-	} else {
 		msg = error.StatusCode.Message()
+	} else {
+		msg = error.Message
 	}
 	responseData := &ResponseData{
 		Code:    error.StatusCode,
