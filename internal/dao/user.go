@@ -48,6 +48,14 @@ func GetUserProfile(db *gorm.DB, idUint uint) (*model.User, error) {
 	return userProfile, result.Error
 }
 
+// ModifyUserProfile 用于修改用户的个人信息
 func ModifyUserProfile(db *gorm.DB, m *model.User, idUint uint) error {
-	return db.Model(&model.User{}).Where("id = ?", idUint).Updates(m).Error
+	return db.Model(m).Where("id = ?", idUint).Updates(m).Error
+}
+
+// GetReserve 用于获取用户的预约信息
+func GetReserve(db *gorm.DB, idUint uint) ([]model.Reserve, error) {
+	var reserve []model.Reserve
+	result := db.Where("user_id = ?", idUint).Find(&reserve)
+	return reserve, result.Error
 }

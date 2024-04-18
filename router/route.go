@@ -52,12 +52,12 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 		userGroup.GET("/release", controller.ReleaseGet)
 		userGroup.POST("/release", controller.ReleasePost)
 		userGroup.GET("/favourites", controller.GetUserFavourites)
+		userGroup.GET("/appointment", controller.HousesAppointmentGet)
 	}
 	userProfileGroup := r.Group("/user/:user_id/profile").Use(
 		middleware.JWTAuthMiddleware(),
 		middleware.UserIDMatchMiddleware(),
 		middleware.DBMiddleware(db))
-	//TODO: 这里需要继续写
 	{
 		userProfileGroup.GET("/", controller.ProfileGet)
 		userProfileGroup.PUT("/", controller.ProfilePut)
