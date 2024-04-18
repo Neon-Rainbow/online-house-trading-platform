@@ -47,3 +47,7 @@ func GetUserProfile(db *gorm.DB, idUint uint) (*model.User, error) {
 	result := db.Preload("Avatar").First(&userProfile, idUint)
 	return userProfile, result.Error
 }
+
+func ModifyUserProfile(db *gorm.DB, m *model.User, idUint uint) error {
+	return db.Model(&model.User{}).Where("id = ?", idUint).Updates(m).Error
+}

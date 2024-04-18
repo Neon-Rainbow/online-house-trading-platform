@@ -60,6 +60,7 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 	//TODO: 这里需要继续写
 	{
 		userProfileGroup.GET("/", controller.ProfileGet)
+		userProfileGroup.PUT("/", controller.ProfilePut)
 	}
 }
 

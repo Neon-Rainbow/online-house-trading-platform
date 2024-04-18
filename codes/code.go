@@ -29,6 +29,8 @@ const (
 	CreateHouseImageError                         // 创建房屋图片错误
 	GetUserFavouritesError                        // 获取用户收藏错误
 	GetUserProfileError                           // 获取用户信息错误
+	BindDataError                                 // 绑定数据错误
+	ModifyUserProfileError                        // 修改用户信息错误
 )
 
 // codeMessageMap 用于存放code和message的映射关系
@@ -59,6 +61,8 @@ var codeMessageMap = map[ResCode]string{
 	CreateHouseImageError:   "创建房屋图片错误",
 	GetUserFavouritesError:  "获取用户收藏错误",
 	GetUserProfileError:     "获取用户信息错误",
+	BindDataError:           "绑定数据错误",
+	ModifyUserProfileError:  "修改用户信息错误",
 }
 
 // Message 返回code对应的消息

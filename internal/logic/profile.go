@@ -16,3 +16,11 @@ func GetUserProfile(db *gorm.DB, idUint uint) (*model.User, *model.Error) {
 	}
 	return userProfile, nil
 }
+
+func ModifyUserProfile(db *gorm.DB, m *model.User, idUint uint) *model.Error {
+	err := dao.ModifyUserProfile(db, m, idUint)
+	if err != nil {
+		return &model.Error{StatusCode: codes.ModifyUserProfileError}
+	}
+	return nil
+}
