@@ -46,61 +46,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/appointment": {
-            "post": {
-                "description": "用户预约房屋",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "预约"
-                ],
-                "summary": "预约房屋",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer 用户令牌",
-                        "name": "Authorization",
-                        "in": "header"
-                    },
-                    {
-                        "description": "房屋ID",
-                        "name": "house_id",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "description": "预约时间",
-                        "name": "time",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "预约成功",
-                        "schema": {
-                            "$ref": "#/definitions/controller.ResponseData"
-                        }
-                    },
-                    "400": {
-                        "description": "预约失败,具体原因查看json中的message字段和code字段",
-                        "schema": {
-                            "$ref": "#/definitions/controller.ResponseData"
-                        }
-                    }
-                }
-            }
-        },
         "/auth/login": {
             "get": {
                 "description": "显示用户登录界面",
@@ -235,7 +180,45 @@ const docTemplate = `{
                 }
             }
         },
-        "/house": {
+        "/house/{house_id}": {
+            "get": {
+                "description": "获取某个房屋的详细信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "房屋"
+                ],
+                "summary": "获取某个房屋的详细信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "房屋ID",
+                        "name": "house_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取失败",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/houses": {
             "get": {
                 "description": "获取所有房屋信息",
                 "consumes": [
@@ -272,9 +255,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/house/{house_id}": {
-            "get": {
-                "description": "获取某个房屋的详细信息",
+        "/houses/appointment": {
+            "post": {
+                "description": "用户预约房屋",
                 "consumes": [
                     "application/json"
                 ],
@@ -282,9 +265,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "房屋"
+                    "预约"
                 ],
-                "summary": "获取某个房屋的详细信息",
+                "summary": "预约房屋",
                 "parameters": [
                     {
                         "type": "string",
@@ -293,16 +276,33 @@ const docTemplate = `{
                         "in": "header"
                     },
                     {
-                        "type": "string",
                         "description": "房屋ID",
                         "name": "house_id",
-                        "in": "path",
-                        "required": true
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "description": "预约时间",
+                        "name": "time",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "获取失败",
+                        "description": "预约成功",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "预约失败,具体原因查看json中的message字段和code字段",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseData"
                         }
@@ -550,6 +550,50 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/{user_id}/appointment": {
+            "get": {
+                "description": "获取用户预约的房屋",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "预约"
+                ],
+                "summary": "获取用户预约的房屋",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "获取失败",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
         "/user/{user_id}/collects": {
             "post": {
                 "description": "获取用户收藏的房屋",
@@ -626,7 +670,11 @@ const docTemplate = `{
                 1024,
                 1025,
                 1026,
-                1027
+                1027,
+                1028,
+                1029,
+                1030,
+                1031
             ],
             "x-enum-comments": {
                 "BindDataError": "绑定数据错误",
@@ -639,10 +687,13 @@ const docTemplate = `{
                 "GetDBError": "数据库错误",
                 "GetHouseInfoError": "获取某一个房屋信息错误",
                 "GetHouseListError": "获取房屋列表错误",
+                "GetReserveInformetionError": "获取预约信息错误",
                 "GetUserFavouritesError": "获取用户收藏错误",
                 "GetUserIDError": "获取用户ID错误",
                 "GetUserProfileError": "获取用户信息错误",
                 "HouseIDInvalid": "房屋ID无效",
+                "InvalidTokenError": "token无效",
+                "InvalidTokenFormatError": "token格式错误",
                 "LoginInvalidParam": "请求参数错误",
                 "LoginInvalidPassword": "密码错误",
                 "LoginServerBusy": "服务繁忙",
@@ -653,6 +704,7 @@ const docTemplate = `{
                 "RegisterInvalidParam": "注册请求参数错误",
                 "RegisterUsernameExists": "用户名已存在",
                 "ReleaseBindDataError": "绑定数据错误",
+                "RequestWithoutTokenError": "请求未携带token，无权限访问",
                 "ReserveError": "预约失败",
                 "ReserveInvalidParam": "预约请求参数错误",
                 "SaveFileError": "保存文件错误",
@@ -666,6 +718,9 @@ const docTemplate = `{
                 "LoginServerBusy",
                 "GetDBError",
                 "GenerateJWTTokenError",
+                "RequestWithoutTokenError",
+                "InvalidTokenFormatError",
+                "InvalidTokenError",
                 "RegisterInvalidParam",
                 "CheckUserExistsError",
                 "RegisterUsernameExists",
@@ -686,7 +741,8 @@ const docTemplate = `{
                 "GetUserFavouritesError",
                 "GetUserProfileError",
                 "BindDataError",
-                "ModifyUserProfileError"
+                "ModifyUserProfileError",
+                "GetReserveInformetionError"
             ]
         },
         "controller.ResponseData": {
@@ -735,7 +791,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:8080",
-	BasePath:         "",
+	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "在线房屋交易平台API文档",
 	Description:      "这是在线房屋交易平台的API文档, 用于提供房屋交易相关的接口, 包括用户注册、登录、房屋信息的增删改查等功能, 以及房屋图片的上传和获取等功能",

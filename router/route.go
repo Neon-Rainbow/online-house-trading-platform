@@ -97,7 +97,7 @@ func SetupRouters(db *gorm.DB) *gin.Engine {
 		c.HTML(http.StatusNotFound, "404.html", nil)
 	})
 
-	docs.SwaggerInfo.BasePath = "/api/v1"
+	docs.SwaggerInfo.BasePath = "/"
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 

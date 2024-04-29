@@ -21,6 +21,7 @@ import (
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @host localhost:8080
+// @BasePath /
 func main() {
 	config.LoadConfig("config.json") // 加载配置文件
 
