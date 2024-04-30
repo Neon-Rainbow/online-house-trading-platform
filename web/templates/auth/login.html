@@ -70,6 +70,17 @@
             background-color: #45a049;
         }
 
+        /* 注册按钮样式 */
+        .register-link {
+            display: block;
+            margin-top: 10px; /* 调整距离上方的间距 */
+            color: #666;
+            text-decoration: none;
+        }
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -86,6 +97,8 @@
             </div>
             <button type="submit">登录</button>
         </form>
+        <!-- 注册按钮，点击后跳转到注册页面 -->
+        <a href="/auth/register" class="register-link">没有账号？点击注册</a>
     </div>
 </body>
 </html>
