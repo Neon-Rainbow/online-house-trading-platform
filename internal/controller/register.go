@@ -1,0 +1,58 @@
+package controller
+
+import (
+	"net/http"
+	"online-house-trading-platform/codes"
+	"online-house-trading-platform/internal/logic"
+	"online-house-trading-platform/pkg/model"
+
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+)
+
+// RegisterGet 用于处理用户的注册界面的GET请求
+// @Summary 注册界面
+// @Description 显示用户注册界面
+// @Tags 注册
+// @Accept json
+// @Produce json
+// @Success 200 {string} html "注册界面"
+// @Router /auth/register [get]
+func RegisterGet(c *gin.Context) {
+	c.HTML(http.StatusOK, "register.html", nil)
+	return
+}
+
+// RegisterPost 用于处理用户的注册界面的POST请求
+// @Summary 注册接口
+// @Description 用户注册接口
+// @Tags 注册
+// @Accept json
+// @Produce json
+// @Param object query model.RegisterRequest false "查询参数"
+// @Success 200 {object} controller.ResponseData "注册成功"
+// @Failure 400 {object} controller.ResponseData "预约失败,具体原因查看json中的message字段和code字段"
+// @Router /auth/register [post]
+func RegisterPost(c *gin.Context) {
+	db, exist := c.MustGet("db").(*gorm.DB)
+	if !exist {
+		ResponseErrorWithCode(c, codes.GetDBError)
+		return
+	}
+
+	var registerReq model.RegisterRequest
+	err := c.ShouldBind(&registerReq)
+	if err != nil {
+		ResponseErrorWithCode(c, codes.RegisterInvalidParam)
+		return
+	}
+
+	apiError := logic.RegisterHandle(db, registerReq)
+	if apiError != nil {
+		ResponseError(c, *apiError)
+		return
+	}
+
+	ResponseSuccess(c, nil)
+	return
+}

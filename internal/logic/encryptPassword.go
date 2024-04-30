@@ -1,4 +1,4 @@
-package auth
+package logic
 
 import (
 	"crypto/md5"
@@ -6,8 +6,8 @@ import (
 	"online-house-trading-platform/config"
 )
 
-// encryptPassword 用于对密码进行加密,使用了md5加密算法
-func encryptPassword(password string) string {
+// EncryptPassword 用于对密码进行加密,使用了md5加密算法
+func EncryptPassword(password string) string {
 	// secret 用于存储密码加密的密钥
 	var secret = config.AppConfig.PasswordSecret
 	h := md5.New()
