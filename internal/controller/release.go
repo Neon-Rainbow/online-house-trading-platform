@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"net/http"
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/logic"
 	"online-house-trading-platform/pkg/model"
@@ -20,7 +19,8 @@ import (
 // @Success 200 {string} html "发布房屋信息页面"
 // @Router /release [get]
 func ReleaseGet(c *gin.Context) {
-	c.HTML(http.StatusOK, "release.html", nil)
+	// c.HTML(http.StatusOK, "release.html", nil)
+	ResponseSuccess(c, nil)
 	return
 }
 

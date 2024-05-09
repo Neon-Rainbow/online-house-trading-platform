@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"net/http"
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/logic"
 	"online-house-trading-platform/pkg/model"
@@ -19,7 +18,8 @@ import (
 // @Success 200 {string} html "注册界面"
 // @Router /auth/register [get]
 func RegisterGet(c *gin.Context) {
-	c.HTML(http.StatusOK, "register.html", nil)
+	//c.HTML(http.StatusOK, "register.html", nil)
+	ResponseSuccess(c, nil)
 	return
 }
 
