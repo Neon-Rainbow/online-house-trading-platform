@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"log"
-	"net/http"
+	"online-house-trading-platform/internal/controller"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +14,7 @@ func UserIDMatchMiddleware() gin.HandlerFunc {
 		contextUserID, exists := c.Get("user_id")
 		if !exists {
 			// 如果在上下文中找不到user_id，返回错误响应
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "未授权访问"})
+			controller.ResponseErrorWithCode(c, 1017)
 			log.Printf("未授权访问,context中未能找到JWT中间件中注入的user_id\n请求IP: %v\n请求url: %v", c.ClientIP(), c.Request.URL)
 			c.Abort()
 			return
@@ -26,7 +26,7 @@ func UserIDMatchMiddleware() gin.HandlerFunc {
 		paramUserIDUint := uint(paramUserID)
 		if err != nil {
 			// 如果URL参数中的user_id不是有效的整数，返回错误响应
-			c.JSON(http.StatusBadRequest, gin.H{"error": "无效的用户ID"})
+			controller.ResponseErrorWithCode(c, 1018)
 			log.Printf("无效的用户ID,URL参数中的user_id不是有效的整数\n请求IP: %v\n请求url: %v", c.ClientIP(), c.Request.URL)
 			c.Abort()
 			return
@@ -35,7 +35,7 @@ func UserIDMatchMiddleware() gin.HandlerFunc {
 		// 比较上下文中的user_id和URL参数中的user_id
 		if contextUserID != paramUserIDUint {
 			// 如果不匹配，返回错误响应
-			c.JSON(http.StatusForbidden, gin.H{"error": "无权访问此资源,因为token中的user_id与URL参数中的user_id不匹配"})
+			controller.ResponseErrorWithCode(c, 1032)
 			log.Printf("无权访问此资源,因为token中的user_id与URL参数中的user_id不匹配\ntoken中的user_id: %v\nURL参数中的user_id: %v\n请求IP: %v\n请求url: %v", contextUserID, paramUserID, c.ClientIP(), c.Request.URL)
 			c.Abort()
 			return
