@@ -62,7 +62,7 @@ func CollectPost(c *gin.Context) {
 // @Param user_id path uint true "用户ID"
 // @Success 200 {object} controller.ResponseData "获取成功"
 // @Failure 400 {object} controller.ResponseData "预约失败,具体原因查看json中的message字段和code字段"
-// @Router /user/{user_id}/collects [post]
+// @Router /user/{user_id}/favourites [post]
 func GetUserFavourites(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
