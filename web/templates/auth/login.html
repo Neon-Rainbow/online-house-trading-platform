@@ -86,7 +86,7 @@
 <body>
     <div class="container">
         <h2>登录</h2>
-        <form action="/auth/login" method="post">
+        <form id="loginForm" action="/auth/login" method="post">
             <div class="form-group">
                 <label for="username">用户名:</label>
                 <input type="text" id="username" name="username" required>
@@ -100,5 +100,44 @@
         <!-- 注册按钮，点击后跳转到注册页面 -->
         <a href="/auth/register" class="register-link">没有账号？点击注册</a>
     </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            var loginData = {
+                "username": username,
+                "password": password
+            };
+
+            fetch("/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(loginData)
+            }).then(response => {
+                if (response.ok) {
+                    // 登录成功，显示成功消息
+                    return response.json();
+                } else {
+                    // 登录失败，显示失败消息
+                    alert("登录失败，请检查用户名和密码。");
+                    throw new Error("登录失败");
+                }
+            }).then(data => {
+                // 显示登录成功的提示
+                alert("登录成功！");
+                // 重定向到首页
+                window.location.href = "/";
+            }).catch(error => {
+                // 处理其他错误情况
+                console.error("Error:", error);
+            });
+        });
+    </script>
 </body>
 </html>

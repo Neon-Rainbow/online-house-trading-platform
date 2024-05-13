@@ -49,10 +49,9 @@ func ReleasePost(c *gin.Context) {
 		return
 	}
 
-	ownerID := req.OwnerID
-	apiError := logic.ProcessHouseAndImages(db, &req, ownerID)
+	apiError := logic.ProcessHouseAndImages(db, &req, c)
 	if apiError != nil {
-		ResponseErrorWithCode(c, apiError.StatusCode)
+		ResponseError(c, *apiError)
 		return
 	}
 	ResponseSuccess(c, nil)
