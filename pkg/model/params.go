@@ -7,23 +7,23 @@ import (
 
 // LoginRequest 用于处理用户登录请求
 type LoginRequest struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username string `json:"username" form:"username"`
+	Password string `json:"password" form:"password"`
 }
 
 // LoginResponse 用于处理用户登录请求
 type LoginResponse struct {
-	Token    string `json:"token"`
-	UserID   uint   `json:"user_id"`
-	Username string `json:"username"`
+	Token    string `json:"token" form:"token"`
+	UserID   uint   `json:"user_id" form:"user_id"`
+	Username string `json:"username" form:"username"`
 }
 
 // RegisterRequest 用于处理用户注册请求
 type RegisterRequest struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Email    string `json:"email"`
-	Role     string `json:"role"`
+	Username string `json:"username" form:"username"`
+	Password string `json:"password" form:"password"`
+	Email    string `json:"email" form:"email"`
+	Role     string `json:"role" form:"role"`
 }
 
 // HouseRequest 是从前端接收房源数据的结构体。
