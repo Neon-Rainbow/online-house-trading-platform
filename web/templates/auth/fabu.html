@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>房屋信息发布</title>
+    <style>
+        body {
+            background-image: url(static/building-8329924_1280.jpg);
+            background-repeat: repeat;
+            background-size: contain;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .flex-container>div {
+            width: calc(50% - 10px);
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-top: 4px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .image-preview-item {
+            position: relative;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .image-preview-item img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .delete-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            line-height: 25px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .upload-info {
+            font-size: 14px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .form-group .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 5px;
+        }
+
+        .form-group .checkbox-group label {
+            display: block;
+            flex-basis: 20%;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+
+        .form-group .checkbox-group input[type="checkbox"] {
+            margin-top: 0;
+            margin-right: 5px;
+        }
+
+        .container1 {
+            width: 80%;
+            margin: 0 auto;
+            padding: 2px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            resize: vertical;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>发布房屋信息</h2>
+        <form action="/submit_house_info" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <div class="flex-container">
+                    <div>
+                        <label for="city">城市：</label>
+                        <select id="city" name="city" required>
+                            <option value="">请选择</option>
+                            <option value="北京">北京</option>
+                            <option value="上海">上海</option>
+                            <option value="广州">广州</option>
+                            <option value="深圳">深圳</option>
+                            <option value="重庆">重庆</option>
+                            <option value="天津">天津</option>
+                            <option value="南京">南京</option>
+                            <option value="杭州">杭州</option>
+                            <option value="成都">成都</option>
+                            <option value="武汉">武汉</option>
+                            <option value="西安">西安</option>
+                            <option value="苏州">苏州</option>
+                            <option value="郑州">郑州</option>
+                            <option value="长沙">长沙</option>
+                            <option value="青岛">青岛</option>
+                            <option value="沈阳">沈阳</option>
+                            <option value="宁波">宁波</option>
+                            <option value="厦门">厦门</option>
+                            <option value="无锡">无锡</option>
+                            <option value="福州">福州</option>
+                            <option value="济南">济南</option>
+                            <!-- 继续添加更多城市 -->
+
+                        </select>
+                    </div>
+                    <div>
+                        <label for="address">楼盘地址：</label>
+                        <input type="text" id="address" name="address" required>
+                    </div>
+                </div>
+                <div class="flex-container">
+                    <div>
+                        <label for="price">租房金额：</label>
+                        <input type="number" id="price" name="price" required>
+                    </div>
+                    <div>
+                        <label for="area">房屋面积：</label>
+                        <input type="number" id="area" name="area" required>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="decoration">装修程度：</label>
+                <select id="decoration" name="decoration" required>
+                    <option value="">请选择</option>
+                    <option value="毛坯">毛坯</option>
+                    <option value="简装">简装</option>
+                    <option value="精装修">精装修</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="facilities">配套家具：</label><br>
+                <div class="checkbox-group">
+                    <div>
+                        <label for="facility1">冰箱</label>
+                        <input type="checkbox" id="facility1" name="facilities" value="停车场">
+                    </div>
+                    <!-- 添加更多复选项 -->
+                    <div>
+                        <label for="facility2">空调</label>
+                        <input type="checkbox" id="facility2" name="facilities" value="电梯">
+                    </div>
+                    <div>
+                        <label for="facility3">洗衣机</label>
+                        <input type="checkbox" id="facility3" name="facilities" value="游泳池">
+                    </div>
+                    <div>
+                        <label for="facility4">床</label>
+                        <input type="checkbox" id="facility4" name="facilities" value="床">
+                    </div>
+                    <div>
+                        <label for="facility5">衣柜</label>
+                        <input type="checkbox" id="facility5" name="facilities" value="衣柜">
+                    </div>
+                    <div>
+                        <label for="facility6">燃气灶</label>
+                        <input type="checkbox" id="facility6" name="facilities" value="燃气灶">
+                    </div>
+                    <div>
+                        <label for="facility7">卫生间</label>
+                        <input type="checkbox" id="facility7" name="facilities" value="卫生间">
+                    </div>
+                    <div>
+                        <label for="facility8">电视</label>
+                        <input type="checkbox" id="facility8" name="facilities" value="电视">
+                    </div>
+                    <div>
+                        <label for="facility9">暖气</label>
+                        <input type="checkbox" id="facility9" name="facilities" value="暖气">
+                    </div>
+                    <div>
+                        <label for="facility10">油烟机</label>
+                        <input type="checkbox" id="facility10" name="facilities" value="油烟机">
+                    </div>
+                    <div>
+                        <label for="facility11">宽带</label>
+                        <input type="checkbox" id="facility11" name="facilities" value="宽带">
+                    </div>
+                    <div>
+                        <label for="facility12">沙发</label>
+                        <input type="checkbox" id="facility12" name="facilities" value="沙发">
+                    </div>
+                </div>
+            </div>
+            <label for="facilities">说明房屋情况以及需要特别注意的事项：</label><br>
+            <div class="container1">
+                <textarea placeholder="点击此处输入..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="house_images">房源图片：</label>
+                图片上传要求：图片明亮清晰采光好，能看清房屋和家具<br />
+                样例：
+                <div>
+                    <img src="static/living-room-1835923_1280.jpg" alt="" style="width: 300px; ;">
+                    <img src="static/bed-1839183_1280.jpg" alt="" style="width: 273px;  ">
+                </div>
+                <input type="file" id="fileInput" multiple accept="image/*">
+                <div class="preview-container" id="previewContainer"></div>
+            </div>
+            <div class="image-preview" id="imagePreview"></div>
+            <div class="form-group flex-container">
+                <div>
+                    <label for="name">联系人姓名：</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div>
+                    <label for="contact_phone">联系电话：</label>
+                    <input type="text" id="contact_phone" name="contact_phone" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="发布">
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // 获取文件输入框和预览容器
+        const fileInput = document.getElementById('fileInput');
+        const previewContainer = document.getElementById('previewContainer');
+
+        // 监听文件选择变化事件
+        fileInput.addEventListener('change', function (event) {
+            // 获取用户选择的文件列表
+            const files = event.target.files;
+
+            // 遍历文件列表，创建预览图像并添加到预览容器中
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                // 为每个文件创建预览图像
+                reader.onload = function (event) {
+                    const imageUrl = event.target.result;
+                    const image = document.createElement('img');
+                    image.src = imageUrl;
+                    image.classList.add('preview-image');
+                    image.width = 150;
+                    image.height = 150;
+
+                    // 创建删除按钮
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = '删除';
+                    deleteButton.classList.add('delete-button');
+                    deleteButton.addEventListener('click', function () {
+                        // 删除预览图像和删除按钮所在的父元素
+                        previewContainer.removeChild(previewItem);
+                    });
+
+                    // 创建包含图像和删除按钮的容器
+                    const previewItem = document.createElement('div');
+                    previewItem.classList.add('image-preview-item');
+                    previewItem.appendChild(image);
+                    previewItem.appendChild(deleteButton);
+
+                    // 将预览图像添加到预览容器中
+                    previewContainer.appendChild(previewItem);
+                };
+
+                // 读取文件内容，触发 onload 事件
+                reader.readAsDataURL(file);
+            }
+
+        });
+    </script>
+</body>
+
+</html>
