@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>历史记录示例</title>
+<style>
+  /* 样式可以根据需要自行调整 */
+  #history-list {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .history-item {
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h1>历史记录</h1>
+
+<ul id="history-list">
+  <!-- 这里将动态生成历史记录列表项 -->
+</ul>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // 从本地存储获取历史记录数据
+  var historyData = JSON.parse(localStorage.getItem("history")) || [];
+
+  // 渲染历史记录列表
+  var historyList = document.getElementById("history-list");
+  historyData.forEach(function(item) {
+    var li = document.createElement("li");
+    li.className = "history-item";
+    li.textContent = item;
+    historyList.appendChild(li);
+  });
+
+  // 添加历史记录
+  function addHistoryRecord(record) {
+    historyData.push(record);
+    localStorage.setItem("history", JSON.stringify(historyData));
+    var li = document.createElement("li");
+    li.className = "history-item";
+    li.textContent = record;
+    historyList.appendChild(li);
+  }
+
+  // 示例：模拟添加历史记录
+  var newRecord = "2024-05-14 - 用户查看房源详情";
+  addHistoryRecord(newRecord);
+});
+</script>
+
+</body>
+</html>
