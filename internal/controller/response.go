@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"log"
 	"net/http"
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/pkg/model"
@@ -38,7 +39,8 @@ func ResponseError(c *gin.Context, error model.Error) {
 		Message: msg,
 		Data:    nil,
 	}
-	c.JSON(http.StatusBadRequest, responseData)
+	log.Printf("错误代码:%v, 错误原因:%v", responseData.Code, responseData.Message)
+	c.JSON(http.StatusOK, responseData)
 }
 
 func ResponseErrorWithCode(c *gin.Context, code codes.ResCode) {
@@ -47,5 +49,6 @@ func ResponseErrorWithCode(c *gin.Context, code codes.ResCode) {
 		Message: code.Message(),
 		Data:    nil,
 	}
-	c.JSON(http.StatusBadRequest, responseData)
+	log.Printf("错误代码:%v, 错误原因:%v", responseData.Code, responseData.Message)
+	c.JSON(http.StatusOK, responseData)
 }
