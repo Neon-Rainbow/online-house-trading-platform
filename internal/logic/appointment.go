@@ -25,7 +25,7 @@ func AppointmentHandle(db *gorm.DB, reserve *model.Reserve, userID uint) *model.
 func GetReserve(db *gorm.DB, idUint uint) ([]model.Reserve, *model.Error) {
 	reserve, err := dao.GetReserve(db, idUint)
 	if err != nil {
-		return nil, &model.Error{StatusCode: codes.GetReserveInformetionError}
+		return nil, &model.Error{StatusCode: codes.GetReserveInformationError}
 	}
 	return reserve, nil
 }

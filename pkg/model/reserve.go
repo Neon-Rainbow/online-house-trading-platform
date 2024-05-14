@@ -11,6 +11,6 @@ import (
 type Reserve struct {
 	gorm.Model
 	UserID  uint      `gorm:"not null" json:"user_id" context:"user_id"`
-	HouseID uint      `gorm:"not null" json:"house_id"`
-	Time    time.Time `gorm:"not null"`
+	HouseID uint      `gorm:"not null" json:"house_id" context:"house_id"`
+	Time    time.Time `gorm:"not null" json:"time" context:"time"`
 }

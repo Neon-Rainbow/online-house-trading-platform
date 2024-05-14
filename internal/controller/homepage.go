@@ -15,7 +15,8 @@ import (
 // @Success 200 {string} html "首页"
 // @Router / [get]
 func HomePageGet(c *gin.Context) {
-	c.HTML(http.StatusOK, "frontpage.html", nil)
+	//c.HTML(http.StatusOK, "frontpage.html", nil)
+	ResponseSuccess(c, nil)
 }
 
 // LearnMoreGet 用来处理LearnMore页面的Get请求

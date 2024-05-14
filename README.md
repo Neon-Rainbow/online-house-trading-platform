@@ -6,7 +6,7 @@
 ## 项目运行
 在项目根目录下执行以下命令：
 ```shell
-go run ./cmd/main.go
+go run main.go
 ```
 
 ## 项目接口文档
