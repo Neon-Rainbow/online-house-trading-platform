@@ -5,6 +5,7 @@ import (
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/dao"
 	"online-house-trading-platform/pkg/model"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -38,6 +39,22 @@ func ProcessHouseAndImages(db *gorm.DB, req *model.HouseRequest, c *gin.Context)
 		apiError := dao.CreateHouseImages(db, []model.HouseImage{{HouseID: house.ID, URL: dst}})
 		if apiError != nil {
 			return &model.Error{StatusCode: codes.CreateHouseImageError, Message: "保存房屋图片到数据库中失败"}
+		}
+	}
+	return nil
+}
+
+// DeleteHouse 用于删除房屋记录
+func DeleteHouse(db *gorm.DB, houseID uint) *model.Error {
+	house, err := dao.DeleteHouse(db, houseID)
+	if err != nil {
+		return &model.Error{StatusCode: codes.DeleteHouseError, Message: "删除房屋记录失败"}
+	}
+	for _, houseImage := range house.Images {
+		filepath := fmt.Sprintf("./%s", houseImage.URL)
+		err := os.Remove(filepath)
+		if err != nil {
+			return &model.Error{StatusCode: codes.DeleteHouseError, Message: "删除房屋图片失败"}
 		}
 	}
 	return nil

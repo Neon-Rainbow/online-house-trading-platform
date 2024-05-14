@@ -45,3 +45,24 @@ func CreateHouse(db *gorm.DB, house *model.House) error {
 func CreateHouseImages(db *gorm.DB, images []model.HouseImage) error {
 	return db.Create(&images).Error
 }
+
+// DeleteHouse 用于删除房屋记录
+// 该函数会返回被删除的房屋记录
+// ./uploads/houses/文件夹下的图片文件不会被删除,dao层给logic层返回房屋信息后logic层来删除图片内容
+func DeleteHouse(db *gorm.DB, houseID uint) (*model.House, error) {
+	var house model.House
+	result := db.Preload("Images").First(&house, houseID)
+	if result.Error != nil {
+		return &house, result.Error
+	}
+
+	// 删除与房屋关联的图片记录
+	err := db.Delete(&model.HouseImage{}, "house_id = ?", houseID).Error
+	if err != nil {
+		return &house, err
+	}
+
+	// 删除房屋记录
+	err = db.Delete(&house).Error
+	return &house, err
+}
