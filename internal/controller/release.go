@@ -59,6 +59,41 @@ func ReleasePost(c *gin.Context) {
 	return
 }
 
+// ReleasePut 用于处理更新房屋信息的请求
+// @Summary 更新房屋信息
+// @Description 更新房屋信息
+// @Tags 发布
+// @Accept json
+// @Produce json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Param user_id path string true "用户ID"
+// @Param req body model.HouseUpdateRequest true "更新房屋信息请求"
+// @Success 200 {object} controller.ResponseData "更新成功"
+// @Failure 400 {object} controller.ResponseData "更新失败"
+// @Router /user/:user_id/release [put]
+func ReleasePut(c *gin.Context) {
+	db, exist := c.MustGet("db").(*gorm.DB)
+	if !exist {
+		ResponseErrorWithCode(c, codes.GetDBError)
+		return
+	}
+
+	var req model.HouseUpdateRequest
+	err := c.ShouldBind(&req)
+	if err != nil {
+		ResponseErrorWithCode(c, codes.ReleaseBindDataError)
+		return
+	}
+
+	apiError := logic.UpdateHouseAndImages(db, &req, c)
+	if apiError != nil {
+		ResponseError(c, *apiError)
+		return
+	}
+	ResponseSuccess(c, nil)
+	return
+}
+
 // ReleaseDeleteWholeHouse 用于处理删除整个房屋信息的请求
 // @Summary 删除房屋信息
 // @Description 删除房屋信息

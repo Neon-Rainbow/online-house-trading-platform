@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"fmt"
 	"online-house-trading-platform/pkg/model"
 
 	"gorm.io/gorm"
@@ -65,4 +66,20 @@ func DeleteHouse(db *gorm.DB, houseID uint) (*model.House, error) {
 	// 删除房屋记录
 	err = db.Delete(&house).Error
 	return &house, err
+}
+
+// UpdateHouse 更新房屋信息
+func UpdateHouse(db *gorm.DB, house *model.House) error {
+	fmt.Print(house)
+	return db.Save(house).Error
+}
+
+// DeleteHouseImages 删除房屋的旧图片记录
+func DeleteHouseImages(db *gorm.DB, houseID uint) error {
+	return db.Where("house_id = ?", houseID).Delete(&model.HouseImage{}).Error
+}
+
+// CreateHouseImage 插入新的房屋图片记录
+func CreateHouseImage(db *gorm.DB, image *model.HouseImage) error {
+	return db.Save(image).Error
 }

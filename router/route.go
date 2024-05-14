@@ -51,6 +51,7 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 	{
 		userGroup.GET("/release", controller.ReleaseGet)
 		userGroup.POST("/release", controller.ReleasePost)
+		userGroup.PUT("/release", controller.ReleasePut)
 		userGroup.DELETE("/release", controller.ReleaseDeleteWholeHouse)
 
 		userGroup.GET("/favourites", controller.GetUserFavourites)
@@ -67,8 +68,8 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 }
 
 func setupRootAPI(router *gin.Engine, db *gorm.DB) {
-	router.GET("/", controller.HomePageGet)
-	router.GET("/learn_more", controller.LearnMoreGet)
+	// router.GET("/", controller.HomePageGet)
+	// router.GET("/learn_more", controller.LearnMoreGet)
 }
 
 // SetupRouters 设置web服务器路由
@@ -77,10 +78,10 @@ func SetupRouters(db *gorm.DB) *gin.Engine {
 	router := gin.Default()
 
 	//加载静态文件
-	router.Static("/static", "./web/static")
+	// router.Static("/static", "./web/static")
 
 	//加载模板文件
-	router.LoadHTMLGlob("./web/templates/**/*")
+	// router.LoadHTMLGlob("./web/templates/**/*")
 
 	//设置路由,地址为/
 	setupRootAPI(router, db)
