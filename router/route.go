@@ -22,10 +22,10 @@ import (
 func setupAuthAPI(r *gin.Engine, db *gorm.DB) {
 	userGroup := r.Group("/auth").Use(middleware.DBMiddleware(db))
 	{
-		userGroup.GET("/login", controller.LoginGet)
+		// userGroup.GET("/login", controller.LoginGet)
 		userGroup.POST("/login", controller.LoginPost)
 
-		userGroup.GET("/register", controller.RegisterGet)
+		// userGroup.GET("/register", controller.RegisterGet)
 		userGroup.POST("/register", controller.RegisterPost)
 
 		// userGroup.POST("/logout", controller.LogoutPost)
@@ -49,7 +49,7 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 		middleware.UserIDMatchMiddleware(),
 		middleware.DBMiddleware(db))
 	{
-		userGroup.GET("/release", controller.ReleaseGet)
+		// userGroup.GET("/release", controller.ReleaseGet)
 		userGroup.POST("/release", controller.ReleasePost)
 		userGroup.PUT("/release", controller.ReleasePut)
 		userGroup.DELETE("/release", controller.ReleaseDeleteWholeHouse)
@@ -67,10 +67,10 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 	}
 }
 
-func setupRootAPI(router *gin.Engine, db *gorm.DB) {
-	// router.GET("/", controller.HomePageGet)
-	// router.GET("/learn_more", controller.LearnMoreGet)
-}
+//func setupRootAPI(router *gin.Engine, db *gorm.DB) {
+//	// router.GET("/", controller.HomePageGet)
+//	// router.GET("/learn_more", controller.LearnMoreGet)
+//}
 
 // SetupRouters 设置web服务器路由
 func SetupRouters(db *gorm.DB) *gin.Engine {
@@ -84,7 +84,7 @@ func SetupRouters(db *gorm.DB) *gin.Engine {
 	// router.LoadHTMLGlob("./web/templates/**/*")
 
 	//设置路由,地址为/
-	setupRootAPI(router, db)
+	// setupRootAPI(router, db)
 
 	//设置路由,地址为/auth
 	setupAuthAPI(router, db)

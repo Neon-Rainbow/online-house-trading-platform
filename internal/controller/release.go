@@ -18,11 +18,11 @@ import (
 // @Param Authorization header string false "Bearer 用户令牌"
 // @Success 200 {string} html "发布房屋信息页面"
 // @Router /release [get]
-func ReleaseGet(c *gin.Context) {
-	//c.HTML(http.StatusOK, "release.html", nil)
-	ResponseSuccess(c, nil)
-	return
-}
+//func ReleaseGet(c *gin.Context) {
+//	//c.HTML(http.StatusOK, "release.html", nil)
+//	ResponseSuccess(c, nil)
+//	return
+//}
 
 // ReleasePost 用于处理发布房屋信息页面的POST请求,用于发布新的房源
 // @Summary 发布房屋信息

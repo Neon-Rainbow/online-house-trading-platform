@@ -17,11 +17,11 @@ import (
 // @Produce json
 // @Success 200 {string} html "注册界面"
 // @Router /auth/register [get]
-func RegisterGet(c *gin.Context) {
-	//c.HTML(http.StatusOK, "register.html", nil)
-	ResponseSuccess(c, nil)
-	return
-}
+//func RegisterGet(c *gin.Context) {
+//	//c.HTML(http.StatusOK, "register.html", nil)
+//	ResponseSuccess(c, nil)
+//	return
+//}
 
 // RegisterPost 用于处理用户的注册界面的POST请求
 // @Summary 注册接口
