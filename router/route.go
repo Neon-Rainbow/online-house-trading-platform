@@ -51,6 +51,8 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 	{
 		userGroup.GET("/release", controller.ReleaseGet)
 		userGroup.POST("/release", controller.ReleasePost)
+		userGroup.DELETE("/release", controller.ReleaseDeleteWholeHouse)
+
 		userGroup.GET("/favourites", controller.GetUserFavourites)
 		userGroup.GET("/appointment", controller.HousesAppointmentGet)
 	}

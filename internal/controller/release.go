@@ -31,10 +31,11 @@ func ReleaseGet(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param Authorization header string false "Bearer 用户令牌"
+// @Param user_id path string true "用户ID"
 // @Param req body model.HouseRequest true "发布房屋信息请求"
 // @Success 200 {object} controller.ResponseData "发布成功"
 // @Failure 400 {object} controller.ResponseData "发布失败"
-// @Router /release [post]
+// @Router /user/:user_id/release [post]
 func ReleasePost(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
@@ -56,4 +57,40 @@ func ReleasePost(c *gin.Context) {
 	}
 	ResponseSuccess(c, nil)
 	return
+}
+
+// ReleaseDeleteWholeHouse 用于处理删除整个房屋信息的请求
+// @Summary 删除房屋信息
+// @Description 删除房屋信息
+// @Tags 发布
+// @Accept json
+// @Produce json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Param user_id path string true "用户ID"
+// @Param house_id body string true "房屋ID"
+// @Success 200 {object} controller.ResponseData "删除成功"
+// @Failure 400 {object} controller.ResponseData "删除失败"
+// @Router /user/:user_id/release [delete]
+func ReleaseDeleteWholeHouse(c *gin.Context) {
+	db, exist := c.MustGet("db").(*gorm.DB)
+	if !exist {
+		ResponseErrorWithCode(c, codes.GetDBError)
+		return
+	}
+
+	var req struct {
+		HouseID uint `json:"house_id"`
+	}
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		ResponseErrorWithCode(c, codes.ReleaseBindDataError)
+		return
+	}
+
+	apiError := logic.DeleteHouse(db, req.HouseID)
+	if apiError != nil {
+		ResponseError(c, *apiError)
+		return
+	}
+	ResponseSuccess(c, nil)
 }

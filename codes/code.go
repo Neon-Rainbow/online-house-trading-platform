@@ -36,6 +36,7 @@ const (
 	ModifyUserProfileError                           // 修改用户信息错误
 	GetReserveInformationError                       // 获取预约信息错误
 	UserIDNotMatch                                   // 用户ID不匹配
+	DeleteHouseError                                 // 删除房屋错误
 )
 
 // codeMessageMap 用于存放code和message的映射关系
@@ -73,6 +74,7 @@ var codeMessageMap = map[ResCode]string{
 	ModifyUserProfileError:     "修改用户信息错误",
 	GetReserveInformationError: "获取预约信息错误",
 	UserIDNotMatch:             "Context中和url中的用户ID不匹配",
+	DeleteHouseError:           "删除房屋错误",
 }
 
 // Message 返回code对应的消息
