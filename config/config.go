@@ -7,18 +7,22 @@ import (
 	"os"
 )
 
+type Database struct {
+	Host     string `json:"host"`
+	Port     int    `json:"port"`
+	User     string `json:"user"`
+	Password string `json:"password"`
+	DBName   string `json:"dbname"`
+}
+
 type Config struct {
-	Database struct {
-		Host     string `json:"host"`
-		Port     int    `json:"port"`
-		User     string `json:"user"`
-		Password string `json:"password"`
-		DBName   string `json:"dbname"`
-	} `json:"database"`
-	JWTSecret      string `json:"jwtSecret"`
-	PasswordSecret string `json:"passwordSecret"`
-	LogFilePath    string `json:"logFilePath"`
-	Port           int    `json:"port"`
+	Database       Database `json:"database"`
+	JWTSecret      string   `json:"jwtSecret"`
+	PasswordSecret string   `json:"passwordSecret"`
+	LogFilePath    string   `json:"logFilePath"`
+	Port           int      `json:"port"`
+	GinMode        string   `json:"ginMode"`
+	ZapLogLever    string   `json:"zapLogLever"`
 }
 
 // AppConfig 用于存储配置文件的内容

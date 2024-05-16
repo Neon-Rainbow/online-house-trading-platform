@@ -1,9 +1,11 @@
 package logger
 
 import (
+	"log"
 	"net"
 	"net/http"
 	"net/http/httputil"
+	"online-house-trading-platform/config"
 	"os"
 	"runtime/debug"
 	"strings"
@@ -15,9 +17,14 @@ import (
 )
 
 func InitLogger(logFilePath string) *zap.Logger {
-	config := zap.NewProductionConfig()
-	config.Level = zap.NewAtomicLevelAt(zap.DebugLevel) // 设置日志级别为 Debug
-	config.EncoderConfig = zapcore.EncoderConfig{
+	zapConfig := zap.NewProductionConfig()
+	var level zapcore.Level
+	err := level.UnmarshalText([]byte(config.AppConfig.ZapLogLever))
+	if err != nil {
+		log.Print("无法解析日志级别: ", err)
+	}
+	zapConfig.Level = zap.NewAtomicLevelAt(level) // 设置日志级别
+	zapConfig.EncoderConfig = zapcore.EncoderConfig{
 		TimeKey:    "ts",
 		LevelKey:   "level",
 		NameKey:    "logger",
@@ -30,12 +37,12 @@ func InitLogger(logFilePath string) *zap.Logger {
 		EncodeDuration: zapcore.SecondsDurationEncoder,
 		EncodeCaller:   zapcore.ShortCallerEncoder,
 	}
-	config.OutputPaths = []string{
+	zapConfig.OutputPaths = []string{
 		logFilePath,
 		"stdout",
 	}
 
-	logger, err := config.Build()
+	logger, err := zapConfig.Build()
 	if err != nil {
 		panic(err)
 	}

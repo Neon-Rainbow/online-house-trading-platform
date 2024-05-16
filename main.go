@@ -46,5 +46,4 @@ func main() {
 		zap.L().Error("服务器连接失败", zap.Error(err))
 		return
 	}
-	zap.L().Info("项目启动成功", zap.Int("端口", config.AppConfig.Port))
 }

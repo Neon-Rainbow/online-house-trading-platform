@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	"online-house-trading-platform/config"
 	"online-house-trading-platform/internal/controller"
 	"online-house-trading-platform/middleware"
 
@@ -59,6 +60,7 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 // SetupRouters 设置web服务器路由
 func SetupRouters(db *gorm.DB) *gin.Engine {
 	router := gin.New()
+	gin.SetMode(config.AppConfig.GinMode)
 
 	// 使用 zap 日志中间件
 	router.Use(logger.GinLogger(zap.L()))
