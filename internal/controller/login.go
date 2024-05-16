@@ -4,8 +4,10 @@ import (
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/logic"
 	"online-house-trading-platform/pkg/model"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -36,6 +38,7 @@ import (
 func LoginPost(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
+		zap.L().Error("LoginPost: c.MustGet(\"db\").(*gorm.DB) failed")
 		ResponseErrorWithCode(c, codes.GetDBError)
 		return
 	}
@@ -44,12 +47,18 @@ func LoginPost(c *gin.Context) {
 
 	err := c.ShouldBind(&loginReq)
 	if err != nil {
+		zap.L().Error("LoginPost: c.ShouldBind(&loginReq) failed",
+			zap.String("错误码", strconv.FormatInt(int64(codes.LoginInvalidParam), 10)),
+		)
 		ResponseErrorWithCode(c, codes.LoginInvalidParam)
 		return
 	}
 
 	loginResp, apiError := logic.LoginHandle(db, loginReq)
 	if apiError != nil {
+		zap.L().Error("LoginPost: logic.LoginHandle failed",
+			zap.String("错误码", strconv.FormatInt(int64(apiError.StatusCode), 10)),
+		)
 		ResponseError(c, *apiError)
 		return
 	}

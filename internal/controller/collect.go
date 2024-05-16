@@ -6,6 +6,7 @@ import (
 	"online-house-trading-platform/pkg/model"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -66,24 +67,38 @@ func CollectPost(c *gin.Context) {
 func GetUserFavourites(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
+		zap.L().Error("GetUserFavourites: c.MustGet(\"db\").(*gorm.DB) failed",
+			zap.Int("错误码", codes.GetDBError.Int()),
+		)
 		ResponseErrorWithCode(c, codes.GetDBError)
 		return
 	}
 
 	userID, exists := c.Get("user_id")
 	if !exists {
+		zap.L().Error("GetUserFavourites: c.Get(\"user_id\") failed",
+			zap.Int("错误码", codes.GetUserIDError.Int()),
+		)
 		ResponseErrorWithCode(c, codes.GetUserIDError)
 		return
 	}
 
 	userIDUint, ok := userID.(uint)
 	if !ok {
+		zap.L().Error("GetUserFavourites: userID.(uint) failed",
+			zap.Int("错误码", codes.UserIDTypeError.Int()),
+			zap.Any("用户ID", userID),
+		)
 		ResponseErrorWithCode(c, codes.UserIDTypeError)
 		return
 	}
 
 	favourites, apiError := logic.GetUserFavourites(db, userIDUint)
 	if apiError != nil {
+		zap.L().Error("GetUserFavourites: logic.GetUserFavourites failed",
+			zap.Int("错误码", apiError.StatusCode.Int()),
+			zap.Int("用户ID", int(userIDUint)),
+		)
 		ResponseError(c, *apiError)
 		return
 	}

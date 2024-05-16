@@ -87,3 +87,7 @@ func (c ResCode) Message() string {
 	}
 	return msg
 }
+
+func (c ResCode) Int() int {
+	return int(c)
+}

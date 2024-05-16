@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -22,12 +23,18 @@ import (
 func GetAllHouses(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
+		zap.L().Error("GetAllHouses: c.MustGet(\"db\").(*gorm.DB) failed",
+			zap.String("错误码", strconv.FormatInt(int64(codes.GetDBError), 10)),
+		)
 		ResponseErrorWithCode(c, codes.GetDBError)
 		return
 	}
 
 	houses, err := logic.FetchAllHouses(db)
 	if err != nil {
+		zap.L().Error("GetAllHouses: logic.FetchAllHouses failed",
+			zap.String("错误码", strconv.FormatInt(int64(err.StatusCode), 10)),
+		)
 		ResponseError(c, *err)
 		return
 	}
@@ -49,16 +56,26 @@ func GetAllHouses(c *gin.Context) {
 func GetHouseInfoByID(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
+		zap.L().Error("GetHouseInfoByID: c.MustGet(\"db\").(*gorm.DB) failed",
+			zap.String("错误码", strconv.FormatInt(int64(codes.GetDBError), 10)),
+		)
 		ResponseErrorWithCode(c, codes.GetDBError)
 	}
 
 	houseID := c.Param("house_id")
 	houseIDUint, err := strconv.ParseUint(houseID, 10, 64)
 	if err != nil {
+		zap.L().Error("GetHouseInfoByID: strconv.ParseUint failed",
+			zap.String("错误码", strconv.FormatInt(int64(codes.HouseIDInvalid), 10)),
+			zap.String("house_id", houseID),
+		)
 		ResponseErrorWithCode(c, codes.HouseIDInvalid)
 	}
 	house, apiError := logic.FetchCertainHouseInformationByID(db, uint(houseIDUint))
 	if apiError != nil {
+		zap.L().Error("GetHouseInfoByID: logic.FetchCertainHouseInformationByID failed",
+			zap.String("错误码", strconv.FormatInt(int64(apiError.StatusCode), 10)),
+		)
 		ResponseError(c, *apiError)
 	}
 	ResponseSuccess(c, house)

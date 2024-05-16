@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"online-house-trading-platform/config"
-	"online-house-trading-platform/logger"
+	"online-house-trading-platform/logger" // 导入 logger 包
 	"online-house-trading-platform/pkg/database"
 	"online-house-trading-platform/router"
+
+	"go.uber.org/zap"
 )
 
 // @title 在线房屋交易平台API文档
@@ -23,29 +24,27 @@ import (
 // @host localhost:8080
 // @BasePath /
 func main() {
-	config.LoadConfig("config.json") // 加载配置文件
+	// 加载配置文件
+	config.LoadConfig("config.json")
 
-	// 打开日志文件
-	logFile := logger.InitLogger(config.AppConfig.LogFilePath)
-	defer func() {
-		err := logFile.Close()
-		if err != nil {
-			log.Fatalf("关闭日志文件失败: %v", err)
-		}
-	}()
-
-	log.Println("项目启动")
+	// 初始化日志记录器
+	logFilePath := config.AppConfig.LogFilePath
+	logger := logger.InitLogger(logFilePath)
+	defer logger.Sync()
+	zap.ReplaceGlobals(logger)
 
 	db := database.InitializeDB()
 	if db == nil {
-		log.Fatal("数据库初始化失败")
+		zap.L().Error("数据库连接失败")
+		return
 	}
 
 	route := router.SetupRouters(db)
 
 	err := route.Run(fmt.Sprintf(":%d", config.AppConfig.Port))
-
 	if err != nil {
-		log.Fatalf("服务器连接失败: %v", err)
+		zap.L().Error("服务器连接失败", zap.Error(err))
+		return
 	}
+	zap.L().Info("项目启动成功", zap.Int("端口", config.AppConfig.Port))
 }
