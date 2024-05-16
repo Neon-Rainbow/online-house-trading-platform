@@ -93,9 +93,10 @@ func snakeCase(s string) string {
 
 func UpdateHouseAndImages(db *gorm.DB, req *model.HouseUpdateRequest, c *gin.Context) *model.Error {
 	// 更新房屋信息
-	var existingHouse model.House
-	if err := db.Preload("Images").First(&existingHouse, req.HouseID).Error; err != nil {
+	existingHouse, err := dao.GetHouseInformationByID(db, req.HouseID)
+	if err != nil {
 		return &model.Error{StatusCode: codes.UpdateHouseError, Message: "房屋信息获取失败"}
+
 	}
 
 	var house model.House
@@ -124,7 +125,8 @@ func UpdateHouseAndImages(db *gorm.DB, req *model.HouseUpdateRequest, c *gin.Con
 	//if err := dao.UpdateHouse(db, &house); err != nil {
 	//	return &model.Error{StatusCode: codes.UpdateHouseError, Message: "更新房屋信息失败"}
 	//}
-	if err := db.Model(&house).Updates(updateFields).Error; err != nil {
+	err = dao.UpdateHouse(db, &house, updateFields)
+	if err != nil {
 		return &model.Error{StatusCode: codes.UpdateHouseError, Message: "更新房屋信息失败"}
 	}
 
