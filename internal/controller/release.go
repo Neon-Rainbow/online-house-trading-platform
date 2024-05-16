@@ -6,6 +6,7 @@ import (
 	"online-house-trading-platform/pkg/model"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -46,6 +47,11 @@ func ReleasePost(c *gin.Context) {
 	var req model.HouseRequest
 	err := c.ShouldBind(&req)
 	if err != nil {
+		zap.L().Debug(
+			"ReleasePost: c.ShouldBind(&req) failed",
+			zap.Error(err),
+			zap.String("path", c.Request.URL.Path),
+			zap.String("function", "ReleasePost"))
 		ResponseErrorWithCode(c, codes.ReleaseBindDataError)
 		return
 	}

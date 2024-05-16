@@ -4,8 +4,10 @@ import (
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/logic"
 	"online-house-trading-platform/pkg/model"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -36,6 +38,9 @@ import (
 func RegisterPost(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
+		zap.L().Error("RegisterPost: c.MustGet(\"db\").(*gorm.DB) failed",
+			zap.String("错误码", strconv.FormatInt(int64(codes.GetDBError), 10)),
+		)
 		ResponseErrorWithCode(c, codes.GetDBError)
 		return
 	}
@@ -43,12 +48,19 @@ func RegisterPost(c *gin.Context) {
 	var registerReq model.RegisterRequest
 	err := c.ShouldBind(&registerReq)
 	if err != nil {
+		zap.L().Error("RegisterPost: c.ShouldBind(&registerReq) failed",
+			zap.String("错误码", strconv.FormatInt(int64(codes.RegisterInvalidParam), 10)),
+		)
 		ResponseErrorWithCode(c, codes.RegisterInvalidParam)
 		return
 	}
 
 	apiError := logic.RegisterHandle(db, registerReq)
 	if apiError != nil {
+		zap.L().Error("RegisterPost: logic.RegisterHandle failed",
+			zap.String("错误码", strconv.FormatInt(int64(apiError.StatusCode), 10)),
+			zap.Any("注册信息", registerReq),
+		)
 		ResponseError(c, *apiError)
 		return
 	}

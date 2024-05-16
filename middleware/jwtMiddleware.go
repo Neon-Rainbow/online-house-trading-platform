@@ -4,15 +4,21 @@ import (
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/controller"
 	"online-house-trading-platform/pkg/jwt"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 func JWTAuthMiddleware() func(c *gin.Context) {
 	return func(c *gin.Context) {
 		authHeader := c.Request.Header.Get("Authorization")
 		if authHeader == "" {
+			zap.L().Error("JWTAuthMiddleware:请求头部没有token",
+				zap.String("错误码", strconv.FormatInt(int64(codes.RequestWithoutTokenError), 10)),
+				zap.String("authHeader", authHeader),
+			)
 			controller.ResponseErrorWithCode(c, codes.RequestWithoutTokenError)
 			c.Abort()
 			return
@@ -28,16 +34,22 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		} else if len(parts) == 2 && parts[0] == "Bearer" {
 			tkn = parts[1]
 		} else {
+			zap.L().Error("JWTAuthMiddleware: jwt token格式错误",
+				zap.String("错误码", strconv.FormatInt(int64(codes.InvalidTokenFormatError), 10)),
+				zap.String("authHeader", authHeader),
+				zap.Strings("parts", parts),
+			)
 			controller.ResponseErrorWithCode(c, codes.InvalidTokenFormatError)
 			c.Abort()
 			return
 		}
 
-		//log.Printf("authHeader: %v", authHeader)
-		//log.Printf("parts: %v", parts)
-
 		mc, err := jwt.ParseToken(tkn)
 		if err != nil {
+			zap.L().Error("JWTAuthMiddleware: jwt token解析错误",
+				zap.String("错误码", strconv.FormatInt(int64(codes.InvalidTokenError), 10)),
+				zap.String("token", tkn),
+			)
 			controller.ResponseErrorWithCode(c, codes.InvalidTokenError)
 			c.Abort()
 			return
