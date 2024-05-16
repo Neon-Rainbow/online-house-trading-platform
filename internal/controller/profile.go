@@ -98,25 +98,58 @@ func ProfilePut(c *gin.Context) {
 		return
 	}
 
-	var userProfile model.User
-	err := c.ShouldBind(&userProfile)
+	var userProfileUpdateReq model.UserReq
+	err := c.ShouldBind(&userProfileUpdateReq)
+	// fmt.Print(userProfileUpdateReq)
 	if err != nil {
-		zap.L().Error("ProfilePut: c.ShouldBind(&userProfile) failed",
+		zap.L().Error("ProfilePut: c.ShouldBind(&userProfileUpdateReq ) failed",
 			zap.Int("错误码", codes.BindDataError.Int()),
 		)
 		ResponseErrorWithCode(c, codes.BindDataError)
 		return
 	}
 
-	apiError := logic.ModifyUserProfile(db, &userProfile, userIDUint)
+	apiError := logic.ModifyUserProfile(db, &userProfileUpdateReq, userIDUint)
 	if apiError != nil {
 		zap.L().Error("ProfilePut: logic.ModifyUserProfile failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
-			zap.Any("用户信息", userProfile),
+			zap.Any("用户信息", userProfileUpdateReq),
 		)
 		ResponseError(c, *apiError)
 		return
 	}
 	ResponseSuccess(c, nil)
 	return
+}
+
+// ProfileAvatarPut 用于处理用户修改头像的Put请求
+func ProfileAvatarPut(c *gin.Context) {
+	db, exist := c.MustGet("db").(*gorm.DB)
+	if !exist {
+		zap.L().Error("ProfilePut: c.MustGet(\"db\").(*gorm.DB) failed",
+			zap.String("错误码", strconv.FormatInt(int64(codes.GetDBError), 10)),
+		)
+		ResponseErrorWithCode(c, codes.GetDBError)
+		return
+	}
+	var avatar model.UserAvatarReq
+	avatar.UserID = c.MustGet("user_id").(uint)
+	err := c.ShouldBind(&avatar)
+	if err != nil {
+		zap.L().Error("ProfilePut: c.ShouldBind(&avatar) failed",
+			zap.Int("错误码", codes.BindDataError.Int()),
+		)
+		ResponseErrorWithCode(c, codes.BindDataError)
+		return
+	}
+	apiError := logic.ModifyUserAvatar(db, &avatar, c)
+	if apiError != nil {
+		zap.L().Error("ProfilePut: logic.ModifyUserAvatar failed",
+			zap.Int("错误码", apiError.StatusCode.Int()),
+			zap.Any("用户头像信息", avatar),
+		)
+		ResponseError(c, *apiError)
+		return
+	}
+	ResponseSuccess(c, nil)
 }

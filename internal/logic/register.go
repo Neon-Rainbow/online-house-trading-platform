@@ -1,15 +1,18 @@
 package logic
 
 import (
+	"fmt"
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/dao"
 	"online-house-trading-platform/pkg/model"
+	"path/filepath"
 
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 // RegisterHandle 用于处理用户注册逻辑
-func RegisterHandle(db *gorm.DB, req model.RegisterRequest) *model.Error {
+func RegisterHandle(db *gorm.DB, req model.RegisterRequest, c *gin.Context) *model.Error {
 	if req.Username == "" || req.Password == "" || req.Email == "" {
 		return &model.Error{StatusCode: codes.RegisterInvalidParam}
 	}
@@ -24,6 +27,7 @@ func RegisterHandle(db *gorm.DB, req model.RegisterRequest) *model.Error {
 	if emailExists {
 		return &model.Error{StatusCode: codes.RegisterEmailExists}
 	}
+
 	user := model.User{
 		Username: req.Username,
 		Password: EncryptPassword(req.Password),
@@ -34,5 +38,15 @@ func RegisterHandle(db *gorm.DB, req model.RegisterRequest) *model.Error {
 	if err != nil {
 		return &model.Error{StatusCode: codes.RegisterCreateUserError}
 	}
-	return &model.Error{StatusCode: codes.CodeSuccess, Message: "注册成功"}
+
+	dst := fmt.Sprintf("./uploads/user/%d/%d%v", user.ID, user.ID, filepath.Ext(req.Avatar.Filename))
+	err = c.SaveUploadedFile(req.Avatar, dst)
+	if err != nil {
+		return &model.Error{StatusCode: codes.RegisterSaveAvatarError}
+	}
+	err = dao.CreateUserAvatar(db, &model.UserAvatar{UserID: user.ID, URL: dst})
+	if err != nil {
+		return &model.Error{StatusCode: codes.RegisterSaveAvatarError}
+	}
+	return nil
 }

@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"fmt"
 	"online-house-trading-platform/pkg/model"
 
 	"gorm.io/gorm"
@@ -9,7 +10,7 @@ import (
 // GetUserByUsername 用于根据用户名获取用户信息
 func GetUserByUsername(db *gorm.DB, username string) (*model.User, error) {
 	var user model.User
-	result := db.Where("username = ?", username).First(&user)
+	result := db.Preload("Avatar").Where("username = ?", username).First(&user)
 	return &user, result.Error
 }
 
@@ -49,8 +50,8 @@ func GetUserProfile(db *gorm.DB, idUint uint) (*model.User, error) {
 }
 
 // ModifyUserProfile 用于修改用户的个人信息
-func ModifyUserProfile(db *gorm.DB, m *model.User, idUint uint) error {
-	return db.Model(m).Where("id = ?", idUint).Updates(m).Error
+func ModifyUserProfile(db *gorm.DB, m *model.UserReq, idUint uint) error {
+	return db.Model(model.User{}).Where("id = ?", idUint).Updates(m).Error
 }
 
 // GetReserve 用于获取用户的预约信息
@@ -58,4 +59,15 @@ func GetReserve(db *gorm.DB, idUint uint) ([]model.Reserve, error) {
 	var reserve []model.Reserve
 	result := db.Where("user_id = ?", idUint).Find(&reserve)
 	return reserve, result.Error
+}
+
+// CreateUserAvatar 用于创建用户的头像
+func CreateUserAvatar(db *gorm.DB, avatar *model.UserAvatar) error {
+	return db.Create(avatar).Error
+}
+
+func ModifyUserAvatar(db *gorm.DB, avatar *model.UserAvatar) error {
+	fmt.Print(avatar)
+	err := db.Raw("UPDATE user_avatars SET url = ? WHERE user_id = ?", avatar.URL, avatar.UserID).Error
+	return err
 }

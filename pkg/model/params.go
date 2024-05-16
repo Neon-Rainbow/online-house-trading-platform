@@ -20,10 +20,11 @@ type LoginResponse struct {
 
 // RegisterRequest 用于处理用户注册请求
 type RegisterRequest struct {
-	Username string `json:"username" form:"username"`
-	Password string `json:"password" form:"password"`
-	Email    string `json:"email" form:"email"`
-	Role     string `json:"role" form:"role"`
+	Username string                `json:"username" form:"username"`
+	Password string                `json:"password" form:"password"`
+	Email    string                `json:"email" form:"email"`
+	Role     string                `json:"role" form:"role"`
+	Avatar   *multipart.FileHeader `json:"avatar" form:"avatar"`
 }
 
 // HouseRequest 是从前端接收房源数据的结构体。
@@ -46,6 +47,18 @@ type HouseUpdateRequest struct {
 	Price       float64                 `json:"price" form:"prices"`            // 房屋价格
 	Address     string                  `json:"address" form:"address"`         // 房屋地址
 	Images      []*multipart.FileHeader `json:"images" form:"images"`           // 房屋相关的图片文件列表
+}
+
+type UserReq struct {
+	Username string `json:"username" form:"username"`
+	Password string `json:"password" form:"password"`
+	Email    string `json:"email" form:"email"`
+	Role     string `json:"role" form:"role"`
+}
+
+type UserAvatarReq struct {
+	UserID uint                  `json:"user_id" form:"user_id"`
+	Avatar *multipart.FileHeader `json:"avatar" form:"avatar"`
 }
 
 // Error 用于处理错误信息

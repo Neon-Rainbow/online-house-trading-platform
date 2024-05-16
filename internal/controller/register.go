@@ -55,7 +55,7 @@ func RegisterPost(c *gin.Context) {
 		return
 	}
 
-	apiError := logic.RegisterHandle(db, registerReq)
+	apiError := logic.RegisterHandle(db, registerReq, c)
 	if apiError != nil {
 		zap.L().Error("RegisterPost: logic.RegisterHandle failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),

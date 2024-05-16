@@ -54,6 +54,7 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 	{
 		userProfileGroup.GET("/", controller.ProfileGet)
 		userProfileGroup.PUT("/", controller.ProfilePut)
+		userProfileGroup.PUT("/avatar", controller.ProfileAvatarPut)
 	}
 }
 
