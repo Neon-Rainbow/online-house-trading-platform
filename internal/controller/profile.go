@@ -102,7 +102,7 @@ func ProfilePut(c *gin.Context) {
 	err := c.ShouldBind(&userProfile)
 	if err != nil {
 		zap.L().Error("ProfilePut: c.ShouldBind(&userProfile) failed",
-			zap.String("错误码", strconv.FormatInt(int64(codes.BindDataError), 10)),
+			zap.Int("错误码", codes.BindDataError.Int()),
 		)
 		ResponseErrorWithCode(c, codes.BindDataError)
 		return
@@ -111,7 +111,7 @@ func ProfilePut(c *gin.Context) {
 	apiError := logic.ModifyUserProfile(db, &userProfile, userIDUint)
 	if apiError != nil {
 		zap.L().Error("ProfilePut: logic.ModifyUserProfile failed",
-			zap.String("错误码", strconv.FormatInt(int64(apiError.StatusCode), 10)),
+			zap.Int("错误码", apiError.StatusCode.Int()),
 			zap.Any("用户信息", userProfile),
 		)
 		ResponseError(c, *apiError)

@@ -40,6 +40,9 @@ import (
 func ReleasePost(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
+		zap.L().Error("ReleasePost: c.MustGet(\"db\").(*gorm.DB) failed",
+			zap.Int("错误码", codes.GetDBError.Int()),
+		)
 		ResponseErrorWithCode(c, codes.GetDBError)
 		return
 	}
@@ -47,17 +50,19 @@ func ReleasePost(c *gin.Context) {
 	var req model.HouseRequest
 	err := c.ShouldBind(&req)
 	if err != nil {
-		zap.L().Debug(
-			"ReleasePost: c.ShouldBind(&req) failed",
-			zap.Error(err),
-			zap.String("path", c.Request.URL.Path),
-			zap.String("function", "ReleasePost"))
+		zap.L().Error("ReleasePost: c.ShouldBind(&req) failed",
+			zap.Int("错误码", codes.ReleaseBindDataError.Int()),
+		)
 		ResponseErrorWithCode(c, codes.ReleaseBindDataError)
 		return
 	}
 
 	apiError := logic.ProcessHouseAndImages(db, &req, c)
 	if apiError != nil {
+		zap.L().Error("ReleasePost: logic.ProcessHouseAndImages failed",
+			zap.Int("错误码", apiError.StatusCode.Int()),
+			zap.Any("req", req),
+		)
 		ResponseError(c, *apiError)
 		return
 	}
@@ -80,6 +85,9 @@ func ReleasePost(c *gin.Context) {
 func ReleasePut(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
+		zap.L().Error("ReleasePut: c.MustGet(\"db\").(*gorm.DB) failed",
+			zap.Int("错误码", codes.GetDBError.Int()),
+		)
 		ResponseErrorWithCode(c, codes.GetDBError)
 		return
 	}
@@ -87,12 +95,19 @@ func ReleasePut(c *gin.Context) {
 	var req model.HouseUpdateRequest
 	err := c.ShouldBind(&req)
 	if err != nil {
+		zap.L().Error("ReleasePut: c.ShouldBind(&req) failed",
+			zap.Int("错误码", codes.ReleaseBindDataError.Int()),
+		)
 		ResponseErrorWithCode(c, codes.ReleaseBindDataError)
 		return
 	}
 
 	apiError := logic.UpdateHouseAndImages(db, &req, c)
 	if apiError != nil {
+		zap.L().Error("ReleasePut: logic.UpdateHouseAndImages failed",
+			zap.Int("错误码", apiError.StatusCode.Int()),
+			zap.Any("req", req),
+		)
 		ResponseError(c, *apiError)
 		return
 	}
@@ -115,6 +130,9 @@ func ReleasePut(c *gin.Context) {
 func ReleaseDeleteWholeHouse(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
+		zap.L().Error("ReleaseDeleteWholeHouse: c.MustGet(\"db\").(*gorm.DB) failed",
+			zap.Int("错误码", codes.GetDBError.Int()),
+		)
 		ResponseErrorWithCode(c, codes.GetDBError)
 		return
 	}
@@ -124,12 +142,19 @@ func ReleaseDeleteWholeHouse(c *gin.Context) {
 	}
 	err := c.ShouldBindJSON(&req)
 	if err != nil {
+		zap.L().Error("ReleaseDeleteWholeHouse: c.ShouldBindJSON(&req) failed",
+			zap.Int("错误码", codes.ReleaseBindDataError.Int()),
+		)
 		ResponseErrorWithCode(c, codes.ReleaseBindDataError)
 		return
 	}
 
 	apiError := logic.DeleteHouse(db, req.HouseID)
 	if apiError != nil {
+		zap.L().Error("ReleaseDeleteWholeHouse: logic.DeleteHouse failed",
+			zap.Int("错误码", apiError.StatusCode.Int()),
+			zap.Any("req", req),
+		)
 		ResponseError(c, *apiError)
 		return
 	}

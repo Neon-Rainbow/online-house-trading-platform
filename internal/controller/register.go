@@ -49,7 +49,7 @@ func RegisterPost(c *gin.Context) {
 	err := c.ShouldBind(&registerReq)
 	if err != nil {
 		zap.L().Error("RegisterPost: c.ShouldBind(&registerReq) failed",
-			zap.String("错误码", strconv.FormatInt(int64(codes.RegisterInvalidParam), 10)),
+			zap.Int("错误码", codes.RegisterInvalidParam.Int()),
 		)
 		ResponseErrorWithCode(c, codes.RegisterInvalidParam)
 		return
@@ -58,8 +58,8 @@ func RegisterPost(c *gin.Context) {
 	apiError := logic.RegisterHandle(db, registerReq)
 	if apiError != nil {
 		zap.L().Error("RegisterPost: logic.RegisterHandle failed",
-			zap.String("错误码", strconv.FormatInt(int64(apiError.StatusCode), 10)),
-			zap.Any("注册信息", registerReq),
+			zap.Int("错误码", apiError.StatusCode.Int()),
+			zap.Any("注册信息registerReq", registerReq),
 		)
 		ResponseError(c, *apiError)
 		return
