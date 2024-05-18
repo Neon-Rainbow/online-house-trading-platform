@@ -63,3 +63,11 @@ go run main.go
 或在项目启动后访问[http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)查看。
 
 项目默认监听`8080`端口，可在`config.json`中修改.
+
+## 项目日志文件
+项目的日志文件会在[application.log](./application.log)中.如果需要格式化 JSON 数据,可以运行项目根目录下的[format_log.py](./format_log.py)
+
+可以在项目根目录下执行以下指令:
+```shell
+python format_log.py
+```
