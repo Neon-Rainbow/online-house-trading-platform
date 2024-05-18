@@ -61,7 +61,7 @@ func GinLogger(logger *zap.Logger) gin.HandlerFunc {
 		logger.Info(path,
 			zap.Int("status", c.Writer.Status()),
 			zap.String("method", c.Request.Method),
-			zap.String("head", c.Request.Header.Get("Authorization")),
+			zap.Any("head", c.Request.Header),
 			zap.String("path", path),
 			zap.String("query", query),
 			zap.Any("body", c.Request.Body),
