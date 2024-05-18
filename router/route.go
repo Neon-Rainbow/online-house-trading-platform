@@ -1,10 +1,12 @@
 package router
 
 import (
+	"github.com/gin-contrib/cors"
 	"net/http"
 	"online-house-trading-platform/config"
 	"online-house-trading-platform/internal/controller"
 	"online-house-trading-platform/middleware"
+	"time"
 
 	docs "online-house-trading-platform/docs"
 
@@ -66,6 +68,16 @@ func SetupRouters(db *gorm.DB) *gin.Engine {
 	// 使用 zap 日志中间件
 	router.Use(logger.GinLogger(zap.L()))
 	router.Use(logger.GinRecovery(zap.L(), true))
+
+	corsCFG := cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000", "http://127.0.0.1:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}
+	router.Use(cors.New(corsCFG))
 
 	setupAuthAPI(router, db)
 	setupHouseAPI(router, db)
