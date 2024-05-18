@@ -4,11 +4,10 @@ import (
 	"github.com/gin-contrib/cors"
 	"net/http"
 	"online-house-trading-platform/config"
+	docs "online-house-trading-platform/docs"
 	"online-house-trading-platform/internal/controller"
 	"online-house-trading-platform/middleware"
 	"time"
-
-	docs "online-house-trading-platform/docs"
 
 	"online-house-trading-platform/logger" // 导入 logger 包
 
@@ -84,7 +83,10 @@ func SetupRouters(db *gorm.DB) *gin.Engine {
 	setupUserAPI(router, db)
 
 	router.NoRoute(func(c *gin.Context) {
-		c.HTML(http.StatusNotFound, "404.html", nil)
+		c.JSON(http.StatusNotFound, gin.H{
+			"url":     c.Request.RequestURI,
+			"message": "无法访问",
+		})
 	})
 
 	docs.SwaggerInfo.BasePath = "/"
