@@ -2,4 +2,5 @@
 .idea
 config.json
 application.log
+formatted_application.log
 .vscode
