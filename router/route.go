@@ -91,6 +91,6 @@ func SetupRouters(db *gorm.DB) *gin.Engine {
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	zap.L().Info("路由配置成功")
+	//zap.L().Info("路由配置成功")
 	return router
 }

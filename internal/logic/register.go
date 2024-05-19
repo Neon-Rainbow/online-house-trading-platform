@@ -39,6 +39,9 @@ func RegisterHandle(db *gorm.DB, req model.RegisterRequest, c *gin.Context) *mod
 		return &model.Error{StatusCode: codes.RegisterCreateUserError}
 	}
 
+	if req.Avatar == nil {
+		return &model.Error{StatusCode: codes.RegisterInvalidParam, Message: "头像文件解析失败或者未携带头像文件.此时用户已经创建完成,无需再创建用户"}
+	}
 	dst := fmt.Sprintf("./uploads/user/%d/%d%v", user.ID, user.ID, filepath.Ext(req.Avatar.Filename))
 	err = c.SaveUploadedFile(req.Avatar, dst)
 	if err != nil {
