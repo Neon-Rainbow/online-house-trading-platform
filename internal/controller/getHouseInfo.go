@@ -60,6 +60,7 @@ func GetHouseInfoByID(c *gin.Context) {
 			zap.String("错误码", strconv.FormatInt(int64(codes.GetDBError), 10)),
 		)
 		ResponseErrorWithCode(c, codes.GetDBError)
+		return
 	}
 
 	houseID := c.Param("house_id")
@@ -70,6 +71,7 @@ func GetHouseInfoByID(c *gin.Context) {
 			zap.String("house_id", houseID),
 		)
 		ResponseErrorWithCode(c, codes.HouseIDInvalid)
+		return
 	}
 	house, apiError := logic.FetchCertainHouseInformationByID(db, uint(houseIDUint))
 	if apiError != nil {
@@ -77,6 +79,7 @@ func GetHouseInfoByID(c *gin.Context) {
 			zap.String("错误码", strconv.FormatInt(int64(apiError.StatusCode), 10)),
 		)
 		ResponseError(c, *apiError)
+		return
 	}
 	ResponseSuccess(c, house)
 }

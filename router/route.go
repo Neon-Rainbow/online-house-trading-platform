@@ -28,7 +28,7 @@ func setupHouseAPI(r *gin.Engine, db *gorm.DB) {
 	housesGroup := r.Group("/houses").Use(middleware.DBMiddleware(db))
 	{
 		housesGroup.GET("/", controller.GetAllHouses)
-		housesGroup.GET("/:id", controller.GetHouseInfoByID)
+		housesGroup.GET("/:house_id", controller.GetHouseInfoByID)
 		housesGroup.POST("/appointment", middleware.JWTAuthMiddleware(), controller.HousesAppointmentPost)
 		housesGroup.POST("/collect", middleware.JWTAuthMiddleware(), controller.CollectPost)
 	}
