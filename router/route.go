@@ -40,6 +40,7 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 		middleware.UserIDMatchMiddleware(),
 		middleware.DBMiddleware(db))
 	{
+		userGroup.GET("/release", controller.ReleaseGet)
 		userGroup.POST("/release", controller.ReleasePost)
 		userGroup.PUT("/release", controller.ReleasePut)
 		userGroup.DELETE("/release", controller.ReleaseDeleteWholeHouse)

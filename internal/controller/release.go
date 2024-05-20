@@ -4,14 +4,15 @@ import (
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/logic"
 	"online-house-trading-platform/pkg/model"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
-// ReleaseGet 用于处理获取发布房屋信息页面的请求
-// @Summary 获取发布房屋信息页面
+// ReleaseGet 获取用户发布的房屋信息
+// @Summary 获取用户发布的房屋信息
 // @Description 获取发布房屋信息页面
 // @Tags 发布
 // @Accept json
@@ -19,11 +20,25 @@ import (
 // @Param Authorization header string false "Bearer 用户令牌"
 // @Success 200 {string} html "发布房屋信息页面"
 // @Router /release [get]
-//func ReleaseGet(c *gin.Context) {
-//	//c.HTML(http.StatusOK, "release.html", nil)
-//	ResponseSuccess(c, nil)
-//	return
-//}
+func ReleaseGet(c *gin.Context) {
+	db, exist := c.MustGet("db").(*gorm.DB)
+	if !exist {
+		zap.L().Error("ReleasePost: c.MustGet(\"db\").(*gorm.DB) failed",
+			zap.Int("错误码", codes.GetDBError.Int()),
+		)
+		ResponseErrorWithCode(c, codes.GetDBError)
+		return
+	}
+	userID := c.Param("user_id")
+	userIDUint, _ := strconv.ParseUint(userID, 10, 32)
+	houses, apiError := logic.GetUserRelease(db, uint(userIDUint))
+	if apiError != nil {
+		ResponseError(c, *apiError)
+		return
+	}
+	ResponseSuccess(c, houses)
+	return
+}
 
 // ReleasePost 用于处理发布房屋信息页面的POST请求,用于发布新的房源
 // @Summary 发布房屋信息
