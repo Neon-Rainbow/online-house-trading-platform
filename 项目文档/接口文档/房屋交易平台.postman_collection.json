@@ -1,0 +1,3002 @@
+{
+	"info": {
+		"_postman_id": "4d7f4ce5-ff0c-4236-99f3-683165874b3b",
+		"name": "房屋交易平台",
+		"description": "在线房屋交易平台接口文档",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33410652"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "登陆接口",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Origin",
+								"value": "127.0.0.1:3000",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "admin",
+									"description": "用户名",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"description": "用户密码",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "登陆成功",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Origin",
+										"value": "127.0.0.1:3000",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "admin",
+											"description": "用户名",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "admin",
+											"description": "用户密码",
+											"type": "text"
+										}
+									],
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "127.0.0.1:8080/auth/login",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 17:16:34 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "317"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"请求成功\",\n    \"data\": {\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MzUsImlzcyI6IjQwOeWuv-iIjeeahOeyvuiHtOeahOe7vOWQiOmhueebriIsImV4cCI6MTcxNjIyNTM5NCwiaWF0IjoxNzE2MTM4OTk0fQ.UNlmLy33D2F_Tm8Oaea9snu6FC7eVkm3JmbNzdWSTp4\",\n        \"user_id\": 35,\n        \"username\": \"admin\"\n    }\n}"
+						},
+						{
+							"name": "用户不存在",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Origin",
+										"value": "127.0.0.1:3000"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\":\"wrong_username\",\r\n    \"password\":\"admin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "127.0.0.1:8080/auth/login",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 17:21:35 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "59"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1002,\n    \"message\": \"登陆用户不存在\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "密码错误",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Origin",
+										"value": "127.0.0.1:3000"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\":\"admin\",\r\n    \"password\":\"wrong_password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "127.0.0.1:8080/auth/login",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 17:22:05 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "56"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1003,\n    \"message\": \"登陆密码错误\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "请求参数错误",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Origin",
+										"value": "127.0.0.1:3000"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\":\"admin\",\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "127.0.0.1:8080/auth/login",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 17:22:44 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "62"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1001,\n    \"message\": \"登陆请求参数错误\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "注册接口",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "",
+									"description": "用户名",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"description": "用户密码",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "",
+									"description": "用户职业",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "",
+									"description": "用户邮箱",
+									"type": "text"
+								},
+								{
+									"key": "avatar",
+									"description": "用户头像",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "注册接口",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "test1111",
+											"description": "用户名",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "test",
+											"description": "用户密码",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "test",
+											"description": "用户职业",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "test@test11",
+											"description": "用户邮箱",
+											"type": "text"
+										},
+										{
+											"key": "avatar",
+											"description": "用户头像",
+											"type": "file",
+											"src": "/C:/Users/FHN/Pictures/screenshots/Screenshot 2024-01-21 212553.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "127.0.0.1:8080/auth/register",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 17:20:37 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "62"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1010,\n    \"message\": \"注册请求参数错误\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "成功注册",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "test",
+											"description": "用户名",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "test",
+											"description": "用户密码",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "test",
+											"description": "用户职业",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "test@email",
+											"description": "用户邮箱",
+											"type": "text"
+										},
+										{
+											"key": "avatar",
+											"description": "用户头像",
+											"type": "file",
+											"src": "/C:/Users/FHN/.bash_history"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/auth/register",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 17:41:31 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "50"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"请求成功\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "未携带头像的注册",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "test",
+											"description": "用户名",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "test",
+											"description": "用户密码",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "test",
+											"description": "用户职业",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "test@email",
+											"description": "用户邮箱",
+											"type": "text"
+										},
+										{
+											"key": "avatar",
+											"description": "用户头像文件",
+											"type": "file",
+											"src": "/C:/Users/FHN/.bash_history",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/auth/register",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 17:44:13 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "142"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1010,\n    \"message\": \"头像文件解析失败或者未携带头像文件.此时用户已经创建完成,无需再创建用户\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "请求参数错误",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "",
+											"description": "用户名",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "",
+											"description": "用户密码",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "",
+											"description": "用户职业",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "",
+											"description": "用户邮箱",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "avatar",
+											"description": "用户头像",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/auth/register",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 17:24:11 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "62"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1010,\n    \"message\": \"注册请求参数错误\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "用户名已存在",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "test",
+											"description": "用户名",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "test",
+											"description": "用户密码",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "test",
+											"description": "用户职业",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "test@test",
+											"description": "用户邮箱",
+											"type": "text"
+										},
+										{
+											"key": "avatar",
+											"description": "用户头像",
+											"type": "file",
+											"src": "/C:/Users/FHN/Pictures/screenshots/Screenshot 2024-01-21 212553.png",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/auth/register",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 17:26:01 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "65"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1012,\n    \"message\": \"注册时用户名已存在\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "邮箱已存在",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "test111",
+											"description": "用户名",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "test",
+											"description": "用户密码",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "test",
+											"description": "用户职业",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "test@test",
+											"description": "用户邮箱",
+											"type": "text"
+										},
+										{
+											"key": "avatar",
+											"description": "用户头像",
+											"type": "file",
+											"src": "/C:/Users/FHN/Pictures/screenshots/Screenshot 2024-01-21 212553.png",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/auth/register",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 17:26:28 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "62"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1013,\n    \"message\": \"注册时邮箱已存在\",\n    \"data\": null\n}"
+						}
+					]
+				}
+			],
+			"description": "auth路由组.该路由组主要用来处理用户的登陆和注册功能,以及获取jwt token",
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "houses",
+			"item": [
+				{
+					"name": "获取所有房屋信息",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/houses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"houses"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "成功",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "127.0.0.1:8080/houses",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"houses"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 17:48:30 GMT"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"请求成功\",\n    \"data\": [\n        {\n            \"ID\": 1,\n            \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n            \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n            \"DeletedAt\": null,\n            \"owner\": \"admin\",\n            \"owner_id\": 1,\n            \"title\": \"a\",\n            \"description\": \"a\",\n            \"price\": 1,\n            \"address\": \"1\",\n            \"Images\": [\n                {\n                    \"ID\": 1,\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"HouseID\": 1,\n                    \"URL\": \"test\"\n                }\n            ]\n        },\n        {\n            \"ID\": 2,\n            \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n            \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n            \"DeletedAt\": null,\n            \"owner\": \"admin\",\n            \"owner_id\": 1,\n            \"title\": \"11\",\n            \"description\": \"1\",\n            \"price\": 1,\n            \"address\": \"1\",\n            \"Images\": []\n        },\n        {\n            \"ID\": 3,\n            \"CreatedAt\": \"2024-04-19T02:41:47.455+08:00\",\n            \"UpdatedAt\": \"2024-04-19T02:41:47.455+08:00\",\n            \"DeletedAt\": null,\n            \"owner\": \"\",\n            \"owner_id\": 0,\n            \"title\": \"\",\n            \"description\": \"\",\n            \"price\": 0,\n            \"address\": \"\",\n            \"Images\": []\n        },\n        {\n            \"ID\": 4,\n            \"CreatedAt\": \"2024-04-19T02:42:26.094+08:00\",\n            \"UpdatedAt\": \"2024-04-19T02:42:26.094+08:00\",\n            \"DeletedAt\": null,\n            \"owner\": \"\",\n            \"owner_id\": 0,\n            \"title\": \"\",\n            \"description\": \"\",\n            \"price\": 0,\n            \"address\": \"\",\n            \"Images\": []\n        },\n        {\n            \"ID\": 5,\n            \"CreatedAt\": \"2024-04-19T02:42:43.445+08:00\",\n            \"UpdatedAt\": \"2024-04-19T02:42:43.445+08:00\",\n            \"DeletedAt\": null,\n            \"owner\": \"\",\n            \"owner_id\": 0,\n            \"title\": \"\",\n            \"description\": \"\",\n            \"price\": 0,\n            \"address\": \"\",\n            \"Images\": []\n        },\n        {\n            \"ID\": 6,\n            \"CreatedAt\": \"2024-05-09T13:36:25.097+08:00\",\n            \"UpdatedAt\": \"2024-05-09T13:36:25.097+08:00\",\n            \"DeletedAt\": null,\n            \"owner\": \"\",\n            \"owner_id\": 0,\n            \"title\": \"\",\n            \"description\": \"\",\n            \"price\": 0,\n            \"address\": \"\",\n            \"Images\": []\n        },\n        {\n            \"ID\": 7,\n            \"CreatedAt\": \"2024-05-09T13:36:53.657+08:00\",\n            \"UpdatedAt\": \"2024-05-09T13:36:53.657+08:00\",\n            \"DeletedAt\": null,\n            \"owner\": \"\",\n            \"owner_id\": 0,\n            \"title\": \"\",\n            \"description\": \"\",\n            \"price\": 0,\n            \"address\": \"\",\n            \"Images\": []\n        },\n        {\n            \"ID\": 9,\n            \"CreatedAt\": \"2024-05-09T13:42:08.204+08:00\",\n            \"UpdatedAt\": \"2024-05-14T19:24:57.073+08:00\",\n            \"DeletedAt\": null,\n            \"owner\": \"fhnfhn\",\n            \"owner_id\": 0,\n            \"title\": \"\",\n            \"description\": \"new description\",\n            \"price\": 0,\n            \"address\": \"\",\n            \"Images\": [\n                {\n                    \"ID\": 7,\n                    \"CreatedAt\": \"2024-05-14T19:24:57.217+08:00\",\n                    \"UpdatedAt\": \"2024-05-14T19:24:57.217+08:00\",\n                    \"DeletedAt\": null,\n                    \"HouseID\": 9,\n                    \"URL\": \"./uploads/houses/9/AAAAAD.png\"\n                },\n                {\n                    \"ID\": 8,\n                    \"CreatedAt\": \"2024-05-14T19:24:57.297+08:00\",\n                    \"UpdatedAt\": \"2024-05-14T19:24:57.297+08:00\",\n                    \"DeletedAt\": null,\n                    \"HouseID\": 9,\n                    \"URL\": \"./uploads/houses/9/AAAAAS.png\"\n                }\n            ]\n        },\n        {\n            \"ID\": 12,\n            \"CreatedAt\": \"2024-05-13T13:16:58.626+08:00\",\n            \"UpdatedAt\": \"2024-05-13T13:16:58.626+08:00\",\n            \"DeletedAt\": null,\n            \"owner\": \"\",\n            \"owner_id\": 0,\n            \"title\": \"\",\n            \"description\": \"\",\n            \"price\": 0,\n            \"address\": \"\",\n            \"Images\": []\n        },\n        {\n            \"ID\": 13,\n            \"CreatedAt\": \"2024-05-14T17:05:26.774+08:00\",\n            \"UpdatedAt\": \"2024-05-14T17:05:26.774+08:00\",\n            \"DeletedAt\": null,\n            \"owner\": \"\",\n            \"owner_id\": 0,\n            \"title\": \"new\",\n            \"description\": \"\",\n            \"price\": 0,\n            \"address\": \"\",\n            \"Images\": []\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "获取某一个房屋信息",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/houses/:house_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"houses",
+								":house_id"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "house_id",
+									"value": "9"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "成功",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "127.0.0.1:8080/houses/:house_id",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"houses",
+										":house_id"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "house_id",
+											"value": "9"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 18:04:19 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "594"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"请求成功\",\n    \"data\": {\n        \"ID\": 9,\n        \"CreatedAt\": \"2024-05-09T13:42:08.204+08:00\",\n        \"UpdatedAt\": \"2024-05-14T19:24:57.073+08:00\",\n        \"DeletedAt\": null,\n        \"owner\": \"fhnfhn\",\n        \"owner_id\": 0,\n        \"title\": \"\",\n        \"description\": \"new description\",\n        \"price\": 0,\n        \"address\": \"\",\n        \"Images\": [\n            {\n                \"ID\": 7,\n                \"CreatedAt\": \"2024-05-14T19:24:57.217+08:00\",\n                \"UpdatedAt\": \"2024-05-14T19:24:57.217+08:00\",\n                \"DeletedAt\": null,\n                \"HouseID\": 9,\n                \"URL\": \"./uploads/houses/9/AAAAAD.png\"\n            },\n            {\n                \"ID\": 8,\n                \"CreatedAt\": \"2024-05-14T19:24:57.297+08:00\",\n                \"UpdatedAt\": \"2024-05-14T19:24:57.297+08:00\",\n                \"DeletedAt\": null,\n                \"HouseID\": 9,\n                \"URL\": \"./uploads/houses/9/AAAAAS.png\"\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "预约房屋",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MzUsImlzcyI6IjQwOeWuv-iIjeeahOeyvuiHtOeahOe7vOWQiOmhueebriIsImV4cCI6MTcxNjIyODU2NCwiaWF0IjoxNzE2MTQyMTY0fQ.iE1yPwZngi_yQkecwimnkTwG-5rtrGROGAErc2ivsoc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\":35,\r\n    \"house_id\":9,\r\n    \"time\":\"2023-03-21T23:04:05Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/houses/appointment",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"houses",
+								"appointment"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "预约成功",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\":35,\r\n    \"house_id\":9,\r\n    \"time\":\"2023-03-21T23:04:05Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "127.0.0.1:8080/houses/appointment",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"houses",
+										"appointment"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 18:12:27 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "50"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"请求成功\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "预约成功(不需要携带user_id)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"house_id\":9,\r\n    \"time\":\"2023-03-21T23:04:05Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/houses/appointment",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"houses",
+										"appointment"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 18:15:11 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "50"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"请求成功\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "请求参数错误",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\":35,\r\n    \"house_id\":9,\r\n    \"time\":\"错误的时间戳\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/houses/appointment",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"houses",
+										"appointment"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 18:13:10 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "62"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1015,\n    \"message\": \"预约请求参数错误\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "token无效",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\":35,\r\n    \"house_id\":9,\r\n    \"time\":\"2023-03-21T23:04:05Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/houses/appointment",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"houses",
+										"appointment"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 18:16:01 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "49"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1009,\n    \"message\": \"token无效\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "未携带token",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\":35,\r\n    \"house_id\":9,\r\n    \"time\":\"2023-03-21T23:04:05Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/houses/appointment",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"houses",
+										"appointment"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 18:16:47 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "76"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1007,\n    \"message\": \"请求未携带token，无权限访问\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "收藏房屋",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MzUsImlzcyI6IjQwOeWuv-iIjeeahOeyvuiHtOeahOe7vOWQiOmhueebriIsImV4cCI6MTcxNjIyODU2NCwiaWF0IjoxNzE2MTQyMTY0fQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\":35,\r\n    \"house_id\":9\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/houses/collect",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"houses",
+								"collect"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "收藏成功",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\":35,\r\n    \"house_id\":9\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "127.0.0.1:8080/houses/collect",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"houses",
+										"collect"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 18:20:00 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "50"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"请求成功\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "请求参数错误",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\":35,\r\n    \"house_id\":9,\r\n    \"time\":\"错误的时间戳\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/houses/appointment",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"houses",
+										"appointment"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 18:13:10 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "62"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1015,\n    \"message\": \"预约请求参数错误\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "token无效",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\":35,\r\n    \"house_id\":9\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/houses/collect",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"houses",
+										"collect"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 18:16:01 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "49"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1009,\n    \"message\": \"token无效\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "未携带token Copy",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\":35,\r\n    \"house_id\":9\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/houses/collect",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"houses",
+										"collect"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 18:16:47 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "76"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1007,\n    \"message\": \"请求未携带token，无权限访问\",\n    \"data\": null\n}"
+						}
+					]
+				}
+			],
+			"description": "houses路由组.该路由组用来获取所有房屋的信息,某一个具体的房屋的信息,以及预约和收藏房屋的接口.其中预约和收藏两功能需要jwt token"
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "获取用户发布的房屋信息",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": [
+						{
+							"name": "成功获取",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "127.0.0.1:8080/user/:user_id/release",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										":user_id",
+										"release"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 08:42:09 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "748"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"请求成功\",\n    \"data\": [\n        {\n            \"ID\": 8,\n            \"CreatedAt\": \"2024-05-09T13:40:21.214+08:00\",\n            \"UpdatedAt\": \"2024-05-09T13:40:21.214+08:00\",\n            \"DeletedAt\": null,\n            \"owner\": \"admin\",\n            \"owner_id\": 35,\n            \"title\": \"example_house\",\n            \"description\": \"house\",\n            \"price\": 0,\n            \"address\": \"suzhou\",\n            \"Images\": null\n        },\n        {\n            \"ID\": 10,\n            \"CreatedAt\": \"2024-05-09T14:05:50.234+08:00\",\n            \"UpdatedAt\": \"2024-05-09T14:05:50.234+08:00\",\n            \"DeletedAt\": null,\n            \"owner\": \"admin\",\n            \"owner_id\": 35,\n            \"title\": \"example_house\",\n            \"description\": \"house\",\n            \"price\": 0,\n            \"address\": \"suzhou\",\n            \"Images\": null\n        },\n        {\n            \"ID\": 11,\n            \"CreatedAt\": \"2024-05-09T14:13:29.452+08:00\",\n            \"UpdatedAt\": \"2024-05-09T14:13:29.452+08:00\",\n            \"DeletedAt\": null,\n            \"owner\": \"admin\",\n            \"owner_id\": 35,\n            \"title\": \"example_house\",\n            \"description\": \"house\",\n            \"price\": 0,\n            \"address\": \"suzhou\",\n            \"Images\": null\n        }\n    ]\n}"
+						},
+						{
+							"name": "未携带token",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/:user_id/release",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":user_id",
+										"release"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 08:43:17 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "76"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1007,\n    \"message\": \"请求未携带token，无权限访问\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "token无效",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/:user_id/release",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":user_id",
+										"release"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 08:43:39 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "49"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1009,\n    \"message\": \"token无效\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "发布房屋",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MzUsImlzcyI6IjQwOeWuv-iIjeeahOeyvuiHtOeahOe7vOWQiOmhueebriIsImV4cCI6MTcxNjI4MDgwOCwiaWF0IjoxNzE2MTk0NDA4fQ.7JHhoN2WK2vbYlY15Qoz9tSeuoRXj1v7dSYs04GoEBQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "owner",
+									"value": "admin",
+									"description": "房屋拥有者的用户名",
+									"type": "text"
+								},
+								{
+									"key": "owner_id",
+									"value": "35",
+									"description": "房屋拥有者的用户id",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "房屋名字",
+									"description": "房屋的名字",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "房屋描述",
+									"description": "房屋的描述",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "房屋价格",
+									"description": "房屋的价格",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "房屋地址",
+									"description": "房屋的地址",
+									"type": "text"
+								},
+								{
+									"key": "images",
+									"description": "房屋的图片",
+									"type": "file",
+									"src": "/E:/Desktop/test/1.png"
+								},
+								{
+									"key": "images",
+									"description": "房屋的图片",
+									"type": "file",
+									"src": "/E:/Desktop/test/2.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/user/:user_id/release",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								":user_id",
+								"release"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "35"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "发布成功",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "owner",
+											"value": "admin",
+											"description": "房屋拥有者的用户名",
+											"type": "text"
+										},
+										{
+											"key": "owner_id",
+											"value": "35",
+											"description": "房屋拥有者的用户id",
+											"type": "text"
+										},
+										{
+											"key": "title",
+											"value": "房屋名字",
+											"description": "房屋的名字",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "房屋描述",
+											"description": "房屋的描述",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "房屋价格",
+											"description": "房屋的价格",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "房屋地址",
+											"description": "房屋的地址",
+											"type": "text"
+										},
+										{
+											"key": "images",
+											"description": "房屋的图片",
+											"type": "file",
+											"src": "/E:/Desktop/test/1.png"
+										},
+										{
+											"key": "images",
+											"description": "房屋的图片",
+											"type": "file",
+											"src": "/E:/Desktop/test/2.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "127.0.0.1:8080/user/:user_id/release",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										":user_id",
+										"release"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 08:48:08 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "50"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"请求成功\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "更新房屋信息",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MzUsImlzcyI6IjQwOeWuv-iIjeeahOeyvuiHtOeahOe7vOWQiOmhueebriIsImV4cCI6MTcxNjI4MDgwOCwiaWF0IjoxNzE2MTk0NDA4fQ.7JHhoN2WK2vbYlY15Qoz9tSeuoRXj1v7dSYs04GoEBQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "house_id",
+									"value": "14",
+									"description": "房屋id",
+									"type": "text"
+								},
+								{
+									"key": "owner",
+									"value": "admin",
+									"description": "房屋拥有者的用户名",
+									"type": "text"
+								},
+								{
+									"key": "owner_id",
+									"value": "35",
+									"description": "房屋拥有者的用户id",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "房屋名字(更新)",
+									"description": "房屋的名字",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "房屋描述(更新)",
+									"description": "房屋的描述",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "房屋价格(更新)",
+									"description": "房屋的价格",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "房屋地址(更新)",
+									"description": "房屋的地址",
+									"type": "text"
+								},
+								{
+									"key": "images",
+									"description": "房屋的图片",
+									"type": "file",
+									"src": "/E:/Desktop/test/3.png"
+								},
+								{
+									"key": "images",
+									"description": "房屋的图片",
+									"type": "file",
+									"src": "/E:/Desktop/test/4.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/user/:user_id/release",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								":user_id",
+								"release"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "35"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "更新成功",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "house_id",
+											"value": "14",
+											"description": "房屋id",
+											"type": "text"
+										},
+										{
+											"key": "owner",
+											"value": "admin",
+											"description": "房屋拥有者的用户名",
+											"type": "text"
+										},
+										{
+											"key": "owner_id",
+											"value": "35",
+											"description": "房屋拥有者的用户id",
+											"type": "text"
+										},
+										{
+											"key": "title",
+											"value": "房屋名字(更新)",
+											"description": "房屋的名字",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "房屋描述(更新)",
+											"description": "房屋的描述",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "房屋价格(更新)",
+											"description": "房屋的价格",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "房屋地址(更新)",
+											"description": "房屋的地址",
+											"type": "text"
+										},
+										{
+											"key": "images",
+											"description": "房屋的图片",
+											"type": "file",
+											"src": "/E:/Desktop/test/3.png"
+										},
+										{
+											"key": "images",
+											"description": "房屋的图片",
+											"type": "file",
+											"src": "/E:/Desktop/test/4.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "127.0.0.1:8080/user/:user_id/release",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										":user_id",
+										"release"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 08:53:52 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "50"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"请求成功\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "删除房屋信息",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MzUsImlzcyI6IjQwOeWuv-iIjeeahOeyvuiHtOeahOe7vOWQiOmhueebriIsImV4cCI6MTcxNjI4MDgwOCwiaWF0IjoxNzE2MTk0NDA4fQ.7JHhoN2WK2vbYlY15Qoz9tSeuoRXj1v7dSYs04GoEBQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"house_id\":14\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/:user_id/release",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								":user_id",
+								"release"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "35"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "删除成功",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"house_id\":14\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "127.0.0.1:8080/user/:user_id/release",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										":user_id",
+										"release"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 08:55:53 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "50"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"请求成功\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "获取用户收藏",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MzUsImlzcyI6IjQwOeWuv-iIjeeahOeyvuiHtOeahOe7vOWQiOmhueebriIsImV4cCI6MTcxNjI4MDgwOCwiaWF0IjoxNzE2MTk0NDA4fQ.7JHhoN2WK2vbYlY15Qoz9tSeuoRXj1v7dSYs04GoEBQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/user/:user_id/favourites",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								":user_id",
+								"favourites"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "35"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "获取成功",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "127.0.0.1:8080/user/:user_id/favourites",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										":user_id",
+										"favourites"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 08:57:53 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "755"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"请求成功\",\n    \"data\": [\n        {\n            \"ID\": 25,\n            \"CreatedAt\": \"2024-04-16T16:43:02.957+08:00\",\n            \"UpdatedAt\": \"2024-04-16T16:43:02.957+08:00\",\n            \"DeletedAt\": null,\n            \"user_id\": 35,\n            \"house_id\": 1\n        },\n        {\n            \"ID\": 26,\n            \"CreatedAt\": \"2024-04-16T16:43:12.554+08:00\",\n            \"UpdatedAt\": \"2024-04-16T16:43:12.554+08:00\",\n            \"DeletedAt\": null,\n            \"user_id\": 35,\n            \"house_id\": 100\n        },\n        {\n            \"ID\": 27,\n            \"CreatedAt\": \"2024-05-09T15:55:59.331+08:00\",\n            \"UpdatedAt\": \"2024-05-09T15:55:59.331+08:00\",\n            \"DeletedAt\": null,\n            \"user_id\": 35,\n            \"house_id\": 1\n        },\n        {\n            \"ID\": 28,\n            \"CreatedAt\": \"2024-05-14T16:08:03.023+08:00\",\n            \"UpdatedAt\": \"2024-05-14T16:08:03.023+08:00\",\n            \"DeletedAt\": null,\n            \"user_id\": 35,\n            \"house_id\": 10\n        },\n        {\n            \"ID\": 29,\n            \"CreatedAt\": \"2024-05-20T02:20:00.619+08:00\",\n            \"UpdatedAt\": \"2024-05-20T02:20:00.619+08:00\",\n            \"DeletedAt\": null,\n            \"user_id\": 35,\n            \"house_id\": 9\n        }\n    ]\n}"
+						},
+						{
+							"name": "未携带token",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/:user_id/favourites",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":user_id",
+										"favourites"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 08:58:20 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "76"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1007,\n    \"message\": \"请求未携带token，无权限访问\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "token无效",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/:user_id/favourites",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":user_id",
+										"favourites"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 08:58:39 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "49"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1009,\n    \"message\": \"token无效\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "获取用户预约信息",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": [
+						{
+							"name": "获取成功",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "127.0.0.1:8080/user/:user_id/appointment",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										":user_id",
+										"appointment"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 08:59:47 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "749"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"请求成功\",\n    \"data\": [\n        {\n            \"ID\": 7,\n            \"CreatedAt\": \"2024-03-21T18:33:37.071+08:00\",\n            \"UpdatedAt\": \"2024-03-21T18:33:37.071+08:00\",\n            \"DeletedAt\": null,\n            \"user_id\": 35,\n            \"house_id\": 10,\n            \"time\": \"2023-03-21T23:04:05+08:00\"\n        },\n        {\n            \"ID\": 8,\n            \"CreatedAt\": \"2024-05-20T02:12:27.743+08:00\",\n            \"UpdatedAt\": \"2024-05-20T02:12:27.743+08:00\",\n            \"DeletedAt\": null,\n            \"user_id\": 35,\n            \"house_id\": 9,\n            \"time\": \"2023-03-22T07:04:05+08:00\"\n        },\n        {\n            \"ID\": 9,\n            \"CreatedAt\": \"2024-05-20T02:15:11.119+08:00\",\n            \"UpdatedAt\": \"2024-05-20T02:15:11.119+08:00\",\n            \"DeletedAt\": null,\n            \"user_id\": 35,\n            \"house_id\": 9,\n            \"time\": \"2023-03-22T07:04:05+08:00\"\n        },\n        {\n            \"ID\": 10,\n            \"CreatedAt\": \"2024-05-20T02:16:40.219+08:00\",\n            \"UpdatedAt\": \"2024-05-20T02:16:40.219+08:00\",\n            \"DeletedAt\": null,\n            \"user_id\": 35,\n            \"house_id\": 9,\n            \"time\": \"2023-03-22T07:04:05+08:00\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "获取用户个人信息",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MzUsImlzcyI6IjQwOeWuv-iIjeeahOeyvuiHtOeahOe7vOWQiOmhueebriIsImV4cCI6MTcxNjI4MDgwOCwiaWF0IjoxNzE2MTk0NDA4fQ.7JHhoN2WK2vbYlY15Qoz9tSeuoRXj1v7dSYs04GoEBQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/user/:user_id/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								":user_id",
+								"profile"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "35"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "获取成功",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "127.0.0.1:8080/user/:user_id/profile",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										":user_id",
+										"profile"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 09:00:29 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "398"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"请求成功\",\n    \"data\": {\n        \"ID\": 35,\n        \"CreatedAt\": \"2024-03-26T15:24:10.663+08:00\",\n        \"UpdatedAt\": \"2024-03-26T15:24:10.663+08:00\",\n        \"DeletedAt\": null,\n        \"username\": \"admin\",\n        \"password\": \"61646d696e94daba8aebc8d7c12146d1cd3ccc7a67\",\n        \"email\": \"admin@admin\",\n        \"role\": \"admin\",\n        \"avatar\": {\n            \"ID\": 0,\n            \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n            \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n            \"DeletedAt\": null,\n            \"user_id\": 0,\n            \"url\": \"\"\n        }\n    }\n}"
+						},
+						{
+							"name": "未携带token",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/:user_id/profile",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":user_id",
+										"profile"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 09:01:08 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "76"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1007,\n    \"message\": \"请求未携带token，无权限访问\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "token错误",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/:user_id/profile",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":user_id",
+										"profile"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 09:01:25 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "49"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1009,\n    \"message\": \"token无效\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "更新用户个人信息",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response content type is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields - code, message, and data\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('code');",
+									"    pm.expect(responseData).to.have.property('message');",
+									"    pm.expect(responseData).to.have.property('data');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Code is a non-negative integer\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.code).to.be.a('number');",
+									"  pm.expect(responseData.code).to.be.at.least(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MzUsImlzcyI6IjQwOeWuv-iIjeeahOeyvuiHtOeahOe7vOWQiOmhueebriIsImV4cCI6MTcxNjI4MDgwOCwiaWF0IjoxNzE2MTk0NDA4fQ.7JHhoN2WK2vbYlY15Qoz9tSeuoRXj1v7dSYs04GoEBQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"admin\",\r\n    \"password\":\"admin\",\r\n    \"email\":\"更新 邮箱\",\r\n    \"role\":\"更新 职业\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/:user_id/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								":user_id",
+								"profile"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "35"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "更新成功",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\":\"admin\",\r\n    \"password\":\"admin\",\r\n    \"email\":\"更新邮箱\",\r\n    \"role\":\"更新职业\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "127.0.0.1:8080/user/:user_id/profile",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										":user_id",
+										"profile"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 09:03:09 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "50"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"请求成功\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "未携带token",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/:user_id/profile",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":user_id",
+										"profile"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 09:01:08 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "76"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1007,\n    \"message\": \"请求未携带token，无权限访问\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "token错误",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/:user_id/profile",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":user_id",
+										"profile"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 09:01:25 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "49"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1009,\n    \"message\": \"token无效\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "更新用户头像",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MzUsImlzcyI6IjQwOeWuv-iIjeeahOeyvuiHtOeahOe7vOWQiOmhueebriIsImV4cCI6MTcxNjI4MDgwOCwiaWF0IjoxNzE2MTk0NDA4fQ.7JHhoN2WK2vbYlY15Qoz9tSeuoRXj1v7dSYs04GoEBQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/E:/Desktop/test/1.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/user/:user_id/profile/avatar",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								":user_id",
+								"profile",
+								"avatar"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "35"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "更新成功",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "avatar",
+											"type": "file",
+											"src": "/E:/Desktop/test/1.png"
+										}
+									],
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "127.0.0.1:8080/user/:user_id/profile/avatar",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										":user_id",
+										"profile",
+										"avatar"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 09:14:00 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "50"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"请求成功\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "未携带token",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/:user_id/profile/avatar",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":user_id",
+										"profile",
+										"avatar"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 09:01:08 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "76"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1007,\n    \"message\": \"请求未携带token，无权限访问\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "token错误",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/:user_id/profile/avatar",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":user_id",
+										"profile",
+										"avatar"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 May 2024 09:01:25 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "49"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1009,\n    \"message\": \"token无效\",\n    \"data\": null\n}"
+						}
+					]
+				}
+			],
+			"description": "user路由组.该路由组用来处理用户的个人信息.包括:\n+ 获取用户自己发布的房屋\n+ 用户发布房屋\n+ 用户更新房屋信息\n+ 用户删除自己发布的房屋\n+ 获取用户的个人收藏\n+ 获取用户的个人预约\n+ 修改用户个人信息,包括修改密码,修改头像",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MzUsImlzcyI6IjQwOeWuv-iIjeeahOeyvuiHtOeahOe7vOWQiOmhueebriIsImV4cCI6MTcxNjIyODU2NCwiaWF0IjoxNzE2MTQyMTY0fQ.iE1yPwZngi_yQkecwimnkTwG-5rtrGROGAErc2ivsoc",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}
