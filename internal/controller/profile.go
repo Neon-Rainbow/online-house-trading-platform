@@ -100,6 +100,7 @@ func ProfilePut(c *gin.Context) {
 
 	var userProfileUpdateReq model.UserReq
 	err := c.ShouldBind(&userProfileUpdateReq)
+	userProfileUpdateReq.Password = logic.EncryptPassword(userProfileUpdateReq.Password) //对需要修改的明文密码进行加密
 	// fmt.Print(userProfileUpdateReq)
 	if err != nil {
 		zap.L().Error("ProfilePut: c.ShouldBind(&userProfileUpdateReq ) failed",
