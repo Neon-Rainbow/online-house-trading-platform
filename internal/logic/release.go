@@ -56,10 +56,7 @@ func DeleteHouse(db *gorm.DB, houseID uint) *model.Error {
 	}
 	for _, houseImage := range house.Images {
 		filepath := fmt.Sprintf("./%s", houseImage.URL)
-		err := os.Remove(filepath)
-		if err != nil {
-			return &model.Error{StatusCode: codes.DeleteHouseError, Message: "删除房屋图片失败"}
-		}
+		_ = os.Remove(filepath)
 	}
 	return nil
 }
@@ -96,7 +93,6 @@ func UpdateHouseAndImages(db *gorm.DB, req *model.HouseUpdateRequest, c *gin.Con
 	existingHouse, err := dao.GetHouseInformationByID(db, req.HouseID)
 	if err != nil {
 		return &model.Error{StatusCode: codes.UpdateHouseError, Message: "房屋信息获取失败"}
-
 	}
 
 	var house model.House
@@ -106,7 +102,7 @@ func UpdateHouseAndImages(db *gorm.DB, req *model.HouseUpdateRequest, c *gin.Con
 	updateFields := make(map[string]interface{})
 
 	reqValue := reflect.ValueOf(req).Elem()
-	existingValue := reflect.ValueOf(existingHouse)
+	existingValue := reflect.ValueOf(existingHouse).Elem() // 确保 existingHouse 被解引用
 
 	for i := 0; i < reqValue.NumField(); i++ {
 		field := reqValue.Type().Field(i)
@@ -119,12 +115,11 @@ func UpdateHouseAndImages(db *gorm.DB, req *model.HouseUpdateRequest, c *gin.Con
 			updateFields[snakeCase(fieldName)] = existingValue.FieldByName(fieldName).Interface()
 		}
 	}
-	//删除updateFields中的images字段
+
+	// 删除 updateFields 中的 images 字段
 	delete(updateFields, "images")
 
-	//if err := dao.UpdateHouse(db, &house); err != nil {
-	//	return &model.Error{StatusCode: codes.UpdateHouseError, Message: "更新房屋信息失败"}
-	//}
+	// 更新房屋信息
 	err = dao.UpdateHouse(db, &house, updateFields)
 	if err != nil {
 		return &model.Error{StatusCode: codes.UpdateHouseError, Message: "更新房屋信息失败"}
@@ -155,5 +150,12 @@ func UpdateHouseAndImages(db *gorm.DB, req *model.HouseUpdateRequest, c *gin.Con
 	}
 
 	return nil
+}
 
+func GetUserRelease(db *gorm.DB, userID uint) (*[]model.House, *model.Error) {
+	houses, err := dao.GetUserRelease(db, userID)
+	if err != nil {
+		return nil, &model.Error{StatusCode: codes.GetHouseInfoError, Message: "获取房屋信息失败"}
+	}
+	return houses, nil
 }
