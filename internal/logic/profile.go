@@ -35,10 +35,7 @@ func ModifyUserAvatar(db *gorm.DB, avatar *model.UserAvatarReq, c *gin.Context) 
 		return &model.Error{StatusCode: codes.GetUserProfileError, Message: "获取用户原先头像信息失败"}
 	}
 	dst := userInfo.Avatar.URL
-	err = os.Remove(dst)
-	if err != nil {
-		return &model.Error{StatusCode: codes.DeleteUserAvatarError}
-	}
+	_ = os.Remove(dst)
 	dst = fmt.Sprintf("./uploads/user/%d/%d%v", avatar.UserID, avatar.UserID, filepath.Ext(avatar.Avatar.Filename))
 
 	err = c.SaveUploadedFile(avatar.Avatar, dst)
