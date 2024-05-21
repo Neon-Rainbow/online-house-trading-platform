@@ -1,12 +1,6 @@
 package router
 
 import (
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
-	swaggerfiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
-	"go.uber.org/zap"
-	"gorm.io/gorm"
 	"net/http"
 	"online-house-trading-platform/config"
 	docs "online-house-trading-platform/docs"
@@ -14,6 +8,13 @@ import (
 	"online-house-trading-platform/logger" // 导入 logger 包
 	"online-house-trading-platform/middleware"
 	"time"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"go.uber.org/zap"
+	"gorm.io/gorm"
 )
 
 func setupAuthAPI(r *gin.Engine, db *gorm.DB) {
@@ -72,9 +73,10 @@ func SetupRouters(db *gorm.DB) *gin.Engine {
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
 		AllowAllOrigins:  true,
-		AllowCredentials: true,
+		AllowCredentials: false,
 		MaxAge:           12 * time.Hour,
 	}
+
 	router.Use(cors.New(corsConfig))
 
 	setupAuthAPI(router, db)
