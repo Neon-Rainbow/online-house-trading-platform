@@ -5,6 +5,7 @@ import (
 	"online-house-trading-platform/config"
 	"online-house-trading-platform/logger" // 导入 logger 包
 	"online-house-trading-platform/pkg/database"
+	"online-house-trading-platform/pkg/redis"
 	"online-house-trading-platform/router"
 
 	"go.uber.org/zap"
@@ -39,9 +40,14 @@ func main() {
 		return
 	}
 
+	_, err := redis.InitRedis()
+	if err != nil {
+		zap.L().Error("Redis连接失败", zap.Error(err))
+	}
+
 	route := router.SetupRouters(db)
 
-	err := route.Run(fmt.Sprintf(":%d", config.AppConfig.Port))
+	err = route.Run(fmt.Sprintf(":%d", config.AppConfig.Port))
 	if err != nil {
 		zap.L().Error("服务器连接失败", zap.Error(err))
 		return

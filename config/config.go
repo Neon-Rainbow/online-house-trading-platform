@@ -15,8 +15,16 @@ type Database struct {
 	DBName   string `json:"dbname"`
 }
 
+type Redis struct {
+	Host     string `json:"host"`
+	Port     int    `json:"port"`
+	Password string `json:"password"`
+	DB       int    `json:"db"`
+}
+
 type Config struct {
 	Database       Database `json:"database"`
+	Redis          Redis    `json:"redis"`
 	JWTSecret      string   `json:"jwtSecret"`
 	PasswordSecret string   `json:"passwordSecret"`
 	LogFilePath    string   `json:"logFilePath"`
