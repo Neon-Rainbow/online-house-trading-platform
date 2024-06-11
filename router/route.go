@@ -59,6 +59,12 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 	}
 }
 
+func setupOtherRouter(r *gin.Engine, db *gorm.DB) {
+	r.Use(middleware.JWTAuthMiddleware(),
+		middleware.DBMiddleware(db))
+	r.GET("/getFile", controller.GetFileByURL)
+}
+
 // SetupRouters 设置web服务器路由
 func SetupRouters(db *gorm.DB) *gin.Engine {
 	router := gin.New()
@@ -82,11 +88,13 @@ func SetupRouters(db *gorm.DB) *gin.Engine {
 	setupAuthAPI(router, db)
 	setupHouseAPI(router, db)
 	setupUserAPI(router, db)
+	setupOtherRouter(router, db)
 
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{
 			"url":     c.Request.RequestURI,
 			"message": "无法访问",
+			"method":  c.Request.Method,
 		})
 	})
 
