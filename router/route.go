@@ -60,9 +60,7 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 }
 
 func setupOtherRouter(r *gin.Engine, db *gorm.DB) {
-	r.Use(middleware.JWTAuthMiddleware(),
-		middleware.DBMiddleware(db))
-	r.GET("/getFile", controller.GetFileByURL)
+	r.GET("/getFile", middleware.JWTAuthMiddleware(), controller.GetFileByURL)
 }
 
 // SetupRouters 设置web服务器路由

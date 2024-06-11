@@ -34,6 +34,11 @@ definitions:
     - 1029
     - 1030
     - 1031
+    - 1032
+    - 1033
+    - 1034
+    - 1035
+    - 1036
     type: integer
     x-enum-comments:
       BindDataError: 绑定数据错误
@@ -42,11 +47,13 @@ definitions:
       CreateDirError: 创建文件夹错误
       CreateHouseError: 创建房屋错误
       CreateHouseImageError: 创建房屋图片错误
+      DeleteHouseError: 删除房屋错误
+      DeleteUserAvatarError: 删除用户头像错误
       GenerateJWTTokenError: 无法生成jwt token
       GetDBError: 数据库错误
       GetHouseInfoError: 获取某一个房屋信息错误
       GetHouseListError: 获取房屋列表错误
-      GetReserveInformetionError: 获取预约信息错误
+      GetReserveInformationError: 获取预约信息错误
       GetUserFavouritesError: 获取用户收藏错误
       GetUserIDError: 获取用户ID错误
       GetUserProfileError: 获取用户信息错误
@@ -61,12 +68,15 @@ definitions:
       RegisterCreateUserError: 创建用户失败
       RegisterEmailExists: 邮箱已存在
       RegisterInvalidParam: 注册请求参数错误
+      RegisterSaveAvatarError: 保存用户头像错误
       RegisterUsernameExists: 用户名已存在
       ReleaseBindDataError: 绑定数据错误
       RequestWithoutTokenError: 请求未携带token，无权限访问
       ReserveError: 预约失败
       ReserveInvalidParam: 预约请求参数错误
       SaveFileError: 保存文件错误
+      UpdateHouseError: 更新房屋错误
+      UserIDNotMatch: 用户ID不匹配
       UserIDTypeError: 用户ID类型错误
     x-enum-varnames:
     - CodeSuccess
@@ -100,7 +110,12 @@ definitions:
     - GetUserProfileError
     - BindDataError
     - ModifyUserProfileError
-    - GetReserveInformetionError
+    - GetReserveInformationError
+    - UserIDNotMatch
+    - DeleteHouseError
+    - UpdateHouseError
+    - RegisterSaveAvatarError
+    - DeleteUserAvatarError
   controller.ResponseData:
     properties:
       code:
@@ -113,6 +128,8 @@ definitions:
         description: 返回的信息
     type: object
   model.HouseRequest:
+    type: object
+  model.HouseUpdateRequest:
     type: object
   model.RegisterRequest:
     properties:
@@ -154,20 +171,6 @@ paths:
       tags:
       - 首页
   /auth/login:
-    get:
-      consumes:
-      - application/json
-      description: 显示用户登录界面
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 登录界面
-          schema:
-            type: string
-      summary: 登录界面
-      tags:
-      - 登录
     post:
       consumes:
       - application/json
@@ -194,20 +197,6 @@ paths:
       tags:
       - 登录
   /auth/register:
-    get:
-      consumes:
-      - application/json
-      description: 显示用户注册界面
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 注册界面
-          schema:
-            type: string
-      summary: 注册界面
-      tags:
-      - 注册
     post:
       consumes:
       - application/json
@@ -239,6 +228,31 @@ paths:
       summary: 注册接口
       tags:
       - 注册
+  /getFile:
+    get:
+      consumes:
+      - application/json
+      description: 通过提供的URL获取文件
+      parameters:
+      - description: 文件URL
+        in: query
+        name: url
+        required: true
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: 请求成功
+          schema:
+            type: string
+        "400":
+          description: 请求参数错误
+          schema:
+            type: object
+      summary: 根据URL获取文件
+      tags:
+      - 文件
   /house/{house_id}:
     get:
       consumes:
@@ -449,7 +463,42 @@ paths:
           description: 发布房屋信息页面
           schema:
             type: string
-      summary: 获取发布房屋信息页面
+      summary: 获取用户发布的房屋信息
+      tags:
+      - 发布
+  /user/:user_id/release:
+    delete:
+      consumes:
+      - application/json
+      description: 删除房屋信息
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      - description: 用户ID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      - description: 房屋ID
+        in: body
+        name: house_id
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+        "400":
+          description: 删除失败
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+      summary: 删除房屋信息
       tags:
       - 发布
     post:
@@ -460,6 +509,11 @@ paths:
       - description: Bearer 用户令牌
         in: header
         name: Authorization
+        type: string
+      - description: 用户ID
+        in: path
+        name: user_id
+        required: true
         type: string
       - description: 发布房屋信息请求
         in: body
@@ -479,6 +533,40 @@ paths:
           schema:
             $ref: '#/definitions/controller.ResponseData'
       summary: 发布房屋信息
+      tags:
+      - 发布
+    put:
+      consumes:
+      - application/json
+      description: 更新房屋信息
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      - description: 用户ID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      - description: 更新房屋信息请求
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/model.HouseUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+        "400":
+          description: 更新失败
+          schema:
+            $ref: '#/definitions/controller.ResponseData'
+      summary: 更新房屋信息
       tags:
       - 发布
   /user/{user_id}/appointment:
@@ -510,7 +598,7 @@ paths:
       summary: 获取用户预约的房屋
       tags:
       - 预约
-  /user/{user_id}/collects:
+  /user/{user_id}/favourites:
     post:
       consumes:
       - application/json

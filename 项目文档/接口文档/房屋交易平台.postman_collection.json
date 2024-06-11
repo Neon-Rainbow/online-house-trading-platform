@@ -12,16 +12,18 @@
 			"item": [
 				{
 					"name": "登陆接口",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "noauth"
 						},
-						"method": "POST",
+						"method": "GET",
 						"header": [
 							{
 								"key": "Origin",
-								"value": "127.0.0.1:3000",
-								"disabled": true
+								"value": "127.0.0.1:3000"
 							}
 						],
 						"body": {
@@ -87,14 +89,10 @@
 									}
 								},
 								"url": {
-									"raw": "127.0.0.1:8080/auth/login",
+									"raw": "{{base_url}}/auth/login",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"auth",
 										"login"
@@ -141,14 +139,10 @@
 									}
 								},
 								"url": {
-									"raw": "127.0.0.1:8080/auth/login",
+									"raw": "{{base_url}}/auth/login",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"auth",
 										"login"
@@ -203,14 +197,10 @@
 									}
 								},
 								"url": {
-									"raw": "127.0.0.1:8080/auth/login",
+									"raw": "{{base_url}}/auth/login",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"auth",
 										"login"
@@ -265,14 +255,10 @@
 									}
 								},
 								"url": {
-									"raw": "127.0.0.1:8080/auth/login",
+									"raw": "{{base_url}}/auth/login",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"auth",
 										"login"
@@ -313,7 +299,14 @@
 					"name": "注册接口",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Origin",
+								"value": "127.0.01:3000",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"body": {
 							"mode": "formdata",
 							"formdata": [
@@ -402,14 +395,10 @@
 									]
 								},
 								"url": {
-									"raw": "127.0.0.1:8080/auth/register",
+									"raw": "{{base_url}}/auth/register",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"auth",
 										"register"
@@ -796,6 +785,85 @@
 							"body": "{\n    \"code\": 1013,\n    \"message\": \"注册时邮箱已存在\",\n    \"data\": null\n}"
 						}
 					]
+				},
+				{
+					"name": "CORS",
+					"request": {
+						"method": "OPTIONS",
+						"header": [
+							{
+								"key": "Origin",
+								"value": "127.0.0.1:3000",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "CORS options请求返回头部",
+							"originalRequest": {
+								"method": "OPTIONS",
+								"header": [
+									{
+										"key": "Origin",
+										"value": "127.0.0.1:3000",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/auth/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin,Content-Length,Content-Type,Authorization"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET,POST,PUT,DELETE,OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "43200"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 21 May 2024 07:59:55 GMT"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
 				}
 			],
 			"description": "auth路由组.该路由组主要用来处理用户的登陆和注册功能,以及获取jwt token",
@@ -871,14 +939,10 @@
 									}
 								},
 								"url": {
-									"raw": "127.0.0.1:8080/houses",
+									"raw": "{{base_url}}/houses",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"houses"
 									]
@@ -963,14 +1027,10 @@
 									}
 								},
 								"url": {
-									"raw": "127.0.0.1:8080/houses/:house_id",
+									"raw": "{{base_url}}/houses/:house_id",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"houses",
 										":house_id"
@@ -1063,14 +1123,10 @@
 									}
 								},
 								"url": {
-									"raw": "127.0.0.1:8080/houses/appointment",
+									"raw": "{{base_url}}/houses/appointment",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"houses",
 										"appointment"
@@ -1330,14 +1386,10 @@
 									}
 								},
 								"url": {
-									"raw": "127.0.0.1:8080/houses/collect",
+									"raw": "{{base_url}}/houses/collect",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"houses",
 										"collect"
@@ -1520,14 +1572,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "127.0.0.1:8080/user/:user_id/release",
+									"raw": "{{base_url}}/user/:user_id/release",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"user",
 										":user_id",
@@ -1795,14 +1843,10 @@
 									]
 								},
 								"url": {
-									"raw": "127.0.0.1:8080/user/:user_id/release",
+									"raw": "{{base_url}}/user/:user_id/release",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"user",
 										":user_id",
@@ -1996,14 +2040,10 @@
 									]
 								},
 								"url": {
-									"raw": "127.0.0.1:8080/user/:user_id/release",
+									"raw": "{{base_url}}/user/:user_id/release",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"user",
 										":user_id",
@@ -2097,14 +2137,10 @@
 									}
 								},
 								"url": {
-									"raw": "127.0.0.1:8080/user/:user_id/release",
+									"raw": "{{base_url}}/user/:user_id/release",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"user",
 										":user_id",
@@ -2180,14 +2216,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "127.0.0.1:8080/user/:user_id/favourites",
+									"raw": "{{base_url}}/user/:user_id/favourites",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"user",
 										":user_id",
@@ -2322,14 +2354,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "127.0.0.1:8080/user/:user_id/appointment",
+									"raw": "{{base_url}}/user/:user_id/appointment",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"user",
 										":user_id",
@@ -2405,14 +2433,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "127.0.0.1:8080/user/:user_id/profile",
+									"raw": "{{base_url}}/user/:user_id/profile",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"user",
 										":user_id",
@@ -2636,14 +2660,10 @@
 									}
 								},
 								"url": {
-									"raw": "127.0.0.1:8080/user/:user_id/profile",
+									"raw": "{{base_url}}/user/:user_id/profile",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"user",
 										":user_id",
@@ -2831,14 +2851,10 @@
 									}
 								},
 								"url": {
-									"raw": "127.0.0.1:8080/user/:user_id/profile/avatar",
+									"raw": "{{base_url}}/user/:user_id/profile/avatar",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"user",
 										":user_id",
@@ -2966,14 +2982,7 @@
 			],
 			"description": "user路由组.该路由组用来处理用户的个人信息.包括:\n+ 获取用户自己发布的房屋\n+ 用户发布房屋\n+ 用户更新房屋信息\n+ 用户删除自己发布的房屋\n+ 获取用户的个人收藏\n+ 获取用户的个人预约\n+ 修改用户个人信息,包括修改密码,修改头像",
 			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MzUsImlzcyI6IjQwOeWuv-iIjeeahOeyvuiHtOeahOe7vOWQiOmhueebriIsImV4cCI6MTcxNjIyODU2NCwiaWF0IjoxNzE2MTQyMTY0fQ.iE1yPwZngi_yQkecwimnkTwG-5rtrGROGAErc2ivsoc",
-						"type": "string"
-					}
-				]
+				"type": "bearer"
 			},
 			"event": [
 				{
@@ -2997,6 +3006,51 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "根据url获取文件",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MzUsImlzcyI6IjQwOeWuv-iIjeeahOeyvuiHtOeahOe7vOWQiOmhueebriIsImV4cCI6MTcxODE3NDE3MywiaWF0IjoxNzE4MDg3NzczfQ.Pz_33H8XQqE7eLtdfjaoUAdamX1dHtKuBQ1ciSPqgV4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/getFile?url=./uploads/houses/9/AAAAAD.png",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"getFile"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "./uploads/houses/9/AAAAAD.png"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

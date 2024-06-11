@@ -35,7 +35,6 @@ func GetFileByURL(c *gin.Context) {
 
 	fmt.Println("filepath:" + filePath)
 	c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", filePath))
-	c.Writer.Header().Set("Content-Type", "application/octet-stream")
 	c.File(filePath)
 	ResponseSuccess(c, filePath)
 	return

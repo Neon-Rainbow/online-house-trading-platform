@@ -47,27 +47,6 @@ const docTemplate = `{
             }
         },
         "/auth/login": {
-            "get": {
-                "description": "显示用户登录界面",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "登录"
-                ],
-                "summary": "登录界面",
-                "responses": {
-                    "200": {
-                        "description": "登录界面",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
             "post": {
                 "description": "用户登录接口",
                 "consumes": [
@@ -109,27 +88,6 @@ const docTemplate = `{
             }
         },
         "/auth/register": {
-            "get": {
-                "description": "显示用户注册界面",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "注册"
-                ],
-                "summary": "注册界面",
-                "responses": {
-                    "200": {
-                        "description": "注册界面",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
             "post": {
                 "description": "用户注册接口",
                 "consumes": [
@@ -175,6 +133,44 @@ const docTemplate = `{
                         "description": "预约失败,具体原因查看json中的message字段和code字段",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/getFile": {
+            "get": {
+                "description": "通过提供的URL获取文件",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "文件"
+                ],
+                "summary": "根据URL获取文件",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "文件URL",
+                        "name": "url",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "请求成功",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "type": "object"
                         }
                     }
                 }
@@ -487,7 +483,7 @@ const docTemplate = `{
                 "tags": [
                     "发布"
                 ],
-                "summary": "获取发布房屋信息页面",
+                "summary": "获取用户发布的房屋信息",
                 "parameters": [
                     {
                         "type": "string",
@@ -501,6 +497,59 @@ const docTemplate = `{
                         "description": "发布房屋信息页面",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/:user_id/release": {
+            "put": {
+                "description": "更新房屋信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "发布"
+                ],
+                "summary": "更新房屋信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "更新房屋信息请求",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.HouseUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新成功",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "更新失败",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
                         }
                     }
                 }
@@ -525,6 +574,13 @@ const docTemplate = `{
                         "in": "header"
                     },
                     {
+                        "type": "string",
+                        "description": "用户ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "发布房屋信息请求",
                         "name": "req",
                         "in": "body",
@@ -543,6 +599,57 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "发布失败",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "删除房屋信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "发布"
+                ],
+                "summary": "删除房屋信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "房屋ID",
+                        "name": "house_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除成功",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "删除失败",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseData"
                         }
@@ -594,7 +701,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/{user_id}/collects": {
+        "/user/{user_id}/favourites": {
             "post": {
                 "description": "获取用户收藏的房屋",
                 "consumes": [
@@ -674,7 +781,12 @@ const docTemplate = `{
                 1028,
                 1029,
                 1030,
-                1031
+                1031,
+                1032,
+                1033,
+                1034,
+                1035,
+                1036
             ],
             "x-enum-comments": {
                 "BindDataError": "绑定数据错误",
@@ -683,11 +795,13 @@ const docTemplate = `{
                 "CreateDirError": "创建文件夹错误",
                 "CreateHouseError": "创建房屋错误",
                 "CreateHouseImageError": "创建房屋图片错误",
+                "DeleteHouseError": "删除房屋错误",
+                "DeleteUserAvatarError": "删除用户头像错误",
                 "GenerateJWTTokenError": "无法生成jwt token",
                 "GetDBError": "数据库错误",
                 "GetHouseInfoError": "获取某一个房屋信息错误",
                 "GetHouseListError": "获取房屋列表错误",
-                "GetReserveInformetionError": "获取预约信息错误",
+                "GetReserveInformationError": "获取预约信息错误",
                 "GetUserFavouritesError": "获取用户收藏错误",
                 "GetUserIDError": "获取用户ID错误",
                 "GetUserProfileError": "获取用户信息错误",
@@ -702,12 +816,15 @@ const docTemplate = `{
                 "RegisterCreateUserError": "创建用户失败",
                 "RegisterEmailExists": "邮箱已存在",
                 "RegisterInvalidParam": "注册请求参数错误",
+                "RegisterSaveAvatarError": "保存用户头像错误",
                 "RegisterUsernameExists": "用户名已存在",
                 "ReleaseBindDataError": "绑定数据错误",
                 "RequestWithoutTokenError": "请求未携带token，无权限访问",
                 "ReserveError": "预约失败",
                 "ReserveInvalidParam": "预约请求参数错误",
                 "SaveFileError": "保存文件错误",
+                "UpdateHouseError": "更新房屋错误",
+                "UserIDNotMatch": "用户ID不匹配",
                 "UserIDTypeError": "用户ID类型错误"
             },
             "x-enum-varnames": [
@@ -742,7 +859,12 @@ const docTemplate = `{
                 "GetUserProfileError",
                 "BindDataError",
                 "ModifyUserProfileError",
-                "GetReserveInformetionError"
+                "GetReserveInformationError",
+                "UserIDNotMatch",
+                "DeleteHouseError",
+                "UpdateHouseError",
+                "RegisterSaveAvatarError",
+                "DeleteUserAvatarError"
             ]
         },
         "controller.ResponseData": {
@@ -765,6 +887,9 @@ const docTemplate = `{
             }
         },
         "model.HouseRequest": {
+            "type": "object"
+        },
+        "model.HouseUpdateRequest": {
             "type": "object"
         },
         "model.RegisterRequest": {

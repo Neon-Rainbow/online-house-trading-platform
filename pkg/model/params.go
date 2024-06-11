@@ -24,7 +24,7 @@ type RegisterRequest struct {
 	Password string                `json:"password" form:"password"`
 	Email    string                `json:"email" form:"email"`
 	Role     string                `json:"role" form:"role"`
-	Avatar   *multipart.FileHeader `json:"avatar" form:"avatar"`
+	Avatar   *multipart.FileHeader `json:"avatar" form:"avatar" `
 }
 
 // HouseRequest 是从前端接收房源数据的结构体。
