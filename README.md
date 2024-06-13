@@ -1,5 +1,29 @@
 # 在线房屋交易平台
 
+# Docker
+
+使用下列指令构建Docker镜像:
+```bash
+docker build -t online-house-trading-platform .
+```
+
+使用下列指令运行Docker镜像:
+```bash
+docker run -d --name online-house-trading-platform -p 8080:8080 online-house-trading-platform 
+```
+
+或者使用Docker Compose:
+```bash
+docker compose up -d
+```
+可以使用
+```bash
+docker compose down
+```
+移除容器
+
+注意:mysql未在Docker中配置
+
 ## git commit 规范
 
 在本地修改代码时,禁止直接修改main分支.请务必使用git branch创建新的分支,并在新分支上进行修改.

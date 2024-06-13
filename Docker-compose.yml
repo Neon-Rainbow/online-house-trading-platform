@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  app:
+    image: online-house-trading-platform  # 使用已经构建好的镜像
+    container_name: online-house-trading-platform  # 指定容器名称
+    ports:
+      - "8080:8080"  # 端口映射
+    restart: always  # 容器失败时自动重启
