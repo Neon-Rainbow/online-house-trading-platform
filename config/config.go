@@ -1,10 +1,10 @@
-// Package config 用于加载配置文件的包
 package config
 
 import (
 	"encoding/json"
 	"log"
 	"os"
+	"strconv"
 )
 
 type Database struct {
@@ -52,5 +52,39 @@ func LoadConfig(path string) {
 	AppConfig = &Config{}
 	if err := json.NewDecoder(file).Decode(AppConfig); err != nil {
 		log.Fatalf("无法解析配置文件: %v", err)
+	}
+
+	overrideWithEnvVariables(AppConfig)
+}
+
+// overrideWithEnvVariables 用于用环境变量覆盖配置文件中的值, 以便在容器中使用
+func overrideWithEnvVariables(config *Config) {
+	if dbHost := os.Getenv("DB_HOST"); dbHost != "" {
+		config.Database.Host = dbHost
+	}
+	if dbPort := os.Getenv("DB_PORT"); dbPort != "" {
+		if port, err := strconv.Atoi(dbPort); err == nil {
+			config.Database.Port = port
+		}
+	}
+	if dbUser := os.Getenv("DB_USER"); dbUser != "" {
+		config.Database.User = dbUser
+	}
+	if dbPassword := os.Getenv("DB_PASSWORD"); dbPassword != "" {
+		config.Database.Password = dbPassword
+	}
+	if dbName := os.Getenv("DB_NAME"); dbName != "" {
+		config.Database.DBName = dbName
+	}
+	if redisHost := os.Getenv("REDIS_HOST"); redisHost != "" {
+		config.Redis.Host = redisHost
+	}
+	if redisPort := os.Getenv("REDIS_PORT"); redisPort != "" {
+		if port, err := strconv.Atoi(redisPort); err == nil {
+			config.Redis.Port = port
+		}
+	}
+	if redisPassword := os.Getenv("REDIS_PASSWORD"); redisPassword != "" {
+		config.Redis.Password = redisPassword
 	}
 }

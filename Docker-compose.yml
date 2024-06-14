@@ -1,9 +1,49 @@
-version: '3.8'
+version: '3.9'
 
 services:
-  app:
-    image: online-house-trading-platform  # 使用已经构建好的镜像
-    container_name: online-house-trading-platform  # 指定容器名称
+  mysql:
+    image: mysql:8.4.0
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: online_house_trading
+      MYSQL_USER: ubuntu
+      MYSQL_PASSWORD: FHn20010930
     ports:
-      - "8080:8080"  # 端口映射
-    restart: always  # 容器失败时自动重启
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:7.2
+    container_name: redis
+    restart: unless-stopped
+    command: [ "redis-server", "--requirepass", "FHn20010930" ]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  app:
+    image: online-house-trading-platform
+    container_name: online-house-trading-platform
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: ubuntu
+      DB_PASSWORD: FHn20010930
+      DB_NAME: online_house_trading
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: FHn20010930
+
+volumes:
+  mysql_data:
+  redis_data:
