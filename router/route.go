@@ -5,6 +5,7 @@ import (
 	"online-house-trading-platform/config"
 	docs "online-house-trading-platform/docs"
 	"online-house-trading-platform/internal/controller"
+	"online-house-trading-platform/internal/logic"
 	"online-house-trading-platform/logger" // 导入 logger 包
 	"online-house-trading-platform/middleware"
 	"time"
@@ -105,18 +106,17 @@ func SetupRouters(db *gorm.DB) *gin.Engine {
 		})
 	})
 
-	manager := &controller.ClientManager{
-		Clients:    make(map[string]*controller.Client),
-		Broadcast:  make(chan *controller.Broadcast),
-		Register:   make(chan *controller.Client),
-		Reply:      make(chan *controller.Client),
-		Unregister: make(chan *controller.Client),
+	manager := &logic.ClientManager{
+		Clients:    make(map[string]*logic.Client),
+		Broadcast:  make(chan *logic.Broadcast),
+		Register:   make(chan *logic.Client),
+		Reply:      make(chan *logic.Client),
+		Unregister: make(chan *logic.Client),
 	}
 
 	go manager.Start()
 
-	router.GET("/ws", controller.WebsocketHandler)
+	router.GET("/ws", middleware.JWTAuthMiddleware(), controller.WebsocketHandler)
 
-	//zap.L().Info("路由配置成功")
 	return router
 }
