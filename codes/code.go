@@ -83,11 +83,31 @@ var codeMessageMap = map[ResCode]string{
 	DeleteUserAvatarError:      "删除用户头像错误",
 }
 
+const (
+	WebsocketSuccessMessage ResCode = 2000 + iota
+	WebsocketSuccess
+	WebsocketEnd
+	WebsocketOnlineReply
+	WebsocketOfflineReply
+	WebsocketLimit
+)
+
+var websocketMessageMap = map[ResCode]string{
+	WebsocketSuccessMessage: "消息发送成功",
+	WebsocketSuccess:        "连接成功",
+	WebsocketEnd:            "连接结束",
+	WebsocketOnlineReply:    "对方在线",
+	WebsocketOfflineReply:   "对方不在线",
+	WebsocketLimit:          "连接数已达上限",
+}
+
 // Message 返回code对应的消息
 func (c ResCode) Message() string {
-	msg, ok := codeMessageMap[c]
-	if !ok {
-		return codeMessageMap[LoginServerBusy]
+	var msg string
+	if c < 2000 {
+		msg, _ = codeMessageMap[c]
+	} else {
+		msg, _ = websocketMessageMap[c]
 	}
 	return msg
 }

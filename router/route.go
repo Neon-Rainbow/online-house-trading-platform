@@ -99,6 +99,23 @@ func SetupRouters(db *gorm.DB) *gin.Engine {
 	docs.SwaggerInfo.BasePath = "/"
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	router.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
+
+	manager := &controller.ClientManager{
+		Clients:    make(map[string]*controller.Client),
+		Broadcast:  make(chan *controller.Broadcast),
+		Register:   make(chan *controller.Client),
+		Reply:      make(chan *controller.Client),
+		Unregister: make(chan *controller.Client),
+	}
+
+	go manager.Start()
+
+	router.GET("/ws", controller.WebsocketHandler)
 
 	//zap.L().Info("路由配置成功")
 	return router
