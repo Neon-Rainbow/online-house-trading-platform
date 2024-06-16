@@ -166,6 +166,10 @@ func (c *Client) Read() {
 				Client:  c,
 				Message: []byte(sendMsg.Content),
 			}
+		} else if sendMsg.Type == 2 { //拉取历史消息
+
+		} else if sendMsg.Type == 3 {
+
 		}
 	}
 }

@@ -20,12 +20,19 @@ func ProcessHouseAndImages(db *gorm.DB, req *model.HouseRequest, c *gin.Context)
 
 	// 创建房屋记录
 	house := model.House{
-		Owner:       req.Owner,
-		OwnerID:     req.OwnerID,
-		Title:       req.Title,
-		Description: req.Description,
-		Price:       req.Price,
-		Address:     req.Address,
+		Owner:            req.Owner,
+		OwnerID:          req.OwnerID,
+		Title:            req.Title,
+		Description:      req.Description,
+		Price:            req.Price,
+		Address:          req.Address,
+		HouseOrientation: req.HouseOrientation,
+		Layout:           req.Layout,
+		Area:             req.Area,
+		Floor:            req.Floor,
+		RentPrice:        req.RentPrice,
+		Type:             req.Type,
+		PostCode:         req.PostCode,
 	}
 
 	err := dao.CreateHouse(db, &house)

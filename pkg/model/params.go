@@ -20,40 +20,68 @@ type LoginResponse struct {
 
 // RegisterRequest 用于处理用户注册请求
 type RegisterRequest struct {
-	Username string                `json:"username" form:"username"`
-	Password string                `json:"password" form:"password"`
-	Email    string                `json:"email" form:"email"`
-	Role     string                `json:"role" form:"role"`
-	Avatar   *multipart.FileHeader `json:"avatar" form:"avatar" `
+	Username     string                `json:"username" form:"username"`
+	Password     string                `json:"password" form:"password"`
+	Email        string                `json:"email" form:"email"`
+	Role         string                `json:"role" form:"role"`
+	PhoneNumber  string                `json:"phone_number" form:"phone_number"` // PhoneNumber 用户手机号
+	Sex          string                `json:"sex" form:"sex"`
+	Province     string                `json:"province" form:"province" gorm:"type:varchar(255)"`
+	City         string                `json:"city" form:"city" gorm:"type:varchar(255)"`
+	Identity     string                `json:"identity" form:"identity" gorm:"type:varchar(255)"`
+	QQNumber     string                `json:"qq_number" form:"qq_number" gorm:"type:varchar(255)"`
+	WechatNumber string                `json:"wechat_number" form:"wechat_number" gorm:"type:varchar(255)"`
+	Avatar       *multipart.FileHeader `json:"avatar" form:"avatar" `
 }
 
 // HouseRequest 是从前端接收房源数据的结构体。
 type HouseRequest struct {
-	Owner       string                  `json:"owner" form:"owner"`             // 房屋所有者名称
-	OwnerID     uint                    `json:"owner_id" form:"owner_id"`       // 房屋所有者ID
-	Title       string                  `json:"title" form:"title"`             // 房屋标题
-	Description string                  `json:"description" form:"description"` // 房屋描述
-	Price       float64                 `json:"price" form:"prices"`            // 房屋价格
-	Address     string                  `json:"address" form:"address"`         // 房屋地址
-	Images      []*multipart.FileHeader `json:"images" form:"images"`           // 房屋相关的图片文件列表
+	Owner            string                  `json:"owner" form:"owner"`                         // 房屋所有者名称
+	OwnerID          uint                    `json:"owner_id" form:"owner_id"`                   // 房屋所有者ID
+	Title            string                  `json:"title" form:"title"`                         // 房屋标题
+	Description      string                  `json:"description" form:"description"`             // 房屋描述
+	Price            float64                 `json:"price" form:"price"`                         // 房屋价格
+	Address          string                  `json:"address" form:"address"`                     // 房屋地址
+	HouseOrientation string                  `json:"house_orientation" form:"house_orientation"` // HouseOrientation 房屋朝向
+	Layout           string                  `json:"layout" form:"layout"`                       // Layout 房屋户型
+	Area             float64                 `json:"area" form:"area"`                           // Area 房屋面积
+	Floor            string                  `json:"floor" form:"floor"`                         // Floor 房屋楼层
+	RentPrice        float64                 `json:"rent_price" form:"rent_price"`               // RentPrice 房屋租金
+	Type             string                  `json:"type" form:"type"`                           // Type 房屋类型
+	PostCode         string                  `json:"post_code" form:"post_code"`                 // PostCode 房屋邮编
+	Images           []*multipart.FileHeader `json:"images" form:"images"`                       // 房屋相关的图片文件列表
 }
 
 type HouseUpdateRequest struct {
-	HouseID     uint                    `json:"house_id" form:"house_id"`       // 房屋ID
-	Owner       string                  `json:"owner" form:"owner"`             // 房屋所有者名称
-	OwnerID     uint                    `json:"owner_id" form:"owner_id"`       // 房屋所有者ID
-	Title       string                  `json:"title" form:"title"`             // 房屋标题
-	Description string                  `json:"description" form:"description"` // 房屋描述
-	Price       float64                 `json:"price" form:"prices"`            // 房屋价格
-	Address     string                  `json:"address" form:"address"`         // 房屋地址
-	Images      []*multipart.FileHeader `json:"images" form:"images"`           // 房屋相关的图片文件列表
+	HouseID          uint                    `json:"house_id" form:"house_id"`                   // 房屋ID
+	Owner            string                  `json:"owner" form:"owner"`                         // 房屋所有者名称
+	OwnerID          uint                    `json:"owner_id" form:"owner_id"`                   // 房屋所有者ID
+	Title            string                  `json:"title" form:"title"`                         // 房屋标题
+	Description      string                  `json:"description" form:"description"`             // 房屋描述
+	Price            float64                 `json:"price" form:"price"`                         // 房屋价格
+	Address          string                  `json:"address" form:"address"`                     // 房屋地址
+	HouseOrientation string                  `json:"house_orientation" form:"house_orientation"` // HouseOrientation 房屋朝向
+	Layout           string                  `json:"layout" form:"layout"`                       // Layout 房屋户型
+	Area             float64                 `json:"area" form:"area"`                           // Area 房屋面积
+	Floor            string                  `json:"floor" form:"floor"`                         // Floor 房屋楼层
+	RentPrice        float64                 `json:"rent_price" form:"rent_price"`               // RentPrice 房屋租金
+	Type             string                  `json:"type" form:"type"`                           // Type 房屋类型
+	PostCode         string                  `json:"post_code" form:"post_code"`                 // PostCode 房屋邮编
+	Images           []*multipart.FileHeader `json:"images" form:"images"`                       // 房屋相关的图片文件列表
 }
 
 type UserReq struct {
-	Username string `json:"username" form:"username"`
-	Password string `json:"password" form:"password"`
-	Email    string `json:"email" form:"email"`
-	Role     string `json:"role" form:"role"`
+	Username     string `json:"username" form:"username"`
+	Password     string `json:"password" form:"password"`
+	Email        string `json:"email" form:"email"`
+	Role         string `json:"role" form:"role"`
+	PhoneNumber  string `json:"phone_number" form:"phone_number"` // PhoneNumber 用户手机号
+	Sex          string `json:"sex" form:"sex"`
+	Province     string `json:"province" form:"province" gorm:"type:varchar(255)"`
+	City         string `json:"city" form:"city" gorm:"type:varchar(255)"`
+	Identity     string `json:"identity" form:"identity" gorm:"type:varchar(255)"`
+	QQNumber     string `json:"qq_number" form:"qq_number" gorm:"type:varchar(255)"`
+	WechatNumber string `json:"wechat_number" form:"wechat_number" gorm:"type:varchar(255)"`
 }
 
 type UserAvatarReq struct {

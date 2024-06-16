@@ -28,12 +28,27 @@ func RegisterHandle(db *gorm.DB, req model.RegisterRequest, c *gin.Context) *mod
 		return &model.Error{StatusCode: codes.RegisterEmailExists}
 	}
 
+	//user := model.User{
+	//	Username: req.Username,
+	//	Password: EncryptPassword(req.Password),
+	//	Email:    req.Email,
+	//	Role:     req.Role,
+	//}
+
 	user := model.User{
-		Username: req.Username,
-		Password: EncryptPassword(req.Password),
-		Email:    req.Email,
-		Role:     req.Role,
+		Username:     req.Username,
+		Password:     EncryptPassword(req.Password),
+		Email:        req.Email,
+		Role:         req.Role,
+		PhoneNumber:  req.PhoneNumber,
+		Sex:          req.Sex,
+		Province:     req.Province,
+		City:         req.City,
+		Identity:     req.Identity,
+		QQNumber:     req.QQNumber,
+		WechatNumber: req.WechatNumber,
 	}
+
 	err = dao.CreateUser(db, &user)
 	if err != nil {
 		return &model.Error{StatusCode: codes.RegisterCreateUserError}

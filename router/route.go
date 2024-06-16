@@ -116,7 +116,7 @@ func SetupRouters(db *gorm.DB) *gin.Engine {
 
 	go manager.Start()
 
-	router.GET("/ws", middleware.JWTAuthMiddleware(), controller.WebsocketHandler)
+	router.GET("/ws", controller.WebsocketHandler)
 
 	return router
 }

@@ -75,7 +75,7 @@ func ModifyUserAvatar(db *gorm.DB, avatar *model.UserAvatar) error {
 // GetUserRelease 获取某个用户发布的房屋信息
 func GetUserRelease(db *gorm.DB, userID uint) (*[]model.House, error) {
 	var houses *[]model.House
-	result := db.Where("owner_id = ?", userID).Find(&houses)
+	result := db.Preload("Images").Where("owner_id = ?", userID).Find(&houses)
 	if result.Error != nil {
 		return nil, result.Error
 	}
