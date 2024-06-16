@@ -47,7 +47,9 @@ func main() {
 
 	route := router.SetupRouters(db)
 
-	err = route.Run(fmt.Sprintf(":%d", config.AppConfig.Port))
+	route.Static("/uploads", "./uploads")
+
+	err = route.Run(fmt.Sprintf("0.0.0.0:%d", config.AppConfig.Port))
 	if err != nil {
 		zap.L().Error("服务器连接失败", zap.Error(err))
 		return
