@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"github.com/gin-gonic/gin"
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/dao"
 	"online-house-trading-platform/pkg/jwt"
@@ -10,7 +11,7 @@ import (
 )
 
 // LoginHandle 用于处理用户登录逻辑
-func LoginHandle(db *gorm.DB, req model.LoginRequest) (*model.LoginResponse, *model.Error) {
+func LoginHandle(db *gorm.DB, req model.LoginRequest, c *gin.Context) (*model.LoginResponse, *model.Error) {
 	dbUser, err := dao.GetUserByUsername(db, req.Username)
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.LoginUserNotExist}
@@ -23,6 +24,12 @@ func LoginHandle(db *gorm.DB, req model.LoginRequest) (*model.LoginResponse, *mo
 	token, err := jwt.GenerateToken(dbUser.Username, dbUser.ID)
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.GenerateJWTTokenError}
+	}
+
+	loginRecord := &model.LoginRecord{UserId: dbUser.ID, LoginIp: c.ClientIP(), LoginMethod: c.Request.UserAgent()}
+	err = dao.CreateLoginRecord(db, loginRecord)
+	if err != nil {
+		return nil, &model.Error{StatusCode: codes.LoginServerBusy}
 	}
 
 	return &model.LoginResponse{

@@ -53,7 +53,7 @@ func LoginPost(c *gin.Context) {
 		return
 	}
 
-	loginResp, apiError := logic.LoginHandle(db, loginReq)
+	loginResp, apiError := logic.LoginHandle(db, loginReq, c)
 	if apiError != nil {
 		zap.L().Error("LoginPost: logic.LoginHandle failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
