@@ -47,7 +47,7 @@ func main() {
 
 	route := router.SetupRouters(db)
 
-	route.Static("/uploads", "./uploads")
+	//route.Static("/uploads", "./uploads")
 
 	err = route.Run(fmt.Sprintf("0.0.0.0:%d", config.AppConfig.Port))
 	if err != nil {
