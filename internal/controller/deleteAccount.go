@@ -9,10 +9,6 @@ import (
 	"strconv"
 )
 
-type deleteRequest struct {
-	Id uint `json:"id"`
-}
-
 func DeleteAccount(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
@@ -23,17 +19,10 @@ func DeleteAccount(c *gin.Context) {
 		return
 	}
 
-	var deleteReq deleteRequest
-	err := c.ShouldBind(&deleteReq)
-	if err != nil {
-		zap.L().Error("RegisterPost: c.ShouldBind(&deleteReq) failed",
-			zap.Int("错误码", codes.RegisterInvalidParam.Int()),
-		)
-		ResponseErrorWithCode(c, codes.RegisterInvalidParam)
-		return
-	}
+	userId := c.Param("user_id")
+	userIdInt, _ := strconv.Atoi(userId)
 
-	apiError := logic.DeleteAccountHandle(db, deleteReq.Id)
+	apiError := logic.DeleteAccountHandle(db, uint(userIdInt))
 	if apiError != nil {
 		zap.L().Error("RegisterPost: logic.RegisterHandle failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),

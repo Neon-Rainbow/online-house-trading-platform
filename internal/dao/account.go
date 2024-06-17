@@ -6,5 +6,6 @@ import (
 )
 
 func DeleteAccount(db *gorm.DB, id uint) error {
-	return db.Delete(&model.User{}, id).Error
+	result := db.Delete(&model.User{}).Where("id = ?", id)
+	return result.Error
 }
