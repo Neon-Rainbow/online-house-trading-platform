@@ -6,6 +6,7 @@ import (
 	"online-house-trading-platform/internal/dao"
 	"online-house-trading-platform/pkg/jwt"
 	"online-house-trading-platform/pkg/model"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -26,7 +27,7 @@ func LoginHandle(db *gorm.DB, req model.LoginRequest, c *gin.Context) (*model.Lo
 		return nil, &model.Error{StatusCode: codes.GenerateJWTTokenError}
 	}
 
-	loginRecord := &model.LoginRecord{UserId: dbUser.ID, LoginIp: c.ClientIP(), LoginMethod: c.Request.UserAgent()}
+	loginRecord := &model.LoginRecord{UserId: dbUser.ID, LoginIp: c.ClientIP(), LoginMethod: c.Request.UserAgent(), LoginTime: time.Now()}
 	err = dao.CreateLoginRecord(db, loginRecord)
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.LoginServerBusy}
