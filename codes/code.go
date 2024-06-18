@@ -43,6 +43,7 @@ const (
 	NoPermission                                     // 无权限
 	GetAllUsersError                                 // 获取所有用户信息错误
 	GetAllHousesError                                // 获取所有房屋信息错误
+	OpenFileError                                    // 打开文件错误
 )
 
 // codeMessageMap 用于存放code和message的映射关系
@@ -87,6 +88,7 @@ var codeMessageMap = map[ResCode]string{
 	NoPermission:               "无权限",
 	GetAllUsersError:           "获取所有用户信息错误",
 	GetAllHousesError:          "获取所有房屋信息错误",
+	OpenFileError:              "打开文件错误",
 }
 
 const (
