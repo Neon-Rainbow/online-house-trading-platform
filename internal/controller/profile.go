@@ -65,24 +65,17 @@ func UpdateUserProfileByUserID(c *gin.Context) {
 		return
 	}
 
-	userID, exists := c.Get("user_id")
-	if !exists {
-		zap.L().Error("UpdateUserProfileByUserID: c.Get(\"user_id\") failed",
-			zap.String("错误码", strconv.FormatInt(int64(codes.GetUserIDError), 10)),
-		)
-		ResponseErrorWithCode(c, codes.GetUserIDError)
-		return
-	}
-
-	userIDUint, ok := userID.(uint)
-	if !ok {
-		zap.L().Error("UpdateUserProfileByUserID: userID.(uint) failed",
-			zap.String("错误码", strconv.FormatInt(int64(codes.UserIDTypeError), 10)),
-			zap.Any("用户ID", userID),
-		)
-		ResponseErrorWithCode(c, codes.UserIDTypeError)
-		return
-	}
+	userID := c.Param("user_id")
+	userIDUint64, _ := strconv.ParseUint(userID, 10, 64)
+	userIDUint := uint(userIDUint64)
+	//if !ok {
+	//	zap.L().Error("UpdateUserProfileByUserID: userID.(uint) failed",
+	//		zap.String("错误码", strconv.FormatInt(int64(codes.UserIDTypeError), 10)),
+	//		zap.Any("用户ID", userID),
+	//	)
+	//	ResponseErrorWithCode(c, codes.UserIDTypeError)
+	//	return
+	//}
 
 	var userProfileUpdateReq model.UserReq
 	err := c.ShouldBind(&userProfileUpdateReq)
