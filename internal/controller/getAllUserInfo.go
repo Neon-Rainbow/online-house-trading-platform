@@ -10,7 +10,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func DeleteUserAccountByUserID(c *gin.Context) {
+// GetAllUsersInformation 用于处理管理员获取所有用户信息的Get请求
+func GetAllUsersInformation(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
 		zap.L().Error("RegisterPost: c.MustGet(\"db\").(*gorm.DB) failed",
@@ -20,16 +21,14 @@ func DeleteUserAccountByUserID(c *gin.Context) {
 		return
 	}
 
-	userId := c.Param("user_id")
-	userIdInt, _ := strconv.Atoi(userId)
-
-	apiError := logic.DeleteAccountHandle(db, uint(userIdInt))
-	if apiError != nil {
-		zap.L().Error("RegisterPost: logic.RegisterHandle failed",
-			zap.Int("错误码", apiError.StatusCode.Int()),
+	users, err := logic.GetAllUsers(db)
+	if err != nil {
+		zap.L().Error("GetAllUsersInformation: logic.GetAllUsers failed",
+			zap.String("错误码", strconv.FormatInt(int64(codes.GetAllUsersError), 10)),
 		)
-		ResponseErrorWithCode(c, apiError.StatusCode)
+		ResponseErrorWithCode(c, codes.GetAllUsersError)
 		return
 	}
-	ResponseSuccess(c, nil)
+	ResponseSuccess(c, users)
+	return
 }

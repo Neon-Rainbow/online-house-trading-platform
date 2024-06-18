@@ -12,16 +12,18 @@ const tokenExpireDuration = time.Hour * 24 // token 过期时间
 type MyClaims struct {
 	Username string `json:"username"`
 	UserID   uint   `json:"user_id"`
+	UserRole string `json:"role"`
 	jwt.RegisteredClaims
 }
 
 // GenerateToken 用于生成JWT
-func GenerateToken(username string, userId uint) (string, error) {
+func GenerateToken(username string, userId uint, role string) (string, error) {
 	var jwtSecret = config.AppConfig.JWTSecret
 	var mySecret = []byte(jwtSecret) // 自定义密钥
 	c := MyClaims{
 		Username: username,
 		UserID:   userId,
+		UserRole: role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(tokenExpireDuration)), // 过期时间
 			IssuedAt:  jwt.NewNumericDate(time.Now()),                          // 签发时间

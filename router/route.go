@@ -22,6 +22,7 @@ func setupAuthAPI(r *gin.Engine, db *gorm.DB) {
 	userGroup := r.Group("/auth").Use(middleware.DBMiddleware(db))
 	{
 		userGroup.POST("/login", controller.LoginPost)
+		userGroup.POST("/admin_login", controller.AdminLogin)
 		userGroup.POST("/register", controller.RegisterPost)
 	}
 }
@@ -30,7 +31,7 @@ func setupHouseAPI(r *gin.Engine, db *gorm.DB) {
 	housesGroup := r.Group("/houses").Use(middleware.DBMiddleware(db))
 	{
 		housesGroup.GET("/", controller.GetAllHouses)
-		housesGroup.GET("/:house_id", controller.GetHouseInfoByID)
+		housesGroup.GET("/:house_id", controller.GetHouseInfomationByHouseID)
 		housesGroup.POST("/appointment", middleware.JWTAuthMiddleware(), controller.HousesAppointmentPost)
 		housesGroup.POST("/collect", middleware.JWTAuthMiddleware(), controller.CollectPost)
 	}
@@ -45,20 +46,54 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 		userGroup.GET("/release", controller.ReleaseGet)
 		userGroup.POST("/release", controller.ReleasePost)
 		userGroup.PUT("/release", controller.ReleasePut)
-		userGroup.DELETE("/release", controller.ReleaseDeleteWholeHouse)
-		userGroup.GET("/favourites", controller.GetUserFavourites)
-		userGroup.GET("/appointment", controller.HousesAppointmentGet)
-		userGroup.POST("/delete_account", controller.DeleteAccount)
-		userGroup.GET("/get_login_record", controller.GetLoginRecord)
+		userGroup.DELETE("/release", controller.DeleteHouseInformationByHouseID)
+		userGroup.GET("/favourites", controller.GetUserFavouritesByUserID)
+		userGroup.GET("/appointment", controller.GetUserAppointmentsByUserID)
+		userGroup.POST("/delete_account", controller.DeleteUserAccountByUserID)
+		userGroup.GET("/get_login_record", controller.GetUserLoginRecordByUserID)
 	}
 	userProfileGroup := r.Group("/user/:user_id/profile").Use(
 		middleware.JWTAuthMiddleware(),
 		middleware.UserIDMatchMiddleware(),
 		middleware.DBMiddleware(db))
 	{
-		userProfileGroup.GET("/", controller.ProfileGet)
-		userProfileGroup.PUT("/", controller.ProfilePut)
-		userProfileGroup.PUT("/avatar", controller.ProfileAvatarPut)
+		userProfileGroup.GET("/", controller.GetUserProfileByUserID)
+		userProfileGroup.PUT("/", controller.UpdateUserProfileByUserID)
+		userProfileGroup.PUT("/avatar", controller.UpdateUserAvatarByUserID)
+	}
+}
+
+// setupAdminAPI 设置管理员API
+func setupAdminAPI(r *gin.Engine, db *gorm.DB) {
+	adminGroup := r.Group("/admin").Use(
+		middleware.DBMiddleware(db),
+		middleware.JWTAuthMiddleware(),
+		middleware.AdminMiddleWare(),
+	)
+	{
+		//adminGroup.POST("/register", controller.AdminRegisterPost)
+
+		adminGroup.GET("/users", controller.GetAllUsersInformation)
+		adminGroup.GET("/users/:user_id", controller.GetUserProfileByUserID)
+		adminGroup.PUT("/users/:user_id", controller.UpdateUserProfileByUserID)
+		adminGroup.PUT("/users/:user_id/avatar", controller.UpdateUserAvatarByUserID)
+		adminGroup.DELETE("/users/:user_id", controller.DeleteUserAccountByUserID)
+
+		adminGroup.GET("/houses", controller.GetAllHousesInformation)
+		adminGroup.GET("/houses/:house_id", controller.GetHouseInfomationByHouseID)
+		adminGroup.DELETE("/houses/:house_id", controller.DeleteHouseInformationByHouseID)
+
+		adminGroup.GET("/appointments", controller.GetAllAppointments)
+		adminGroup.GET("/appointments/:user_id", controller.GetUserAppointmentsByUserID)
+
+		adminGroup.GET("/favourites", controller.GetAllFavourites)
+		adminGroup.GET("/favourites/:user_id", controller.GetUserFavouritesByUserID)
+
+		adminGroup.GET("/login_records", controller.GetAllLoginRecords)
+		adminGroup.GET("/login_records/:user_id", controller.GetUserLoginRecordByUserID)
+
+		adminGroup.GET("/get_log_file", controller.GetLogFile)
+		adminGroup.POST("/delete_log_file", controller.DeleteLogFile)
 	}
 }
 
@@ -89,6 +124,7 @@ func SetupRouters(db *gorm.DB) *gin.Engine {
 	setupAuthAPI(router, db)
 	setupHouseAPI(router, db)
 	setupUserAPI(router, db)
+	setupAdminAPI(router, db)
 	setupOtherRouter(router, db)
 
 	router.NoRoute(func(c *gin.Context) {

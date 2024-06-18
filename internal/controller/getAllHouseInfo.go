@@ -10,7 +10,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func DeleteUserAccountByUserID(c *gin.Context) {
+// GetAllHousesInformation 用于处理管理员获取所有房屋信息的Get请求
+func GetAllHousesInformation(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
 		zap.L().Error("RegisterPost: c.MustGet(\"db\").(*gorm.DB) failed",
@@ -19,17 +20,9 @@ func DeleteUserAccountByUserID(c *gin.Context) {
 		ResponseErrorWithCode(c, codes.GetDBError)
 		return
 	}
-
-	userId := c.Param("user_id")
-	userIdInt, _ := strconv.Atoi(userId)
-
-	apiError := logic.DeleteAccountHandle(db, uint(userIdInt))
-	if apiError != nil {
-		zap.L().Error("RegisterPost: logic.RegisterHandle failed",
-			zap.Int("错误码", apiError.StatusCode.Int()),
-		)
-		ResponseErrorWithCode(c, apiError.StatusCode)
-		return
+	houses, err := logic.GetAllHouses(db)
+	if err != nil {
+		zap.L().Error("houses, err := logic.GetAllHouses(db) failed")
 	}
-	ResponseSuccess(c, nil)
+	ResponseSuccess(c, houses)
 }

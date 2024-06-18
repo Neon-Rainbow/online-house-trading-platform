@@ -10,8 +10,8 @@ type User struct {
 	Username     string     `json:"username" gorm:"uniqueIndex;not null;type:varchar(255)" form:"username" `
 	Password     string     `json:"password" gorm:"not null;type:varchar(255)" form:"password" `
 	Email        string     `json:"email" gorm:"uniqueIndex;not null;type:varchar(255)" form:"email"`
-	Role         string     `json:"role" form:"role"`
-	PhoneNumber  string     `json:"phone_number" form:"phone_number"` // PhoneNumber 用户手机号
+	Role         string     `json:"role" form:"role" gorm:"type:varchar(255);default:'user'"` // 用于判断用户是否为管理员,默认为普通用户
+	PhoneNumber  string     `json:"phone_number" form:"phone_number"`
 	Sex          string     `json:"sex" form:"sex"`
 	Province     string     `json:"province" form:"province" gorm:"type:varchar(255)"`
 	City         string     `json:"city" form:"city" gorm:"type:varchar(255)"`

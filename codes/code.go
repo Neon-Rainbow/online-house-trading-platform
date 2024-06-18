@@ -40,6 +40,9 @@ const (
 	UpdateHouseError                                 // 更新房屋错误
 	RegisterSaveAvatarError                          // 保存用户头像错误
 	DeleteUserAvatarError                            // 删除用户头像错误
+	NoPermission                                     // 无权限
+	GetAllUsersError                                 // 获取所有用户信息错误
+	GetAllHousesError                                // 获取所有房屋信息错误
 )
 
 // codeMessageMap 用于存放code和message的映射关系
@@ -81,6 +84,9 @@ var codeMessageMap = map[ResCode]string{
 	UpdateHouseError:           "更新房屋错误",
 	RegisterSaveAvatarError:    "保存用户头像错误",
 	DeleteUserAvatarError:      "删除用户头像错误",
+	NoPermission:               "无权限",
+	GetAllUsersError:           "获取所有用户信息错误",
+	GetAllHousesError:          "获取所有房屋信息错误",
 }
 
 const (

@@ -1,11 +1,12 @@
 package dao
 
 import (
-	"gorm.io/gorm"
 	"online-house-trading-platform/pkg/model"
+
+	"gorm.io/gorm"
 )
 
 func DeleteAccount(db *gorm.DB, id uint) error {
-	result := db.Delete(&model.User{}).Where("id = ?", id)
+	result := db.Where("id = ?", id).Preload("Avatar").Delete(&model.User{})
 	return result.Error
 }

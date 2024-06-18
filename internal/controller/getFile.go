@@ -41,3 +41,11 @@ func GetFileByURL(c *gin.Context) {
 	ResponseSuccess(c, filePath)
 	return
 }
+
+func GetLogFile(c *gin.Context) {
+	filePath := "./application.log"
+	c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", filePath))
+	c.File(filePath)
+	ResponseSuccess(c, filePath)
+	return
+}

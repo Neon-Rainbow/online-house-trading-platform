@@ -23,14 +23,15 @@ type Redis struct {
 }
 
 type Config struct {
-	Database       Database `json:"database"`
-	Redis          Redis    `json:"redis"`
-	JWTSecret      string   `json:"jwtSecret"`
-	PasswordSecret string   `json:"passwordSecret"`
-	LogFilePath    string   `json:"logFilePath"`
-	Port           int      `json:"port"`
-	GinMode        string   `json:"ginMode"`
-	ZapLogLever    string   `json:"zapLogLever"`
+	Database               Database `json:"database"`
+	Redis                  Redis    `json:"redis"`
+	JWTSecret              string   `json:"jwtSecret"`
+	PasswordSecret         string   `json:"passwordSecret"`
+	LogFilePath            string   `json:"logFilePath"`
+	Port                   int      `json:"port"`
+	GinMode                string   `json:"ginMode"`
+	ZapLogLever            string   `json:"zapLogLever"`
+	AdminRegisterSecretKey string   `json:"admin_register_secret_key"`
 }
 
 // AppConfig 用于存储配置文件的内容

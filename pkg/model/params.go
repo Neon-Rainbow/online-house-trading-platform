@@ -16,6 +16,7 @@ type LoginResponse struct {
 	Token    string `json:"token" form:"token"`
 	UserID   uint   `json:"user_id" form:"user_id"`
 	Username string `json:"username" form:"username"`
+	Role     string `json:"role" form:"role"`
 }
 
 // RegisterRequest 用于处理用户注册请求
@@ -32,6 +33,22 @@ type RegisterRequest struct {
 	QQNumber     string                `json:"qq_number" form:"qq_number" gorm:"type:varchar(255)"`
 	WechatNumber string                `json:"wechat_number" form:"wechat_number" gorm:"type:varchar(255)"`
 	Avatar       *multipart.FileHeader `json:"avatar" form:"avatar" `
+}
+
+type AdminRegisterRequest struct {
+	Username     string                `json:"username" form:"username"`
+	Password     string                `json:"password" form:"password"`
+	Email        string                `json:"email" form:"email"`
+	Role         string                `json:"role" form:"role"`
+	PhoneNumber  string                `json:"phone_number" form:"phone_number"` // PhoneNumber 用户手机号
+	Sex          string                `json:"sex" form:"sex"`
+	Province     string                `json:"province" form:"province" gorm:"type:varchar(255)"`
+	City         string                `json:"city" form:"city" gorm:"type:varchar(255)"`
+	Identity     string                `json:"identity" form:"identity" gorm:"type:varchar(255)"`
+	QQNumber     string                `json:"qq_number" form:"qq_number" gorm:"type:varchar(255)"`
+	WechatNumber string                `json:"wechat_number" form:"wechat_number" gorm:"type:varchar(255)"`
+	Avatar       *multipart.FileHeader `json:"avatar" form:"avatar" `
+	AdminSecret  string                `json:"admin_secret" form:"admin_secret"`
 }
 
 // HouseRequest 是从前端接收房源数据的结构体。

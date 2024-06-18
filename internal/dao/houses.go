@@ -81,3 +81,13 @@ func DeleteHouseImages(db *gorm.DB, houseID uint) error {
 func CreateHouseImage(db *gorm.DB, image *model.HouseImage) error {
 	return db.Save(image).Error
 }
+
+// GetAllHouses 用于获取数据库中的所有房屋信息
+func GetAllHouses(db *gorm.DB) (*[]model.House, error) {
+	var houses *[]model.House
+	result := db.Find(&houses)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return houses, nil
+}
