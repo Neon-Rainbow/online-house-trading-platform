@@ -53,7 +53,7 @@ func CollectPost(c *gin.Context) {
 	return
 }
 
-// GetUserFavourites 用于获取用户收藏的房屋
+// GetUserFavouritesByUserID 用于获取用户收藏的房屋
 // @Summary 获取用户收藏的房屋
 // @Description 获取用户收藏的房屋
 // @Tags 收藏
@@ -64,10 +64,10 @@ func CollectPost(c *gin.Context) {
 // @Success 200 {object} controller.ResponseData "获取成功"
 // @Failure 400 {object} controller.ResponseData "预约失败,具体原因查看json中的message字段和code字段"
 // @Router /user/{user_id}/favourites [post]
-func GetUserFavourites(c *gin.Context) {
+func GetUserFavouritesByUserID(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
-		zap.L().Error("GetUserFavourites: c.MustGet(\"db\").(*gorm.DB) failed",
+		zap.L().Error("GetUserFavouritesByUserID: c.MustGet(\"db\").(*gorm.DB) failed",
 			zap.Int("错误码", codes.GetDBError.Int()),
 		)
 		ResponseErrorWithCode(c, codes.GetDBError)
@@ -76,7 +76,7 @@ func GetUserFavourites(c *gin.Context) {
 
 	userID, exists := c.Get("user_id")
 	if !exists {
-		zap.L().Error("GetUserFavourites: c.Get(\"user_id\") failed",
+		zap.L().Error("GetUserFavouritesByUserID: c.Get(\"user_id\") failed",
 			zap.Int("错误码", codes.GetUserIDError.Int()),
 		)
 		ResponseErrorWithCode(c, codes.GetUserIDError)
@@ -85,7 +85,7 @@ func GetUserFavourites(c *gin.Context) {
 
 	userIDUint, ok := userID.(uint)
 	if !ok {
-		zap.L().Error("GetUserFavourites: userID.(uint) failed",
+		zap.L().Error("GetUserFavouritesByUserID: userID.(uint) failed",
 			zap.Int("错误码", codes.UserIDTypeError.Int()),
 			zap.Any("用户ID", userID),
 		)
@@ -95,7 +95,7 @@ func GetUserFavourites(c *gin.Context) {
 
 	favourites, apiError := logic.GetUserFavourites(db, userIDUint)
 	if apiError != nil {
-		zap.L().Error("GetUserFavourites: logic.GetUserFavourites failed",
+		zap.L().Error("GetUserFavouritesByUserID: logic.GetUserFavouritesByUserID failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
 			zap.Int("用户ID", int(userIDUint)),
 		)
@@ -104,4 +104,25 @@ func GetUserFavourites(c *gin.Context) {
 	}
 	ResponseSuccess(c, favourites)
 	return
+}
+
+// GetAllFavourites 用于获取所有用户收藏的房屋
+func GetAllFavourites(c *gin.Context) {
+	db, exist := c.MustGet("db").(*gorm.DB)
+	if !exist {
+		zap.L().Error("GetUserFavouritesByUserID: c.MustGet(\"db\").(*gorm.DB) failed",
+			zap.Int("错误码", codes.GetDBError.Int()),
+		)
+		ResponseErrorWithCode(c, codes.GetDBError)
+		return
+	}
+	favourites, apiError := logic.GetAllFavourites(db)
+	if apiError != nil {
+		zap.L().Error("GetUserFavouritesByUserID: logic.GetUserFavouritesByUserID failed",
+			zap.Int("错误码", apiError.StatusCode.Int()),
+		)
+		ResponseError(c, *apiError)
+		return
+	}
+	ResponseSuccess(c, favourites)
 }

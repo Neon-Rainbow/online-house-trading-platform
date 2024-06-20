@@ -81,3 +81,40 @@ func GetUserRelease(db *gorm.DB, userID uint) (*[]model.House, error) {
 	}
 	return houses, nil
 }
+
+// IsUserAdmin 用于判断用户是否为管理员
+func IsUserAdmin(db *gorm.DB, id uint) (bool, error) {
+	var user model.User
+	result := db.First(&user, id)
+	if result.Error != nil {
+		return false, result.Error
+	}
+	return user.Role == "admin", nil
+}
+
+func GetAllUsers(db *gorm.DB) (*[]model.User, error) {
+	var user *[]model.User
+	result := db.Find(&user)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return user, nil
+}
+
+func GetAllReserve(db *gorm.DB) (*[]model.Reserve, error) {
+	var reserve *[]model.Reserve
+	result := db.Find(&reserve)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return reserve, nil
+}
+
+func GetAllFavourites(db *gorm.DB) (*[]model.Favourite, error) {
+	var favourites *[]model.Favourite
+	result := db.Find(&favourites)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return favourites, nil
+}

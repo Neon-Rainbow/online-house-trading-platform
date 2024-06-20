@@ -22,7 +22,14 @@ func GetUserProfile(db *gorm.DB, idUint uint) (*model.User, *model.Error) {
 }
 
 func ModifyUserProfile(db *gorm.DB, m *model.UserReq, idUint uint) *model.Error {
-	err := dao.ModifyUserProfile(db, m, idUint)
+	user, err := dao.GetUserProfile(db, idUint)
+	if err != nil {
+		return &model.Error{StatusCode: codes.GetUserProfileError}
+	}
+	if user.Role != "admin" {
+		m.Role = user.Role
+	}
+	err = dao.ModifyUserProfile(db, m, idUint)
 	if err != nil {
 		return &model.Error{StatusCode: codes.ModifyUserProfileError}
 	}

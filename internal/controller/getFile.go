@@ -3,6 +3,8 @@ package controller
 import (
 	"fmt"
 	"online-house-trading-platform/codes"
+	"os"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -37,6 +39,33 @@ func GetFileByURL(c *gin.Context) {
 
 	fmt.Println("filepath:" + filePath)
 	c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", filePath))
+	c.File(filePath)
+	ResponseSuccess(c, filePath)
+	return
+}
+
+func GetLogFile(c *gin.Context) {
+	file, err := os.Open("./application.log")
+	if err != nil {
+		zap.L().Error("GetLogFile", zap.Error(err))
+		ResponseErrorWithCode(c, codes.OpenFileError)
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			zap.L().Error("GetLogFile", zap.Error(err))
+		}
+	}(file)
+
+	fileInfo, err := file.Stat()
+	if err != nil {
+		zap.L().Error("GetLogFile", zap.Error(err))
+		ResponseErrorWithCode(c, codes.OpenFileError)
+	}
+
+	filePath := "./application.log"
+	c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", filePath))
+	c.Writer.Header().Set("Content-Length", strconv.FormatInt(fileInfo.Size(), 10))
 	c.File(filePath)
 	ResponseSuccess(c, filePath)
 	return

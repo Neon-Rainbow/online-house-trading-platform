@@ -29,3 +29,12 @@ func GetReserve(db *gorm.DB, idUint uint) ([]model.Reserve, *model.Error) {
 	}
 	return reserve, nil
 }
+
+// GetAllReserve 用于获取所有用户的预约信息
+func GetAllReserve(db *gorm.DB) (*[]model.Reserve, *model.Error) {
+	reserve, err := dao.GetAllReserve(db)
+	if err != nil {
+		return nil, &model.Error{StatusCode: codes.GetReserveInformationError}
+	}
+	return reserve, nil
+}

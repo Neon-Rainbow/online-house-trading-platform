@@ -47,6 +47,7 @@ func RegisterPost(c *gin.Context) {
 
 	var registerReq model.RegisterRequest
 	err := c.ShouldBind(&registerReq)
+	registerReq.Role = "user"
 	if err != nil {
 		zap.L().Error("RegisterPost: c.ShouldBind(&registerReq) failed",
 			zap.Int("错误码", codes.RegisterInvalidParam.Int()),
@@ -68,3 +69,45 @@ func RegisterPost(c *gin.Context) {
 	ResponseSuccess(c, nil)
 	return
 }
+
+//func AdminRegisterPost(c *gin.Context) {
+//	db, exist := c.MustGet("db").(*gorm.DB)
+//	if !exist {
+//		zap.L().Error("RegisterPost: c.MustGet(\"db\").(*gorm.DB) failed",
+//			zap.String("错误码", strconv.FormatInt(int64(codes.GetDBError), 10)),
+//		)
+//		ResponseErrorWithCode(c, codes.GetDBError)
+//		return
+//	}
+//
+//	var registerReq model.AdminRegisterRequest
+//	err := c.ShouldBind(&registerReq)
+//	registerReq.Role = "admin"
+//	if err != nil {
+//		zap.L().Error("RegisterPost: c.ShouldBind(&registerReq) failed",
+//			zap.Int("错误码", codes.RegisterInvalidParam.Int()),
+//		)
+//		ResponseErrorWithCode(c, codes.RegisterInvalidParam)
+//		return
+//	}
+//	if registerReq.AdminSecret != config.AppConfig.AdminRegisterSecretKey {
+//		zap.L().Error("RegisterPost: admin secret key error",
+//			zap.Int("错误码", codes.RegisterInvalidParam.Int()),
+//		)
+//		ResponseErrorWithCode(c, codes.RegisterInvalidParam)
+//		return
+//	}
+//
+//	apiError := logic.RegisterHandle(db, registerReq, c)
+//	if apiError != nil {
+//		zap.L().Error("RegisterPost: logic.RegisterHandle failed",
+//			zap.Int("错误码", apiError.StatusCode.Int()),
+//			zap.Any("注册信息registerReq", registerReq),
+//		)
+//		ResponseError(c, *apiError)
+//		return
+//	}
+//
+//	ResponseSuccess(c, nil)
+//	return
+//}

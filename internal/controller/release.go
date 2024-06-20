@@ -130,7 +130,7 @@ func ReleasePut(c *gin.Context) {
 	return
 }
 
-// ReleaseDeleteWholeHouse 用于处理删除整个房屋信息的请求
+// DeleteHouseInformationByHouseID 用于处理删除整个房屋信息的请求
 // @Summary 删除房屋信息
 // @Description 删除房屋信息
 // @Tags 发布
@@ -142,10 +142,10 @@ func ReleasePut(c *gin.Context) {
 // @Success 200 {object} controller.ResponseData "删除成功"
 // @Failure 400 {object} controller.ResponseData "删除失败"
 // @Router /user/:user_id/release [delete]
-func ReleaseDeleteWholeHouse(c *gin.Context) {
+func DeleteHouseInformationByHouseID(c *gin.Context) {
 	db, exist := c.MustGet("db").(*gorm.DB)
 	if !exist {
-		zap.L().Error("ReleaseDeleteWholeHouse: c.MustGet(\"db\").(*gorm.DB) failed",
+		zap.L().Error("DeleteHouseInformationByHouseID: c.MustGet(\"db\").(*gorm.DB) failed",
 			zap.Int("错误码", codes.GetDBError.Int()),
 		)
 		ResponseErrorWithCode(c, codes.GetDBError)
@@ -157,7 +157,7 @@ func ReleaseDeleteWholeHouse(c *gin.Context) {
 	}
 	err := c.ShouldBindJSON(&req)
 	if err != nil {
-		zap.L().Error("ReleaseDeleteWholeHouse: c.ShouldBindJSON(&req) failed",
+		zap.L().Error("DeleteHouseInformationByHouseID: c.ShouldBindJSON(&req) failed",
 			zap.Int("错误码", codes.ReleaseBindDataError.Int()),
 		)
 		ResponseErrorWithCode(c, codes.ReleaseBindDataError)
@@ -166,7 +166,7 @@ func ReleaseDeleteWholeHouse(c *gin.Context) {
 
 	apiError := logic.DeleteHouse(db, req.HouseID)
 	if apiError != nil {
-		zap.L().Error("ReleaseDeleteWholeHouse: logic.DeleteHouse failed",
+		zap.L().Error("DeleteHouseInformationByHouseID: logic.DeleteHouse failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
 			zap.Any("req", req),
 		)

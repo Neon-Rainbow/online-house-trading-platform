@@ -53,7 +53,7 @@ func LoginPost(c *gin.Context) {
 		return
 	}
 
-	loginResp, apiError := logic.LoginHandle(db, loginReq)
+	loginResp, apiError := logic.LoginHandle(db, loginReq, c)
 	if apiError != nil {
 		zap.L().Error("LoginPost: logic.LoginHandle failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
@@ -63,6 +63,37 @@ func LoginPost(c *gin.Context) {
 		return
 	}
 
+	ResponseSuccess(c, loginResp)
+	return
+}
+
+// AdminLogin 用于处理管理员的登录界面的POST请求
+func AdminLogin(c *gin.Context) {
+	db, exist := c.MustGet("db").(*gorm.DB)
+	if !exist {
+		zap.L().Error("LoginPost: c.MustGet(\"db\").(*gorm.DB) failed")
+		ResponseErrorWithCode(c, codes.GetDBError)
+		return
+	}
+
+	var loginReq model.LoginRequest
+	err := c.ShouldBind(&loginReq)
+	if err != nil {
+		zap.L().Error("LoginPost: c.ShouldBind(&loginReq) failed",
+			zap.Int("错误码", codes.LoginInvalidParam.Int()),
+		)
+		ResponseErrorWithCode(c, codes.LoginInvalidParam)
+		return
+	}
+	loginResp, apiError := logic.AdminLoginHandle(db, loginReq, c)
+	if apiError != nil {
+		zap.L().Error("LoginPost: logic.LoginHandle failed",
+			zap.Int("错误码", apiError.StatusCode.Int()),
+			zap.Any("loginReq", loginReq),
+		)
+		ResponseError(c, *apiError)
+		return
+	}
 	ResponseSuccess(c, loginResp)
 	return
 }

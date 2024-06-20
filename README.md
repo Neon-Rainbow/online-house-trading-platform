@@ -1,6 +1,6 @@
 # 在线房屋交易平台
 
-# Docker
+## Docker
 
 使用下列指令构建Docker镜像:
 ```bash
@@ -23,6 +23,32 @@ docker compose down
 移除容器
 
 注意:mysql未在Docker中配置
+
+## 配置文件样例
+```json
+{
+  "database": {
+    "host": "",
+    "port": 3306,
+    "user": "",
+    "password": "",
+    "dbname": ""
+  },
+  "redis": {
+    "host": "",
+    "port": 6379,
+    "password": "",
+    "db": 0
+  },
+  "jwtSecret": "",
+  "passwordSecret": "",
+  "logFilePath": "./application.log",
+  "port": 8080,
+  "ginMode": "debug",
+  "zapLogLever": "debug",
+  "admin_register_secret_key": ""
+}
+```
 
 ## git commit 规范
 

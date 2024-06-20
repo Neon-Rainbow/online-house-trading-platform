@@ -28,3 +28,11 @@ func GetUserFavourites(db *gorm.DB, userID uint) ([]model.Favourite, *model.Erro
 	}
 	return favourites, nil
 }
+
+func GetAllFavourites(db *gorm.DB) (*[]model.Favourite, *model.Error) {
+	favourites, err := dao.GetAllFavourites(db)
+	if err != nil {
+		return nil, &model.Error{StatusCode: codes.GetUserFavouritesError}
+	}
+	return favourites, nil
+}
