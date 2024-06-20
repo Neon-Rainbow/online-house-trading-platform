@@ -31,7 +31,7 @@ func setupHouseAPI(r *gin.Engine, db *gorm.DB) {
 	housesGroup := r.Group("/houses").Use(middleware.DBMiddleware(db))
 	{
 		housesGroup.GET("/", controller.GetAllHouses)
-		housesGroup.GET("/:house_id", controller.GetHouseInfomationByHouseID)
+		housesGroup.GET("/:house_id", middleware.JWTAuthMiddleware(), controller.GetHouseInfomationByHouseID)
 		housesGroup.POST("/appointment", middleware.JWTAuthMiddleware(), controller.HousesAppointmentPost)
 		housesGroup.POST("/collect", middleware.JWTAuthMiddleware(), controller.CollectPost)
 	}
@@ -51,6 +51,7 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 		userGroup.GET("/appointment", controller.GetUserAppointmentsByUserID)
 		userGroup.POST("/delete_account", controller.DeleteUserAccountByUserID)
 		userGroup.GET("/get_login_record", controller.GetUserLoginRecordByUserID)
+		userGroup.GET("/get_viewing_record", controller.GetUserViewingRecordsByUserID)
 	}
 	userProfileGroup := r.Group("/user/:user_id/profile").Use(
 		middleware.JWTAuthMiddleware(),

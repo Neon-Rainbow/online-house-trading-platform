@@ -65,7 +65,8 @@ func InitializeDB() *gorm.DB {
 		&model.Favourite{},
 		&model.Reserve{},
 		&model.UserAvatar{},
-		&model.LoginRecord{})
+		&model.LoginRecord{},
+		&model.ViewingRecords{})
 	if err != nil {
 		return nil
 	}

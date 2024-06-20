@@ -73,9 +73,12 @@ func GetHouseInfomationByHouseID(c *gin.Context) {
 		ResponseErrorWithCode(c, codes.HouseIDInvalid)
 		return
 	}
-	house, apiError := logic.FetchCertainHouseInformationByID(db, uint(houseIDUint))
+	_userid, _ := c.Get("user_id")
+	userID := _userid.(uint)
+
+	house, apiError := logic.FetchCertainHouseInformationByID(db, uint(houseIDUint), userID)
 	if apiError != nil {
-		zap.L().Error("GetHouseInfomationByHouseID: logic.FetchCertainHouseInformationByID failed",
+		zap.L().Error("GetHouseInformationByHouseID: logic.FetchCertainHouseInformationByID failed",
 			zap.String("错误码", strconv.FormatInt(int64(apiError.StatusCode), 10)),
 		)
 		ResponseError(c, *apiError)
