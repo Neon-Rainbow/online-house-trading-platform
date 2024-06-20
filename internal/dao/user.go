@@ -96,12 +96,12 @@ func IsUserAdmin(db *gorm.DB, id uint) (bool, error) {
 func GetAllUsers(db *gorm.DB, includeDeleted string) (*[]model.User, error) {
 	var user *[]model.User
 	var result *gorm.DB
-	fmt.Println("includeDeleted: ", includeDeleted)
+	//fmt.Println("includeDeleted: ", includeDeleted)
 	if includeDeleted == "true" {
-		fmt.Println("includeDeleted")
+		//fmt.Println("includeDeleted")
 		result = db.Unscoped().Find(&user)
 	} else {
-		fmt.Println("not includeDeleted")
+		//fmt.Println("not includeDeleted")
 		result = db.Find(&user)
 	}
 	if result.Error != nil {
