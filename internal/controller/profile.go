@@ -79,7 +79,13 @@ func UpdateUserProfileByUserID(c *gin.Context) {
 
 	var userProfileUpdateReq model.UserReq
 	err := c.ShouldBind(&userProfileUpdateReq)
-	userProfileUpdateReq.Password = logic.EncryptPassword(userProfileUpdateReq.Password) //对需要修改的明文密码进行加密
+	if userProfileUpdateReq.Password != "" {
+		userProfileUpdateReq.Password = logic.EncryptPassword(userProfileUpdateReq.Password) //对需要修改的明文密码进行加密
+	} else {
+		temp, _ := logic.GetUserProfile(db, userIDUint)
+		userProfileUpdateReq.Password = temp.Password
+	}
+
 	// fmt.Print(userProfileUpdateReq)
 	if err != nil {
 		zap.L().Error("UpdateUserProfileByUserID: c.ShouldBind(&userProfileUpdateReq ) failed",
