@@ -23,7 +23,7 @@ func LoginHandle(db *gorm.DB, req model.LoginRequest, c *gin.Context) (*model.Lo
 		return nil, &model.Error{StatusCode: codes.LoginInvalidPassword}
 	}
 
-	token, err := jwt.GenerateToken(dbUser.Username, dbUser.ID, codes.User)
+	accessToken, refreshToken, err := jwt.GenerateToken(dbUser.Username, dbUser.ID, codes.User)
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.GenerateJWTTokenError}
 	}
@@ -35,10 +35,11 @@ func LoginHandle(db *gorm.DB, req model.LoginRequest, c *gin.Context) (*model.Lo
 	}
 
 	return &model.LoginResponse{
-		Token:    token,
-		UserID:   dbUser.ID,
-		Username: dbUser.Username,
-		Role:     dbUser.Role,
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+		UserID:       dbUser.ID,
+		Username:     dbUser.Username,
+		Role:         dbUser.Role,
 	}, nil
 }
 
@@ -57,7 +58,7 @@ func AdminLoginHandle(db *gorm.DB, req model.LoginRequest, c *gin.Context) (*mod
 		return nil, &model.Error{StatusCode: codes.LoginUserNotExist}
 	}
 
-	token, err := jwt.GenerateToken(dbUser.Username, dbUser.ID, codes.Admin)
+	accessToken, refreshToken, err := jwt.GenerateToken(dbUser.Username, dbUser.ID, codes.Admin)
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.GenerateJWTTokenError}
 	}
@@ -69,9 +70,10 @@ func AdminLoginHandle(db *gorm.DB, req model.LoginRequest, c *gin.Context) (*mod
 	}
 
 	return &model.LoginResponse{
-		Token:    token,
-		UserID:   dbUser.ID,
-		Username: dbUser.Username,
-		Role:     dbUser.Role,
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+		UserID:       dbUser.ID,
+		Username:     dbUser.Username,
+		Role:         dbUser.Role,
 	}, nil
 }

@@ -52,6 +52,9 @@ const (
 	GetViewingRecordsError                           // 获取看房记录错误
 	AddViewingRecordsError                           //增加看房记录错误
 	RecordExists                                     //记录已存在
+	TokenExpiredError                                //token已过期
+	UnauthorizedAccessError                          //非法访问
+	TokenBlacklistedError                            //token已被列入黑名单
 )
 
 // codeMessageMap 用于存放code和message的映射关系
@@ -100,6 +103,9 @@ var codeMessageMap = map[ResCode]string{
 	GetViewingRecordsError:     "获取看房记录错误",
 	AddViewingRecordsError:     "增加看房记录错误",
 	RecordExists:               "记录已存在",
+	TokenExpiredError:          "token已过期",
+	UnauthorizedAccessError:    "非法访问",
+	TokenBlacklistedError:      "token已被列入黑名单",
 }
 
 const (

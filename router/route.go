@@ -45,8 +45,8 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 	{
 		userGroup.GET("/release", controller.ReleaseGet)
 		userGroup.POST("/release", controller.ReleasePost)
-		userGroup.PUT("/release", controller.ReleasePut)
-		userGroup.DELETE("/release", controller.DeleteHouseInformationByHouseID)
+		userGroup.POST("/update_house", controller.ReleasePut)
+		userGroup.POST("/delete_house", controller.DeleteHouseInformationByHouseID)
 		userGroup.GET("/favourites", controller.GetUserFavouritesByUserID)
 		userGroup.GET("/appointment", controller.GetUserAppointmentsByUserID)
 		userGroup.POST("/delete_account", controller.DeleteUserAccountByUserID)
@@ -100,6 +100,7 @@ func setupAdminAPI(r *gin.Engine, db *gorm.DB) {
 
 func setupOtherRouter(r *gin.Engine, db *gorm.DB) {
 	r.GET("/getFile", controller.GetFileByURL)
+	r.GET("/refresh_token", controller.RefreshToken)
 }
 
 // SetupRouters 设置web服务器路由

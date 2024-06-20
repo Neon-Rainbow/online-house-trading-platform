@@ -44,7 +44,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 			return
 		}
 
-		mc, err := jwt.ParseToken(tkn)
+		myClaims, err := jwt.ParseToken(tkn)
 		if err != nil {
 			zap.L().Error("JWTAuthMiddleware: jwt token解析错误",
 				zap.String("错误码", strconv.FormatInt(int64(codes.InvalidTokenError), 10)),
@@ -54,10 +54,19 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 			c.Abort()
 			return
 		}
-		//fmt.Println(mc)
-		c.Set("user_id", mc.UserID)
-		c.Set("username", mc.Username)
-		c.Set("role", mc.UserRole)
+
+		if myClaims.TokenType != "access_token" {
+			zap.L().Error("JWTAuthMiddleware: 非访问令牌尝试访问资源",
+				zap.String("tokenType", myClaims.TokenType),
+			)
+			controller.ResponseErrorWithCode(c, codes.UnauthorizedAccessError)
+			c.Abort()
+			return
+		}
+
+		c.Set("user_id", myClaims.UserID)
+		c.Set("username", myClaims.Username)
+		c.Set("role", myClaims.UserRole)
 		c.Next()
 	}
 }

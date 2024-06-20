@@ -7,31 +7,56 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-const tokenExpireDuration = time.Hour * 24 // token 过期时间
+const (
+	accessTokenExpireDuration  = time.Minute * 1    // 访问令牌过期时间
+	refreshTokenExpireDuration = time.Hour * 24 * 7 // 刷新令牌过期时间
+)
 
 type MyClaims struct {
-	Username string `json:"username"`
-	UserID   uint   `json:"user_id"`
-	UserRole string `json:"role"`
+	Username  string `json:"username"`
+	UserID    uint   `json:"user_id"`
+	UserRole  string `json:"role"`
+	TokenType string `json:"token_type"`
 	jwt.RegisteredClaims
 }
 
 // GenerateToken 用于生成JWT
-func GenerateToken(username string, userId uint, role string) (string, error) {
+func GenerateToken(username string, userId uint, role string) (accessToken string, refreshToken string, err error) {
 	var jwtSecret = config.AppConfig.JWTSecret
 	var mySecret = []byte(jwtSecret) // 自定义密钥
-	c := MyClaims{
-		Username: username,
-		UserID:   userId,
-		UserRole: role,
+	accessTokenClaims := MyClaims{
+		Username:  username,
+		UserID:    userId,
+		UserRole:  role,
+		TokenType: "access_token",
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(tokenExpireDuration)), // 过期时间
-			IssuedAt:  jwt.NewNumericDate(time.Now()),                          // 签发时间
-			Issuer:    "409宿舍的精致的综合项目",                                         // 签发人
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(accessTokenExpireDuration)), // 过期时间
+			IssuedAt:  jwt.NewNumericDate(time.Now()),                                // 签发时间
+			Issuer:    "409宿舍的精致的综合项目",                                               // 签发人
 		},
 	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, c)
-	return token.SignedString(mySecret)
+	accessToken, err = jwt.NewWithClaims(jwt.SigningMethodHS256, accessTokenClaims).SignedString(mySecret)
+	if err != nil {
+		return
+	}
+
+	refreshTokenClaims := MyClaims{
+		Username:  username,
+		UserID:    userId,
+		UserRole:  role,
+		TokenType: "refresh_token",
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(refreshTokenExpireDuration)), // 过期时间
+			IssuedAt:  jwt.NewNumericDate(time.Now()),                                 // 签发时间
+			Issuer:    "409宿舍的精致的综合项目",                                                // 签发人
+		},
+	}
+
+	refreshToken, err = jwt.NewWithClaims(jwt.SigningMethodHS256, refreshTokenClaims).SignedString(mySecret)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // ParseToken 用于解析JWT

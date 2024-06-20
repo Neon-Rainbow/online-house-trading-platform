@@ -13,10 +13,11 @@ type LoginRequest struct {
 
 // LoginResponse 用于处理用户登录请求
 type LoginResponse struct {
-	Token    string `json:"token" form:"token"`
-	UserID   uint   `json:"user_id" form:"user_id"`
-	Username string `json:"username" form:"username"`
-	Role     string `json:"role" form:"role"`
+	AccessToken  string `json:"access_token" form:"access_token"`
+	RefreshToken string `json:"refresh_token" form:"refresh_token"`
+	UserID       uint   `json:"user_id" form:"user_id"`
+	Username     string `json:"username" form:"username"`
+	Role         string `json:"role" form:"role"`
 }
 
 // RegisterRequest 用于处理用户注册请求
