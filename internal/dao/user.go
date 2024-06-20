@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"errors"
 	"fmt"
 	"online-house-trading-platform/pkg/model"
 
@@ -125,4 +126,20 @@ func GetAllFavourites(db *gorm.DB) (*[]model.Favourite, error) {
 		return nil, result.Error
 	}
 	return favourites, nil
+}
+
+// CheckCombinationUserIDAndHouseIDInFavouriteExists 检查用户ID和房屋ID的组合在favourite表中是否存在
+func CheckCombinationUserIDAndHouseIDInFavouriteExists(db *gorm.DB, userID uint, houseID uint) (bool, error) {
+	var favourite model.Favourite
+	result := db.Where("user_id = ? AND house_id = ?", userID, houseID).First(&favourite)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			// 没有找到记录，返回不存在
+			return false, nil
+		}
+		// 数据库查询出错
+		return false, result.Error
+	}
+	// 找到了记录，返回存在
+	return true, nil
 }

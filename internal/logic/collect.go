@@ -14,6 +14,12 @@ func CollectHandle(db *gorm.DB, favourite *model.Favourite, userID uint) *model.
 		return &model.Error{StatusCode: codes.ReserveInvalidParam}
 	}
 	favourite.UserID = userID
+
+	exist, _ := dao.CheckCombinationUserIDAndHouseIDInFavouriteExists(db, favourite.UserID, favourite.HouseID)
+	if exist {
+		return &model.Error{StatusCode: codes.RecordExists}
+	}
+
 	err := dao.CreateFavorite(db, favourite)
 	if err != nil {
 		return &model.Error{StatusCode: codes.ReserveError}

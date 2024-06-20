@@ -51,6 +51,7 @@ const (
 	OpenFileError                                    // 打开文件错误
 	GetViewingRecordsError                           // 获取看房记录错误
 	AddViewingRecordsError                           //增加看房记录错误
+	RecordExists                                     //记录已存在
 )
 
 // codeMessageMap 用于存放code和message的映射关系
@@ -98,6 +99,7 @@ var codeMessageMap = map[ResCode]string{
 	OpenFileError:              "打开文件错误",
 	GetViewingRecordsError:     "获取看房记录错误",
 	AddViewingRecordsError:     "增加看房记录错误",
+	RecordExists:               "记录已存在",
 }
 
 const (
