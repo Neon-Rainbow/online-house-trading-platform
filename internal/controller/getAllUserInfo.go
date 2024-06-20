@@ -21,7 +21,9 @@ func GetAllUsersInformation(c *gin.Context) {
 		return
 	}
 
-	users, err := logic.GetAllUsers(db)
+	includeDeleted := c.Query("include_deleted")
+
+	users, err := logic.GetAllUsers(db, includeDeleted)
 	if err != nil {
 		zap.L().Error("GetAllUsersInformation: logic.GetAllUsers failed",
 			zap.String("错误码", strconv.FormatInt(int64(codes.GetAllUsersError), 10)),

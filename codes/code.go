@@ -3,6 +3,11 @@ package codes
 type ResCode int64
 
 const (
+	Admin string = "admin"
+	User  string = "user"
+)
+
+const (
 	CodeSuccess                ResCode = 1000 + iota // 成功
 	LoginInvalidParam                                // 请求参数错误
 	LoginUserNotExist                                // 用户不存在

@@ -76,13 +76,13 @@ func setupAdminAPI(r *gin.Engine, db *gorm.DB) {
 
 		adminGroup.GET("/users", controller.GetAllUsersInformation)
 		adminGroup.GET("/users/:user_id", controller.GetUserProfileByUserID)
-		adminGroup.PUT("/users/:user_id", controller.UpdateUserProfileByUserID)
-		adminGroup.PUT("/users/:user_id/avatar", controller.UpdateUserAvatarByUserID)
-		adminGroup.DELETE("/users/:user_id", controller.DeleteUserAccountByUserID)
+		adminGroup.POST("/users/:user_id/update_user_profile", controller.UpdateUserProfileByUserID)
+		adminGroup.POST("/users/:user_id/update_user_avatar", controller.UpdateUserAvatarByUserID)
+		adminGroup.POST("/users/:user_id/delete_user_account", controller.DeleteUserAccountByUserID)
 
 		adminGroup.GET("/houses", controller.GetAllHousesInformation)
 		adminGroup.GET("/houses/:house_id", controller.GetHouseInfomationByHouseID)
-		adminGroup.DELETE("/houses/:house_id", controller.DeleteHouseInformationByHouseID)
+		adminGroup.POST("/houses/:house_id/delete_house", controller.DeleteHouseInformationByHouseID)
 
 		adminGroup.GET("/appointments", controller.GetAllAppointments)
 		adminGroup.GET("/appointments/:user_id", controller.GetUserAppointmentsByUserID)

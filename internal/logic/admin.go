@@ -7,8 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func GetAllUsers(db *gorm.DB) (*[]model.User, error) {
-	users, err := dao.GetAllUsers(db)
+func GetAllUsers(db *gorm.DB, includeDeleted string) (*[]model.User, error) {
+	users, err := dao.GetAllUsers(db, includeDeleted)
 	if err != nil {
 		return nil, err
 	}
