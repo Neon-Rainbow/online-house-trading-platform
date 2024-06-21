@@ -94,14 +94,7 @@ func AdminLogin(c *gin.Context) {
 		ResponseError(c, *apiError)
 		return
 	}
-	response := gin.H{
-		"user_id":       loginResp.UserID,
-		"username":      loginResp.Username,
-		"role":          loginResp.Role,
-		"access_token":  loginResp.AccessToken,
-		"refresh_token": loginResp.RefreshToken,
-	}
 
-	ResponseSuccess(c, response)
+	ResponseSuccess(c, loginResp)
 	return
 }
