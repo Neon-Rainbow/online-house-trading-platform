@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"errors"
 	"gorm.io/gorm"
 	"online-house-trading-platform/pkg/model"
 )
@@ -23,9 +24,26 @@ func GetViewingRecordsByUserID(db *gorm.DB, idUint uint, pageSize int, pageNum i
 
 // AddViewingRecords 添加用户看房记录
 func AddViewingRecords(db *gorm.DB, viewingRecords *model.ViewingRecords) error {
-	err := db.Create(viewingRecords).Error
-	if err != nil {
+	// 检查是否存在相同的看房记录
+	var existingRecord model.ViewingRecords
+	err := db.Where("user_id = ? AND house_id = ?", viewingRecords.UserID, viewingRecords.HouseID).First(&existingRecord).Error
+
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return err
 	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		// 如果记录不存在，则插入新记录
+		if err := db.Create(viewingRecords).Error; err != nil {
+			return err
+		}
+	} else {
+		// 如果记录存在，则更新记录的时间戳
+		existingRecord.UpdatedAt = viewingRecords.UpdatedAt
+		if err := db.Save(&existingRecord).Error; err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
