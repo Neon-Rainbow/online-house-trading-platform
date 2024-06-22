@@ -26,11 +26,17 @@ func GetUserViewingRecordsByUserID(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.Query("page_size"))
 	pageNum, _ := strconv.Atoi(c.Query("page_num"))
 
-	viewingRecords, apiError := logic.GetViewingRecords(db, userIDUint, pageSize, pageNum)
+	viewingRecords, totalCounts, apiError := logic.GetViewingRecords(db, userIDUint, pageSize, pageNum)
 	if apiError != nil {
 		ResponseErrorWithCode(c, apiError.StatusCode)
 		return
 	}
-	ResponseSuccess(c, viewingRecords)
+
+	response := gin.H{
+		"viewing_records": viewingRecords,
+		"total_size":      totalCounts,
+	}
+
+	ResponseSuccess(c, response)
 
 }

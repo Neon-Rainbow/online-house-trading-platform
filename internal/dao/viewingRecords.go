@@ -6,13 +6,19 @@ import (
 )
 
 // GetViewingRecordsByUserID 根据用户ID获取用户看房记录
-func GetViewingRecordsByUserID(db *gorm.DB, idUint uint, pageSize int, pageNum int) ([]model.ViewingRecords, error) {
+func GetViewingRecordsByUserID(db *gorm.DB, idUint uint, pageSize int, pageNum int) ([]model.ViewingRecords, int64, error) {
 	var viewingRecords []model.ViewingRecords
-	err := db.Where("user_id = ?", idUint).Order("updated_at DESC").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&viewingRecords).Error
+	var totalRecords int64
+	err := db.Model(&model.ViewingRecords{}).Where("user_id = ?", idUint).Count(&totalRecords).Error
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
-	return viewingRecords, nil
+
+	err = db.Where("user_id = ?", idUint).Order("updated_at DESC").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&viewingRecords).Error
+	if err != nil {
+		return nil, totalRecords, err
+	}
+	return viewingRecords, totalRecords, nil
 }
 
 // AddViewingRecords 添加用户看房记录
