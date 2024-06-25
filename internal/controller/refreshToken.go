@@ -1,11 +1,12 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/pkg/jwt"
 	"sync"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 var tokenBlacklist = struct {
@@ -32,6 +33,14 @@ func isTokenBlacklisted(token string) bool {
 }
 
 // RefreshToken 用于刷新令牌
+// @Summary 刷新令牌
+// @Description 刷新令牌
+// @Tags 用户
+// @Accept json
+// @Produce json
+// @Param refresh_token query string true "刷新令牌"
+// @Success 200 {object} Response
+// @Router /refresh_token [get]
 func RefreshToken(c *gin.Context) {
 	refreshToken := c.Query("refresh_token") // 假设通过查询参数传递
 
