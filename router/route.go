@@ -15,11 +15,10 @@ import (
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
-	"gorm.io/gorm"
 )
 
-func setupAuthAPI(r *gin.Engine, db *gorm.DB) {
-	userGroup := r.Group("/auth").Use(middleware.DBMiddleware(db))
+func setupAuthAPI(r *gin.Engine) {
+	userGroup := r.Group("/auth")
 	{
 		userGroup.POST("/login", controller.LoginPost)
 		userGroup.POST("/admin_login", controller.AdminLogin)
@@ -27,8 +26,8 @@ func setupAuthAPI(r *gin.Engine, db *gorm.DB) {
 	}
 }
 
-func setupHouseAPI(r *gin.Engine, db *gorm.DB) {
-	housesGroup := r.Group("/houses").Use(middleware.DBMiddleware(db))
+func setupHouseAPI(r *gin.Engine) {
+	housesGroup := r.Group("/houses")
 	{
 		housesGroup.GET("/", controller.GetAllHouses)
 		housesGroup.GET("/:house_id", middleware.JWTAuthMiddleware(), controller.GetHouseInfomationByHouseID)
@@ -37,11 +36,10 @@ func setupHouseAPI(r *gin.Engine, db *gorm.DB) {
 	}
 }
 
-func setupUserAPI(r *gin.Engine, db *gorm.DB) {
+func setupUserAPI(r *gin.Engine) {
 	userGroup := r.Group("/user/:user_id").Use(
 		middleware.JWTAuthMiddleware(),
-		middleware.UserIDMatchMiddleware(),
-		middleware.DBMiddleware(db))
+		middleware.UserIDMatchMiddleware())
 	{
 		userGroup.GET("/release", controller.ReleaseGet)
 		userGroup.POST("/release", controller.ReleasePost)
@@ -55,8 +53,7 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 	}
 	userProfileGroup := r.Group("/user/:user_id/profile").Use(
 		middleware.JWTAuthMiddleware(),
-		middleware.UserIDMatchMiddleware(),
-		middleware.DBMiddleware(db))
+		middleware.UserIDMatchMiddleware())
 	{
 		userProfileGroup.GET("/", controller.GetUserProfileByUserID)
 		userProfileGroup.PUT("/", controller.UpdateUserProfileByUserID)
@@ -65,9 +62,8 @@ func setupUserAPI(r *gin.Engine, db *gorm.DB) {
 }
 
 // setupAdminAPI 设置管理员API
-func setupAdminAPI(r *gin.Engine, db *gorm.DB) {
+func setupAdminAPI(r *gin.Engine) {
 	adminGroup := r.Group("/admin").Use(
-		middleware.DBMiddleware(db),
 		middleware.JWTAuthMiddleware(),
 		middleware.AdminMiddleWare(),
 	)
@@ -98,13 +94,13 @@ func setupAdminAPI(r *gin.Engine, db *gorm.DB) {
 	}
 }
 
-func setupOtherRouter(r *gin.Engine, db *gorm.DB) {
+func setupOtherRouter(r *gin.Engine) {
 	r.GET("/getFile", controller.GetFileByURL)
 	r.GET("/refresh_token", controller.RefreshToken)
 }
 
 // SetupRouters 设置web服务器路由
-func SetupRouters(db *gorm.DB) *gin.Engine {
+func SetupRouters() *gin.Engine {
 	router := gin.New()
 	gin.SetMode(config.AppConfig.GinMode)
 
@@ -123,11 +119,11 @@ func SetupRouters(db *gorm.DB) *gin.Engine {
 
 	router.Use(cors.New(corsConfig))
 
-	setupAuthAPI(router, db)
-	setupHouseAPI(router, db)
-	setupUserAPI(router, db)
-	setupAdminAPI(router, db)
-	setupOtherRouter(router, db)
+	setupAuthAPI(router)
+	setupHouseAPI(router)
+	setupUserAPI(router)
+	setupAdminAPI(router)
+	setupOtherRouter(router)
 
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{

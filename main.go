@@ -34,18 +34,18 @@ func main() {
 	defer logger.Sync()
 	zap.ReplaceGlobals(logger)
 
-	db := database.InitializeDB()
-	if db == nil {
+	_, err := database.InitializeDB()
+	if err != nil {
 		zap.L().Error("数据库连接失败")
 		return
 	}
 
-	_, err := redis.InitRedis()
+	_, err = redis.InitRedis()
 	if err != nil {
 		zap.L().Error("Redis连接失败", zap.Error(err))
 	}
 
-	route := router.SetupRouters(db)
+	route := router.SetupRouters()
 
 	//route.Static("/uploads", "./uploads")
 
