@@ -4,11 +4,9 @@ import (
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/logic"
 	"online-house-trading-platform/pkg/model"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"gorm.io/gorm"
 )
 
 // RegisterGet 用于处理用户的注册界面的GET请求
@@ -36,15 +34,6 @@ import (
 // @Failure 400 {object} controller.ResponseData "预约失败,具体原因查看json中的message字段和code字段"
 // @Router /auth/register [post]
 func RegisterPost(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("RegisterPost: c.MustGet(\"db\").(*gorm.DB) failed",
-			zap.String("错误码", strconv.FormatInt(int64(codes.GetDBError), 10)),
-		)
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
 	var registerReq model.RegisterRequest
 	err := c.ShouldBind(&registerReq)
 	registerReq.Role = "user"
@@ -56,7 +45,7 @@ func RegisterPost(c *gin.Context) {
 		return
 	}
 
-	apiError := logic.RegisterHandle(db, registerReq, c)
+	apiError := logic.RegisterHandle(registerReq, c)
 	if apiError != nil {
 		zap.L().Error("RegisterPost: logic.RegisterHandle failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),

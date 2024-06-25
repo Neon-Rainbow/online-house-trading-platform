@@ -2,15 +2,16 @@ package dao
 
 import (
 	"errors"
-	"gorm.io/gorm"
+	"online-house-trading-platform/pkg/database"
 	"online-house-trading-platform/pkg/model"
+
+	"gorm.io/gorm"
 )
 
 // GetViewingRecordsByUserID 根据用户ID获取用户看房记录
-func GetViewingRecordsByUserID(db *gorm.DB, idUint uint, pageSize int, pageNum int) ([]model.ViewingRecords, int64, error) {
-	var viewingRecords []model.ViewingRecords
-	var totalRecords int64
-	err := db.Model(&model.ViewingRecords{}).Where("user_id = ?", idUint).Count(&totalRecords).Error
+func GetViewingRecordsByUserID(idUint uint, pageSize int, pageNum int) (viewingRecords []model.ViewingRecords, totalRecords int64, err error) {
+	db := database.Database
+	err = db.Model(&model.ViewingRecords{}).Where("user_id = ?", idUint).Count(&totalRecords).Error
 	if err != nil {
 		return nil, 0, err
 	}
@@ -23,7 +24,8 @@ func GetViewingRecordsByUserID(db *gorm.DB, idUint uint, pageSize int, pageNum i
 }
 
 // AddViewingRecords 添加用户看房记录
-func AddViewingRecords(db *gorm.DB, viewingRecords *model.ViewingRecords) error {
+func AddViewingRecords(viewingRecords *model.ViewingRecords) error {
+	db := database.Database
 	// 检查是否存在相同的看房记录
 	var existingRecord model.ViewingRecords
 	err := db.Where("user_id = ? AND house_id = ?", viewingRecords.UserID, viewingRecords.HouseID).First(&existingRecord).Error

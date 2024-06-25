@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"gorm.io/gorm"
 )
 
 // CollectPost 用于处理用户收藏房屋的Post请求
@@ -22,12 +21,6 @@ import (
 // @Failure 400 {object} controller.ResponseData "预约失败,具体原因查看json中的message字段和code字段"
 // @Router /houses/collect [post]
 func CollectPost(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
 	userID, exists := c.Get("user_id")
 	if !exists {
 		ResponseErrorWithCode(c, codes.GetUserIDError)
@@ -44,7 +37,7 @@ func CollectPost(c *gin.Context) {
 		ResponseErrorWithCode(c, codes.ReserveInvalidParam)
 		return
 	}
-	apiError := logic.CollectHandle(db, &favourite, userIDUint)
+	apiError := logic.CollectHandle(&favourite, userIDUint)
 	if apiError != nil {
 		ResponseError(c, *apiError)
 		return
@@ -65,15 +58,6 @@ func CollectPost(c *gin.Context) {
 // @Failure 400 {object} controller.ResponseData "预约失败,具体原因查看json中的message字段和code字段"
 // @Router /user/{user_id}/favourites [post]
 func GetUserFavouritesByUserID(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("GetUserFavouritesByUserID: c.MustGet(\"db\").(*gorm.DB) failed",
-			zap.Int("错误码", codes.GetDBError.Int()),
-		)
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
 	userID, exists := c.Get("user_id")
 	if !exists {
 		zap.L().Error("GetUserFavouritesByUserID: c.Get(\"user_id\") failed",
@@ -93,7 +77,7 @@ func GetUserFavouritesByUserID(c *gin.Context) {
 		return
 	}
 
-	favourites, apiError := logic.GetUserFavourites(db, userIDUint)
+	favourites, apiError := logic.GetUserFavourites(userIDUint)
 	if apiError != nil {
 		zap.L().Error("GetUserFavouritesByUserID: logic.GetUserFavouritesByUserID failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
@@ -108,15 +92,7 @@ func GetUserFavouritesByUserID(c *gin.Context) {
 
 // GetAllFavourites 用于获取所有用户收藏的房屋
 func GetAllFavourites(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("GetUserFavouritesByUserID: c.MustGet(\"db\").(*gorm.DB) failed",
-			zap.Int("错误码", codes.GetDBError.Int()),
-		)
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-	favourites, apiError := logic.GetAllFavourites(db)
+	favourites, apiError := logic.GetAllFavourites()
 	if apiError != nil {
 		zap.L().Error("GetUserFavouritesByUserID: logic.GetUserFavouritesByUserID failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),

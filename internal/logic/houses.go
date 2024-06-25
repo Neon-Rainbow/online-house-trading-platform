@@ -4,13 +4,11 @@ import (
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/dao"
 	"online-house-trading-platform/pkg/model"
-
-	"gorm.io/gorm"
 )
 
 // FetchAllHouses 用于获取所有房屋信息
-func FetchAllHouses(db *gorm.DB) ([]model.House, *model.Error) {
-	houses, err := dao.GetAllHouseInformation(db)
+func FetchAllHouses() ([]model.House, *model.Error) {
+	houses, err := dao.GetAllHouseInformation()
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.GetHouseListError}
 	}
@@ -18,8 +16,8 @@ func FetchAllHouses(db *gorm.DB) ([]model.House, *model.Error) {
 }
 
 // FetchCertainHouseInformationByID 用于获取指定ID的房屋信息
-func FetchCertainHouseInformationByID(db *gorm.DB, houseID uint, userID uint) (*model.House, *model.Error) {
-	house, err := dao.GetHouseInformationByID(db, houseID)
+func FetchCertainHouseInformationByID(houseID uint, userID uint) (*model.House, *model.Error) {
+	house, err := dao.GetHouseInformationByID(houseID)
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.GetHouseInfoError}
 	}
@@ -27,7 +25,7 @@ func FetchCertainHouseInformationByID(db *gorm.DB, houseID uint, userID uint) (*
 		HouseID: houseID,
 		UserID:  userID,
 	}
-	err = dao.AddViewingRecords(db, record)
+	err = dao.AddViewingRecords(record)
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.AddViewingRecordsError}
 	}

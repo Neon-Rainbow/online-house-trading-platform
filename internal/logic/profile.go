@@ -2,42 +2,42 @@ package logic
 
 import (
 	"fmt"
+	"io"
+	"mime/multipart"
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/dao"
 	"online-house-trading-platform/pkg/model"
 	"os"
 	"path/filepath"
-
-	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 // GetUserProfile 用于获取用户的个人信息
-func GetUserProfile(db *gorm.DB, idUint uint) (*model.User, *model.Error) {
-	userProfile, err := dao.GetUserProfile(db, idUint)
+func GetUserProfile(idUint uint) (*model.User, *model.Error) {
+	userProfile, err := dao.GetUserProfile(idUint)
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.GetUserProfileError}
 	}
 	return userProfile, nil
 }
 
-func ModifyUserProfile(db *gorm.DB, m *model.UserReq, idUint uint) *model.Error {
-	user, err := dao.GetUserProfile(db, idUint)
+func ModifyUserProfile(m *model.UserReq, idUint uint) *model.Error {
+	user, err := dao.GetUserProfile(idUint)
 	if err != nil {
 		return &model.Error{StatusCode: codes.GetUserProfileError}
 	}
 	if user.Role != "admin" {
 		m.Role = user.Role
 	}
-	err = dao.ModifyUserProfile(db, m, idUint)
+	err = dao.ModifyUserProfile(m, idUint)
 	if err != nil {
 		return &model.Error{StatusCode: codes.ModifyUserProfileError}
 	}
 	return nil
 }
 
-func ModifyUserAvatar(db *gorm.DB, avatar *model.UserAvatarReq, c *gin.Context) *model.Error {
-	userInfo, err := dao.GetUserProfile(db, avatar.UserID)
+// ModifyUserAvatar 用于修改用户的头像
+func ModifyUserAvatar(avatar *model.UserAvatarReq) *model.Error {
+	userInfo, err := dao.GetUserProfile(avatar.UserID)
 	if err != nil {
 		return &model.Error{StatusCode: codes.GetUserProfileError, Message: "获取用户原先头像信息失败"}
 	}
@@ -45,10 +45,33 @@ func ModifyUserAvatar(db *gorm.DB, avatar *model.UserAvatarReq, c *gin.Context) 
 	_ = os.Remove(dst)
 	dst = fmt.Sprintf("./uploads/user/%d/%d%v", avatar.UserID, avatar.UserID, filepath.Ext(avatar.Avatar.Filename))
 
-	err = c.SaveUploadedFile(avatar.Avatar, dst)
+	err = saveUploadedFile(avatar.Avatar, dst)
 	if err != nil {
 		return &model.Error{StatusCode: codes.ModifyUserProfileError}
 	}
 
 	return nil
+}
+
+// saveUploadedFile 用于保存上传的文件
+// 代码来自Gin框架的源码c.SaveUploadedFile
+func saveUploadedFile(file *multipart.FileHeader, dst string) error {
+	src, err := file.Open()
+	if err != nil {
+		return err
+	}
+	defer src.Close()
+
+	if err = os.MkdirAll(filepath.Dir(dst), 0750); err != nil {
+		return err
+	}
+
+	out, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	_, err = io.Copy(out, src)
+	return err
 }

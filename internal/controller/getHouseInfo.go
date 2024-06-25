@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"gorm.io/gorm"
 )
 
 // GetAllHouses 用于获取所有房屋的信息
@@ -21,16 +20,7 @@ import (
 // @Failure 400 {object} controller.ResponseData "预约失败,具体原因查看json中的message字段和code字段"
 // @Router /houses [get]
 func GetAllHouses(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("GetAllHouses: c.MustGet(\"db\").(*gorm.DB) failed",
-			zap.String("错误码", strconv.FormatInt(int64(codes.GetDBError), 10)),
-		)
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
-	houses, err := logic.FetchAllHouses(db)
+	houses, err := logic.FetchAllHouses()
 	if err != nil {
 		zap.L().Error("GetAllHouses: logic.FetchAllHouses failed",
 			zap.String("错误码", strconv.FormatInt(int64(err.StatusCode), 10)),
@@ -54,15 +44,6 @@ func GetAllHouses(c *gin.Context) {
 // @failure 200 {object} controller.ResponseData "获取失败"
 // @Router /house/{house_id} [get]
 func GetHouseInfomationByHouseID(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("GetHouseInfomationByHouseID: c.MustGet(\"db\").(*gorm.DB) failed",
-			zap.String("错误码", strconv.FormatInt(int64(codes.GetDBError), 10)),
-		)
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
 	houseID := c.Param("house_id")
 	houseIDUint, err := strconv.ParseUint(houseID, 10, 64)
 	if err != nil {
@@ -76,7 +57,7 @@ func GetHouseInfomationByHouseID(c *gin.Context) {
 	_userid, _ := c.Get("user_id")
 	userID := _userid.(uint)
 
-	house, apiError := logic.FetchCertainHouseInformationByID(db, uint(houseIDUint), userID)
+	house, apiError := logic.FetchCertainHouseInformationByID(uint(houseIDUint), userID)
 	if apiError != nil {
 		zap.L().Error("GetHouseInformationByHouseID: logic.FetchCertainHouseInformationByID failed",
 			zap.String("错误码", strconv.FormatInt(int64(apiError.StatusCode), 10)),

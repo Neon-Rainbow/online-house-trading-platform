@@ -1,23 +1,25 @@
 package dao
 
 import (
+	"online-house-trading-platform/pkg/database"
 	"online-house-trading-platform/pkg/model"
-
-	"gorm.io/gorm"
 )
 
 // CreateAppointment 用于实现用户预约房屋
-func CreateAppointment(db *gorm.DB, reserve *model.Reserve) error {
+func CreateAppointment(reserve *model.Reserve) error {
+	db := database.Database
 	return db.Create(reserve).Error
 }
 
 // CreateFavorite 用于实现用户收藏房屋
-func CreateFavorite(db *gorm.DB, favorite *model.Favourite) error {
+func CreateFavorite(favorite *model.Favourite) error {
+	db := database.Database
 	return db.Create(favorite).Error
 }
 
 // GetAllHouseInformation 用于获取数据库中的所有房屋信息
-func GetAllHouseInformation(db *gorm.DB) ([]model.House, error) {
+func GetAllHouseInformation() ([]model.House, error) {
+	db := database.Database
 	var houses []model.House
 	result := db.Preload("Images").Find(&houses)
 	if result.Error != nil {
@@ -27,7 +29,8 @@ func GetAllHouseInformation(db *gorm.DB) ([]model.House, error) {
 }
 
 // GetHouseInformationByID 用于获取数据库中指定ID的房屋信息
-func GetHouseInformationByID(db *gorm.DB, houseID uint) (*model.House, error) {
+func GetHouseInformationByID(houseID uint) (*model.House, error) {
+	db := database.Database
 	var house *model.House
 	result := db.Preload("Images").First(&house, houseID)
 	if result.Error != nil {
@@ -37,19 +40,22 @@ func GetHouseInformationByID(db *gorm.DB, houseID uint) (*model.House, error) {
 }
 
 // CreateHouse 用于创建房屋记录
-func CreateHouse(db *gorm.DB, house *model.House) error {
+func CreateHouse(house *model.House) error {
+	db := database.Database
 	return db.Create(house).Error
 }
 
 // CreateHouseImages 用于在数据库中创建多个房屋图片记录
-func CreateHouseImages(db *gorm.DB, images []model.HouseImage) error {
+func CreateHouseImages(images []model.HouseImage) error {
+	db := database.Database
 	return db.Create(&images).Error
 }
 
 // DeleteHouse 用于删除房屋记录
 // 该函数会返回被删除的房屋记录
 // ./uploads/houses/文件夹下的图片文件不会被删除,dao层给logic层返回房屋信息后logic层来删除图片内容
-func DeleteHouse(db *gorm.DB, houseID uint) (*model.House, error) {
+func DeleteHouse(houseID uint) (*model.House, error) {
+	db := database.Database
 	var house model.House
 	result := db.Preload("Images").First(&house, houseID)
 	if result.Error != nil {
@@ -68,22 +74,26 @@ func DeleteHouse(db *gorm.DB, houseID uint) (*model.House, error) {
 }
 
 // UpdateHouse 更新房屋信息
-func UpdateHouse(db *gorm.DB, house *model.House, updateFields interface{}) error {
+func UpdateHouse(house *model.House, updateFields interface{}) error {
+	db := database.Database
 	return db.Model(&house).Updates(updateFields).Error
 }
 
 // DeleteHouseImages 删除房屋的旧图片记录
-func DeleteHouseImages(db *gorm.DB, houseID uint) error {
+func DeleteHouseImages(houseID uint) error {
+	db := database.Database
 	return db.Where("house_id = ?", houseID).Delete(&model.HouseImage{}).Error
 }
 
 // CreateHouseImage 插入新的房屋图片记录
-func CreateHouseImage(db *gorm.DB, image *model.HouseImage) error {
+func CreateHouseImage(image *model.HouseImage) error {
+	db := database.Database
 	return db.Save(image).Error
 }
 
 // GetAllHouses 用于获取数据库中的所有房屋信息
-func GetAllHouses(db *gorm.DB) (*[]model.House, error) {
+func GetAllHouses() (*[]model.House, error) {
+	db := database.Database
 	var houses *[]model.House
 	result := db.Find(&houses)
 	if result.Error != nil {

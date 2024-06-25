@@ -6,18 +6,15 @@ import (
 	"online-house-trading-platform/internal/dao"
 	"online-house-trading-platform/pkg/model"
 	"path/filepath"
-
-	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 // RegisterHandle 用于处理用户注册逻辑
-func RegisterHandle(db *gorm.DB, req model.RegisterRequest, c *gin.Context) *model.Error {
+func RegisterHandle(req model.RegisterRequest) *model.Error {
 	if req.Username == "" || req.Password == "" || req.Email == "" {
 		return &model.Error{StatusCode: codes.RegisterInvalidParam}
 	}
 
-	usernameExists, emailExists, err := dao.CheckUserExists(db, req.Username, req.Email)
+	usernameExists, emailExists, err := dao.CheckUserExists(req.Username, req.Email)
 	if err != nil {
 		return &model.Error{StatusCode: codes.CheckUserExistsError}
 	}
@@ -49,7 +46,7 @@ func RegisterHandle(db *gorm.DB, req model.RegisterRequest, c *gin.Context) *mod
 		WechatNumber: req.WechatNumber,
 	}
 
-	err = dao.CreateUser(db, &user)
+	err = dao.CreateUser(&user)
 	if err != nil {
 		return &model.Error{StatusCode: codes.RegisterCreateUserError}
 	}
@@ -58,11 +55,11 @@ func RegisterHandle(db *gorm.DB, req model.RegisterRequest, c *gin.Context) *mod
 		return &model.Error{StatusCode: codes.RegisterInvalidParam, Message: "头像文件解析失败或者未携带头像文件.此时用户已经创建完成,无需再创建用户"}
 	}
 	dst := fmt.Sprintf("./uploads/user/%d/%d%v", user.ID, user.ID, filepath.Ext(req.Avatar.Filename))
-	err = c.SaveUploadedFile(req.Avatar, dst)
+	err = saveUploadedFile(req.Avatar, dst)
 	if err != nil {
 		return &model.Error{StatusCode: codes.RegisterSaveAvatarError}
 	}
-	err = dao.CreateUserAvatar(db, &model.UserAvatar{UserID: user.ID, URL: dst})
+	err = dao.CreateUserAvatar(&model.UserAvatar{UserID: user.ID, URL: dst})
 	if err != nil {
 		return &model.Error{StatusCode: codes.RegisterSaveAvatarError}
 	}

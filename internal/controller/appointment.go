@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"gorm.io/gorm"
 )
 
 // HousesAppointmentPost 用于处理用户预约房屋的POST请求
@@ -23,15 +22,6 @@ import (
 // @Failure 400 {object} controller.ResponseData "预约失败,具体原因查看json中的message字段和code字段"
 // @Router /houses/appointment [post]
 func HousesAppointmentPost(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("HousesAppointmentPost: c.MustGet(\"db\").(*gorm.DB) failed",
-			zap.Int("错误码", codes.GetDBError.Int()),
-		)
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
 	userID, exists := c.Get("user_id")
 	if !exists {
 		zap.L().Error("HousesAppointmentPost: c.Get(\"user_id\") failed",
@@ -59,7 +49,7 @@ func HousesAppointmentPost(c *gin.Context) {
 		ResponseErrorWithCode(c, codes.ReserveInvalidParam)
 		return
 	}
-	apiError := logic.AppointmentHandle(db, &reserve, userIDUint)
+	apiError := logic.AppointmentHandle(&reserve, userIDUint)
 
 	if apiError != nil {
 		zap.L().Error("HousesAppointmentPost: logic.AppointmentHandle failed",
@@ -85,15 +75,6 @@ func HousesAppointmentPost(c *gin.Context) {
 // @Failure 400 {object} controller.ResponseData "获取失败"
 // @Router /user/{user_id}/appointment [get]
 func GetUserAppointmentsByUserID(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("GetUserAppointmentsByUserID: c.MustGet(\"db\").(*gorm.DB) failed",
-			zap.Int("错误码", codes.GetDBError.Int()),
-		)
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
 	userID, exists := c.Get("user_id")
 	if !exists {
 		zap.L().Error("GetUserAppointmentsByUserID: c.Get(\"user_id\") failed",
@@ -110,7 +91,7 @@ func GetUserAppointmentsByUserID(c *gin.Context) {
 		ResponseErrorWithCode(c, codes.UserIDTypeError)
 		return
 	}
-	reserve, apiError := logic.GetReserve(db, userIDUint)
+	reserve, apiError := logic.GetReserve(userIDUint)
 	if apiError != nil {
 		zap.L().Error("GetUserAppointmentsByUserID: logic.GetReserve failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
@@ -123,16 +104,7 @@ func GetUserAppointmentsByUserID(c *gin.Context) {
 }
 
 func GetAllAppointments(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("GetUserAppointmentsByUserID: c.MustGet(\"db\").(*gorm.DB) failed",
-			zap.Int("错误码", codes.GetDBError.Int()),
-		)
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
-	reserve, apiError := logic.GetAllReserve(db)
+	reserve, apiError := logic.GetAllReserve()
 	if apiError != nil {
 		zap.L().Error("GetUserAppointmentsByUserID: logic.GetReserve failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),

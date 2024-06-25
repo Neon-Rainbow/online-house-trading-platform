@@ -8,7 +8,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"gorm.io/gorm"
 )
 
 // ReleaseGet 获取用户发布的房屋信息
@@ -21,17 +20,9 @@ import (
 // @Success 200 {string} html "发布房屋信息页面"
 // @Router /release [get]
 func ReleaseGet(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("ReleasePost: c.MustGet(\"db\").(*gorm.DB) failed",
-			zap.Int("错误码", codes.GetDBError.Int()),
-		)
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
 	userID := c.Param("user_id")
 	userIDUint, _ := strconv.ParseUint(userID, 10, 32)
-	houses, apiError := logic.GetUserRelease(db, uint(userIDUint))
+	houses, apiError := logic.GetUserRelease(uint(userIDUint))
 	if apiError != nil {
 		ResponseError(c, *apiError)
 		return
@@ -53,15 +44,6 @@ func ReleaseGet(c *gin.Context) {
 // @Failure 400 {object} controller.ResponseData "发布失败"
 // @Router /user/:user_id/release [post]
 func ReleasePost(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("ReleasePost: c.MustGet(\"db\").(*gorm.DB) failed",
-			zap.Int("错误码", codes.GetDBError.Int()),
-		)
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
 	var req model.HouseRequest
 	err := c.ShouldBind(&req)
 	if err != nil {
@@ -72,7 +54,7 @@ func ReleasePost(c *gin.Context) {
 		return
 	}
 
-	apiError := logic.ProcessHouseAndImages(db, &req, c)
+	apiError := logic.ProcessHouseAndImages(&req, c)
 	if apiError != nil {
 		zap.L().Error("ReleasePost: logic.ProcessHouseAndImages failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
@@ -98,15 +80,6 @@ func ReleasePost(c *gin.Context) {
 // @Failure 400 {object} controller.ResponseData "更新失败"
 // @Router /user/:user_id/release [put]
 func ReleasePut(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("ReleasePut: c.MustGet(\"db\").(*gorm.DB) failed",
-			zap.Int("错误码", codes.GetDBError.Int()),
-		)
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
 	var req model.HouseUpdateRequest
 	err := c.ShouldBind(&req)
 	if err != nil {
@@ -117,7 +90,7 @@ func ReleasePut(c *gin.Context) {
 		return
 	}
 
-	apiError := logic.UpdateHouseAndImages(db, &req, c)
+	apiError := logic.UpdateHouseAndImages(&req, c)
 	if apiError != nil {
 		zap.L().Error("ReleasePut: logic.UpdateHouseAndImages failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
@@ -143,15 +116,6 @@ func ReleasePut(c *gin.Context) {
 // @Failure 400 {object} controller.ResponseData "删除失败"
 // @Router /user/:user_id/release [delete]
 func DeleteHouseInformationByHouseID(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("DeleteHouseInformationByHouseID: c.MustGet(\"db\").(*gorm.DB) failed",
-			zap.Int("错误码", codes.GetDBError.Int()),
-		)
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
 	var req struct {
 		HouseID uint `json:"house_id"`
 	}
@@ -164,7 +128,7 @@ func DeleteHouseInformationByHouseID(c *gin.Context) {
 		return
 	}
 
-	apiError := logic.DeleteHouse(db, req.HouseID)
+	apiError := logic.DeleteHouse(req.HouseID)
 	if apiError != nil {
 		zap.L().Error("DeleteHouseInformationByHouseID: logic.DeleteHouse failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),

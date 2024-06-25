@@ -12,11 +12,10 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 // ProcessHouseAndImages 用于处理房屋和图片
-func ProcessHouseAndImages(db *gorm.DB, req *model.HouseRequest, c *gin.Context) *model.Error {
+func ProcessHouseAndImages(req *model.HouseRequest, c *gin.Context) *model.Error {
 
 	// 创建房屋记录
 	house := model.House{
@@ -35,7 +34,7 @@ func ProcessHouseAndImages(db *gorm.DB, req *model.HouseRequest, c *gin.Context)
 		PostCode:         req.PostCode,
 	}
 
-	err := dao.CreateHouse(db, &house)
+	err := dao.CreateHouse(&house)
 	if err != nil {
 		return &model.Error{StatusCode: codes.CreateHouseError, Message: "创建房屋记录失败"}
 	}
@@ -47,7 +46,7 @@ func ProcessHouseAndImages(db *gorm.DB, req *model.HouseRequest, c *gin.Context)
 		if err != nil {
 			return &model.Error{StatusCode: codes.CreateHouseImageError, Message: "保存房屋图片到./uploads/houses/文件夹下失败"}
 		}
-		apiError := dao.CreateHouseImages(db, []model.HouseImage{{HouseID: house.ID, URL: dst}})
+		apiError := dao.CreateHouseImages([]model.HouseImage{{HouseID: house.ID, URL: dst}})
 		if apiError != nil {
 			return &model.Error{StatusCode: codes.CreateHouseImageError, Message: "保存房屋图片到数据库中失败"}
 		}
@@ -56,8 +55,8 @@ func ProcessHouseAndImages(db *gorm.DB, req *model.HouseRequest, c *gin.Context)
 }
 
 // DeleteHouse 用于删除房屋记录
-func DeleteHouse(db *gorm.DB, houseID uint) *model.Error {
-	house, err := dao.DeleteHouse(db, houseID)
+func DeleteHouse(houseID uint) *model.Error {
+	house, err := dao.DeleteHouse(houseID)
 	if err != nil {
 		return &model.Error{StatusCode: codes.DeleteHouseError, Message: "删除房屋记录失败"}
 	}
@@ -95,9 +94,9 @@ func snakeCase(s string) string {
 	return strings.ToLower(snake)
 }
 
-func UpdateHouseAndImages(db *gorm.DB, req *model.HouseUpdateRequest, c *gin.Context) *model.Error {
+func UpdateHouseAndImages(req *model.HouseUpdateRequest, c *gin.Context) *model.Error {
 	// 更新房屋信息
-	existingHouse, err := dao.GetHouseInformationByID(db, req.HouseID)
+	existingHouse, err := dao.GetHouseInformationByID(req.HouseID)
 	if err != nil {
 		return &model.Error{StatusCode: codes.UpdateHouseError, Message: "房屋信息获取失败"}
 	}
@@ -127,13 +126,13 @@ func UpdateHouseAndImages(db *gorm.DB, req *model.HouseUpdateRequest, c *gin.Con
 	delete(updateFields, "images")
 
 	// 更新房屋信息
-	err = dao.UpdateHouse(db, &house, updateFields)
+	err = dao.UpdateHouse(&house, updateFields)
 	if err != nil {
 		return &model.Error{StatusCode: codes.UpdateHouseError, Message: "更新房屋信息失败"}
 	}
 
 	// 删除旧的图片记录
-	if err := dao.DeleteHouseImages(db, req.HouseID); err != nil {
+	if err := dao.DeleteHouseImages(req.HouseID); err != nil {
 		return &model.Error{StatusCode: codes.UpdateHouseError, Message: "删除旧图片记录失败"}
 	}
 
@@ -151,7 +150,7 @@ func UpdateHouseAndImages(db *gorm.DB, req *model.HouseUpdateRequest, c *gin.Con
 			HouseID: req.HouseID,
 			URL:     saveFilePath,
 		}
-		if err := dao.CreateHouseImage(db, &img); err != nil {
+		if err := dao.CreateHouseImage(&img); err != nil {
 			return &model.Error{StatusCode: codes.UpdateHouseError, Message: "插入新图片记录失败"}
 		}
 	}
@@ -159,8 +158,8 @@ func UpdateHouseAndImages(db *gorm.DB, req *model.HouseUpdateRequest, c *gin.Con
 	return nil
 }
 
-func GetUserRelease(db *gorm.DB, userID uint) (*[]model.House, *model.Error) {
-	houses, err := dao.GetUserRelease(db, userID)
+func GetUserRelease(userID uint) (*[]model.House, *model.Error) {
+	houses, err := dao.GetUserRelease(userID)
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.GetHouseInfoError, Message: "获取房屋信息失败"}
 	}

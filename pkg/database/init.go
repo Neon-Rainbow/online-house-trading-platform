@@ -12,6 +12,9 @@ import (
 	"gorm.io/gorm"
 )
 
+// Database 用于存储数据库连接
+var Database *gorm.DB
+
 type Config struct {
 	Database struct {
 		Host     string `json:"host"`
@@ -72,6 +75,9 @@ func InitializeDB() *gorm.DB {
 	}
 
 	log.Printf("数据库连接成功")
+
+	// 将数据库连接赋值给全局变量Database
+	Database = db
 
 	return db
 }

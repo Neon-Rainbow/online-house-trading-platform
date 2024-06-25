@@ -8,7 +8,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"gorm.io/gorm"
 )
 
 // GetUserProfileByUserID 用于处理用户获取个人信息的Get请求
@@ -23,20 +22,11 @@ import (
 // @Failure 400 {object} controller.ResponseData "获取失败"
 // @Router /profile/{user_id} [get]
 func GetUserProfileByUserID(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("GetUserProfileByUserID: c.MustGet(\"db\").(*gorm.DB) failed",
-			zap.String("错误码", strconv.FormatInt(int64(codes.GetDBError), 10)),
-		)
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
 	userID := c.Param("user_id")
 
 	userIDUint, _ := strconv.ParseUint(userID, 10, 64)
 
-	userProfile, apiError := logic.GetUserProfile(db, uint(userIDUint))
+	userProfile, apiError := logic.GetUserProfile(uint(userIDUint))
 	if apiError != nil {
 		ResponseError(c, *apiError)
 		return
@@ -56,15 +46,6 @@ func GetUserProfileByUserID(c *gin.Context) {
 // @Failure 400 {object} controller.ResponseData "修改失败"
 // @Router /profile/profile [put]
 func UpdateUserProfileByUserID(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("UpdateUserProfileByUserID: c.MustGet(\"db\").(*gorm.DB) failed",
-			zap.String("错误码", strconv.FormatInt(int64(codes.GetDBError), 10)),
-		)
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
 	userID := c.Param("user_id")
 	userIDUint64, _ := strconv.ParseUint(userID, 10, 64)
 	userIDUint := uint(userIDUint64)
@@ -82,7 +63,7 @@ func UpdateUserProfileByUserID(c *gin.Context) {
 	if userProfileUpdateReq.Password != "" {
 		userProfileUpdateReq.Password = logic.EncryptPassword(userProfileUpdateReq.Password) //对需要修改的明文密码进行加密
 	} else {
-		temp, _ := logic.GetUserProfile(db, userIDUint)
+		temp, _ := logic.GetUserProfile(userIDUint)
 		userProfileUpdateReq.Password = temp.Password
 	}
 
@@ -95,7 +76,7 @@ func UpdateUserProfileByUserID(c *gin.Context) {
 		return
 	}
 
-	apiError := logic.ModifyUserProfile(db, &userProfileUpdateReq, userIDUint)
+	apiError := logic.ModifyUserProfile(&userProfileUpdateReq, userIDUint)
 	if apiError != nil {
 		zap.L().Error("UpdateUserProfileByUserID: logic.ModifyUserProfile failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
@@ -110,14 +91,6 @@ func UpdateUserProfileByUserID(c *gin.Context) {
 
 // UpdateUserAvatarByUserID 用于处理用户修改头像的Put请求
 func UpdateUserAvatarByUserID(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("UpdateUserProfileByUserID: c.MustGet(\"db\").(*gorm.DB) failed",
-			zap.String("错误码", strconv.FormatInt(int64(codes.GetDBError), 10)),
-		)
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
 	var avatar model.UserAvatarReq
 	avatar.UserID = c.MustGet("user_id").(uint)
 	err := c.ShouldBind(&avatar)
@@ -128,7 +101,7 @@ func UpdateUserAvatarByUserID(c *gin.Context) {
 		ResponseErrorWithCode(c, codes.BindDataError)
 		return
 	}
-	apiError := logic.ModifyUserAvatar(db, &avatar, c)
+	apiError := logic.ModifyUserAvatar(&avatar, c)
 	if apiError != nil {
 		zap.L().Error("UpdateUserProfileByUserID: logic.ModifyUserAvatar failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),

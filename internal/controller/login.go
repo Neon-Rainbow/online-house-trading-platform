@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"gorm.io/gorm"
 )
 
 // LoginGet 用于处理用户的登录界面的GET请求
@@ -35,13 +34,6 @@ import (
 // @Failure 400 {object} controller.ResponseData "预约失败,具体原因查看json中的message字段和code字段"
 // @Router /auth/login [post]
 func LoginPost(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("LoginPost: c.MustGet(\"db\").(*gorm.DB) failed")
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
 	var loginReq model.LoginRequest
 
 	err := c.ShouldBind(&loginReq)
@@ -53,7 +45,7 @@ func LoginPost(c *gin.Context) {
 		return
 	}
 
-	loginResp, apiError := logic.LoginHandle(db, loginReq, c)
+	loginResp, apiError := logic.LoginHandle(loginReq, c.ClientIP(), c.Request.UserAgent())
 	if apiError != nil {
 		zap.L().Error("LoginPost: logic.LoginHandle failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
@@ -69,13 +61,6 @@ func LoginPost(c *gin.Context) {
 
 // AdminLogin 用于处理管理员的登录界面的POST请求
 func AdminLogin(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("LoginPost: c.MustGet(\"db\").(*gorm.DB) failed")
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
 	var loginReq model.LoginRequest
 	err := c.ShouldBind(&loginReq)
 	if err != nil {
@@ -85,7 +70,7 @@ func AdminLogin(c *gin.Context) {
 		ResponseErrorWithCode(c, codes.LoginInvalidParam)
 		return
 	}
-	loginResp, apiError := logic.AdminLoginHandle(db, loginReq, c)
+	loginResp, apiError := logic.AdminLoginHandle(loginReq, c.ClientIP(), c.Request.UserAgent())
 	if apiError != nil {
 		zap.L().Error("LoginPost: logic.LoginHandle failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),

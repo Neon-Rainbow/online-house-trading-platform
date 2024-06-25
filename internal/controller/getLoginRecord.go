@@ -6,20 +6,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"gorm.io/gorm"
 )
 
 func GetUserLoginRecordByUserID(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("LoginPost: c.MustGet(\"db\").(*gorm.DB) failed")
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
 	userID := c.Param("user_id")
 
-	loginRecords, err := dao.GetLoginRecord(db, userID)
+	loginRecords, err := dao.GetLoginRecord(userID)
 	if err != nil {
 		zap.L().Error("GetUserLoginRecordByUserID: dao.GetUserLoginRecordByUserID failed",
 			zap.Error(err),
@@ -33,14 +25,7 @@ func GetUserLoginRecordByUserID(c *gin.Context) {
 }
 
 func GetAllLoginRecords(c *gin.Context) {
-	db, exist := c.MustGet("db").(*gorm.DB)
-	if !exist {
-		zap.L().Error("LoginPost: c.MustGet(\"db\").(*gorm.DB) failed")
-		ResponseErrorWithCode(c, codes.GetDBError)
-		return
-	}
-
-	loginRecords, err := dao.GetAllLoginRecords(db)
+	loginRecords, err := dao.GetAllLoginRecords()
 	if err != nil {
 		zap.L().Error("GetAllLoginRecords: dao.GetAllLoginRecords failed",
 			zap.Error(err),
