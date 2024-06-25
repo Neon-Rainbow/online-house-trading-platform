@@ -101,7 +101,7 @@ func UpdateUserAvatarByUserID(c *gin.Context) {
 		ResponseErrorWithCode(c, codes.BindDataError)
 		return
 	}
-	apiError := logic.ModifyUserAvatar(&avatar, c)
+	apiError := logic.ModifyUserAvatar(&avatar)
 	if apiError != nil {
 		zap.L().Error("UpdateUserProfileByUserID: logic.ModifyUserAvatar failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
