@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	accessTokenExpireDuration  = time.Minute * 1    // 访问令牌过期时间
+	accessTokenExpireDuration  = time.Hour * 24 * 7 // 访问令牌过期时间
 	refreshTokenExpireDuration = time.Hour * 24 * 7 // 刷新令牌过期时间
 )
 
