@@ -92,9 +92,8 @@ func CreateHouseImage(image *model.HouseImage) error {
 }
 
 // GetAllHouses 用于获取数据库中的所有房屋信息
-func GetAllHouses() (*[]model.House, error) {
+func GetAllHouses() (houses []model.House, err error) {
 	db := database.Database
-	var houses *[]model.House
 	result := db.Find(&houses)
 	if result.Error != nil {
 		return nil, result.Error

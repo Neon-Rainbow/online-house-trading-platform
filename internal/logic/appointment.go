@@ -6,8 +6,13 @@ import (
 	"online-house-trading-platform/pkg/model"
 )
 
-// AppointmentHandle 用于处理用户预约房屋的请求
-func AppointmentHandle(reserve *model.Reserve, userID uint) *model.Error {
+// AppointmentHandle 用于处理用户预约房屋的请求\
+// @title AppointmentHandle
+// @description 处理用户预约房屋的请求
+// @param reserve *model.Reserve 预约信息
+// @param userID uint 用户ID
+// @return apiError *model.Error 错误信息
+func AppointmentHandle(reserve *model.Reserve, userID uint) (apiError *model.Error) {
 	if reserve.Time.IsZero() || reserve.HouseID == 0 {
 		return &model.Error{StatusCode: codes.ReserveInvalidParam}
 	}
@@ -20,8 +25,12 @@ func AppointmentHandle(reserve *model.Reserve, userID uint) *model.Error {
 }
 
 // GetReserve 用于获取用户的预约信息
-func GetReserve(idUint uint) ([]model.Reserve, *model.Error) {
-	reserve, err := dao.GetReserve(idUint)
+// @title GetReserve
+// @description 获取用户的预约信息
+// @param userID uint 用户ID
+// @return reserve []model.Reserve 预约信息
+func GetReserve(userId uint) ([]model.Reserve, *model.Error) {
+	reserve, err := dao.GetReserve(userId)
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.GetReserveInformationError}
 	}
@@ -29,7 +38,10 @@ func GetReserve(idUint uint) ([]model.Reserve, *model.Error) {
 }
 
 // GetAllReserve 用于获取所有用户的预约信息
-func GetAllReserve() (*[]model.Reserve, *model.Error) {
+// @title GetAllReserve
+// @description 获取所有用户的预约信息
+// @return reserve []model.Reserve 预约信息
+func GetAllReserve() ([]model.Reserve, *model.Error) {
 	reserve, err := dao.GetAllReserve()
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.GetReserveInformationError}

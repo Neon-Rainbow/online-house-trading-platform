@@ -24,7 +24,12 @@ func CreateUser(user *model.User) error {
 }
 
 // CheckUserExists 用于检查用户名和邮箱是否已存在,返回两个bool值,第一个bool值表示用户名是否存在,第二个bool值表示邮箱是否存在
-func CheckUserExists(username, email string) (bool, bool, error) {
+// @param username string 用户名
+// @param email string 邮箱
+// @return isUsernameExists bool 用户名是否存在
+// @return isEmailExists bool 邮箱是否存在
+// @return err error 错误信息
+func CheckUserExists(username string, email string) (isUsernameExists bool, isEmailExists bool, err error) {
 	db := database.Database
 	var count int64
 	if err := db.Model(&model.User{}).Where("username = ?", username).Count(&count).Error; err != nil {
@@ -41,25 +46,25 @@ func CheckUserExists(username, email string) (bool, bool, error) {
 }
 
 // GetUserFavourites 用于获取用户的收藏
-func GetUserFavourites(id uint) ([]model.Favourite, error) {
+func GetUserFavourites(userID uint) ([]model.Favourite, error) {
 	db := database.Database
 	var favourites []model.Favourite
-	result := db.Where("user_id = ?", id).Find(&favourites)
+	result := db.Where("user_id = ?", userID).Find(&favourites)
 	return favourites, result.Error
 }
 
 // GetUserProfile 用于获取用户的个人信息
-func GetUserProfile(idUint uint) (*model.User, error) {
+func GetUserProfile(userID uint) (*model.User, error) {
 	db := database.Database
 	var userProfile *model.User
-	result := db.Preload("Avatar").First(&userProfile, idUint)
+	result := db.Preload("Avatar").First(&userProfile, userID)
 	return userProfile, result.Error
 }
 
 // ModifyUserProfile 用于修改用户的个人信息
-func ModifyUserProfile(m *model.UserReq, idUint uint) error {
+func ModifyUserProfile(requestModel *model.UserReq, userID uint) error {
 	db := database.Database
-	return db.Model(model.User{}).Where("id = ?", idUint).Updates(m).Error
+	return db.Model(model.User{}).Where("id = ?", userID).Updates(requestModel).Error
 }
 
 // GetReserve 用于获取用户的预约信息
@@ -85,9 +90,9 @@ func ModifyUserAvatar(avatar *model.UserAvatar) error {
 }
 
 // GetUserRelease 获取某个用户发布的房屋信息
-func GetUserRelease(userID uint) (*[]model.House, error) {
+func GetUserRelease(userID uint) ([]model.House, error) {
 	db := database.Database
-	var houses *[]model.House
+	var houses []model.House
 	result := db.Preload("Images").Where("owner_id = ?", userID).Find(&houses)
 	if result.Error != nil {
 		return nil, result.Error
@@ -96,7 +101,7 @@ func GetUserRelease(userID uint) (*[]model.House, error) {
 }
 
 // IsUserAdmin 用于判断用户是否为管理员
-func IsUserAdmin(id uint) (bool, error) {
+func IsUserAdmin(id uint) (isAdmin bool, err error) {
 	db := database.Database
 	var user model.User
 	result := db.First(&user, id)
@@ -106,16 +111,18 @@ func IsUserAdmin(id uint) (bool, error) {
 	return user.Role == "admin", nil
 }
 
-func GetAllUsers(includeDeleted string) (*[]model.User, error) {
+// GetAllUsers 用于获取所有用户
+// @param includeDeleted bool 是否包含已删除用户 默认不包含
+// @return []model.User 用户列表
+// @return error 错误信息
+func GetAllUsers(includeDeleted ...bool) ([]model.User, error) {
 	db := database.Database
-	var user *[]model.User
+	var user []model.User
 	var result *gorm.DB
-	//fmt.Println("includeDeleted: ", includeDeleted)
-	if includeDeleted == "true" {
-		//fmt.Println("includeDeleted")
+	if len(includeDeleted) > 0 && includeDeleted[0] {
 		result = db.Unscoped().Find(&user)
 	} else {
-		//fmt.Println("not includeDeleted")
+		// 默认不包含已删除的用户
 		result = db.Find(&user)
 	}
 	if result.Error != nil {
@@ -124,9 +131,9 @@ func GetAllUsers(includeDeleted string) (*[]model.User, error) {
 	return user, nil
 }
 
-func GetAllReserve() (*[]model.Reserve, error) {
+func GetAllReserve() ([]model.Reserve, error) {
 	db := database.Database
-	var reserve *[]model.Reserve
+	var reserve []model.Reserve
 	result := db.Find(&reserve)
 	if result.Error != nil {
 		return nil, result.Error
@@ -134,9 +141,10 @@ func GetAllReserve() (*[]model.Reserve, error) {
 	return reserve, nil
 }
 
-func GetAllFavourites() (*[]model.Favourite, error) {
+// GetAllFavourites 用于获取所有用户的收藏
+func GetAllFavourites() ([]model.Favourite, error) {
 	db := database.Database
-	var favourites *[]model.Favourite
+	var favourites []model.Favourite
 	result := db.Find(&favourites)
 	if result.Error != nil {
 		return nil, result.Error

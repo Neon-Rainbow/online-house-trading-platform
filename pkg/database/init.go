@@ -14,6 +14,10 @@ import (
 var Database *gorm.DB
 
 // InitializeDB 初始化数据库并进行迁移
+// @title InitializeDB
+// @description 初始化数据库并进行迁移
+// @return db *gorm.DB 数据库连接
+// @return err error 错误信息
 func InitializeDB() (db *gorm.DB, err error) {
 
 	// 数据库连接字符串，替换为你的实际数据库信息

@@ -158,7 +158,7 @@ func UpdateHouseAndImages(req *model.HouseUpdateRequest, c *gin.Context) *model.
 	return nil
 }
 
-func GetUserRelease(userID uint) (*[]model.House, *model.Error) {
+func GetUserRelease(userID uint) ([]model.House, *model.Error) {
 	houses, err := dao.GetUserRelease(userID)
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.GetHouseInfoError, Message: "获取房屋信息失败"}

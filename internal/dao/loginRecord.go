@@ -14,19 +14,19 @@ func CreateLoginRecord(record *model.LoginRecord) error {
 	return nil
 }
 
-func GetLoginRecord(id string) (*[]model.LoginRecord, error) {
+func GetLoginRecord(id string) ([]model.LoginRecord, error) {
 	db := database.Database
 	var records []model.LoginRecord
 	result := db.Where("user_id = ?", id).Find(&records)
 	if result.Error != nil {
 		return nil, result.Error
 	}
-	return &records, nil
+	return records, nil
 }
 
-func GetAllLoginRecords() (*[]model.LoginRecord, error) {
+func GetAllLoginRecords() ([]model.LoginRecord, error) {
 	db := database.Database
-	var records *[]model.LoginRecord
+	var records []model.LoginRecord
 	result := db.Find(&records)
 	if result.Error != nil {
 		return nil, result.Error

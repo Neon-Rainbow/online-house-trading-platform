@@ -11,7 +11,8 @@ import (
 
 // GetAllUsersInformation 用于处理管理员获取所有用户信息的Get请求
 func GetAllUsersInformation(c *gin.Context) {
-	includeDeleted := c.Query("include_deleted")
+	_includeDeleted := c.Query("include_deleted")
+	includeDeleted, _ := strconv.ParseBool(_includeDeleted)
 
 	users, err := logic.GetAllUsers(includeDeleted)
 	if err != nil {

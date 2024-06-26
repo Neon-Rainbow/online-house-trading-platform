@@ -21,6 +21,14 @@ type MyClaims struct {
 }
 
 // GenerateToken 用于生成JWT
+// @title GenerateToken
+// @description 生成JWT
+// @param username string 用户名
+// @param userId uint 用户ID
+// @param role string 用户角色
+// @return accessToken string 访问令牌
+// @return refreshToken string 刷新令牌
+// @return err error 错误信息
 func GenerateToken(username string, userId uint, role string) (accessToken string, refreshToken string, err error) {
 	var jwtSecret = config.AppConfig.JWTSecret
 	var mySecret = []byte(jwtSecret) // 自定义密钥
@@ -60,6 +68,11 @@ func GenerateToken(username string, userId uint, role string) (accessToken strin
 }
 
 // ParseToken 用于解析JWT
+// @title ParseToken
+// @description 解析JWT
+// @param tokenString string JWT字符串
+// @return *MyClaims JWT的Payload
+// @return error 错误信息
 func ParseToken(tokenString string) (*MyClaims, error) {
 	var jwtSecret = config.AppConfig.JWTSecret
 	var mySecret = []byte(jwtSecret) // 自定义密钥

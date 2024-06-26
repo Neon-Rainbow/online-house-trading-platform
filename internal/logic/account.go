@@ -8,6 +8,10 @@ import (
 )
 
 // DeleteAccountHandle 用于处理删除账户的逻辑
+// @title DeleteAccountHandle
+// @description 处理删除账户的逻辑
+// @param userId uint 用户ID
+// @return err *model.Error 错误信息
 func DeleteAccountHandle(userId uint) *model.Error {
 	err := dao.DeleteAccount(userId)
 	if err != nil {
