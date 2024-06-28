@@ -48,3 +48,11 @@ func GetAllReserve() ([]model.Reserve, *model.Error) {
 	}
 	return reserve, nil
 }
+
+func DeleteReserve(userID uint, houseID uint) *model.Error {
+	err := dao.DeleteAppointment(userID, houseID)
+	if err != nil {
+		return &model.Error{StatusCode: codes.LoginServerBusy}
+	}
+	return nil
+}

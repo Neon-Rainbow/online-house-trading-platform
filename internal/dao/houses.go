@@ -70,6 +70,13 @@ func DeleteHouse(houseID uint) (*model.House, error) {
 
 	// 删除房屋记录
 	err = db.Delete(&house).Error
+	if err != nil {
+		return &house, err
+	}
+
+	db.Delete(&model.Favourite{}, "house_id = ?", houseID)
+	db.Delete(&model.Reserve{}, "house_id = ?", houseID)
+
 	return &house, err
 }
 

@@ -45,3 +45,11 @@ func GetAllFavourites() ([]model.Favourite, *model.Error) {
 	}
 	return favourites, nil
 }
+
+func DeleteFavourite(userID uint, houseID uint) *model.Error {
+	err := dao.DeleteFavouriteByUserID(userID, houseID)
+	if err != nil {
+		return &model.Error{StatusCode: codes.LoginServerBusy}
+	}
+	return nil
+}

@@ -168,3 +168,17 @@ func CheckCombinationUserIDAndHouseIDInFavouriteExists(userID uint, houseID uint
 	// 找到了记录，返回存在
 	return true, nil
 }
+
+// DeleteFavouriteByUserID 用于删除用户的收藏
+func DeleteFavouriteByUserID(userID uint, houseID uint) error {
+	db := database.Database
+	result := db.Delete(&model.Favourite{}, "user_id = ? AND house_id = ?", userID, houseID)
+	return result.Error
+}
+
+// DeleteAppointment 用于删除用户的预约
+func DeleteAppointment(userID uint, houseID uint) error {
+	db := database.Database
+	result := db.Delete(&model.Reserve{}, "user_id = ? AND house_id = ?", userID, houseID)
+	return result.Error
+}

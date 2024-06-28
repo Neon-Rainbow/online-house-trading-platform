@@ -102,3 +102,23 @@ func GetAllFavourites(c *gin.Context) {
 	}
 	ResponseSuccess(c, favourites)
 }
+
+type deleteFavoriteRequest struct {
+	HouseID uint `json:"house_id" binding:"required"`
+	UserID  uint `json:"user_id" binding:"required"`
+}
+
+// DeleteFavouriteByUserID 用于删除用户收藏的房屋
+func DeleteFavouriteByUserID(c *gin.Context) {
+	var request deleteFavoriteRequest
+	err := c.ShouldBind(&request)
+	if err != nil {
+		ResponseErrorWithCode(c, codes.BindDataError)
+	}
+
+	apiError := logic.DeleteFavourite(request.UserID, request.HouseID)
+	if apiError != nil {
+		ResponseErrorWithCode(c, codes.LoginServerBusy)
+	}
+	ResponseSuccess(c, nil)
+}

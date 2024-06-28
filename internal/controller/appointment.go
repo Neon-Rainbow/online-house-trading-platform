@@ -115,3 +115,25 @@ func GetAllAppointments(c *gin.Context) {
 	ResponseSuccess(c, reserve)
 
 }
+
+func DeleteAppointment(c *gin.Context) {
+	var reserve model.Reserve
+	err := c.ShouldBind(&reserve)
+	if err != nil {
+		zap.L().Error("DeleteAppointment: c.ShouldBind(&reserve) failed",
+			zap.Int("错误码", codes.ReserveInvalidParam.Int()),
+		)
+		ResponseErrorWithCode(c, codes.ReserveInvalidParam)
+		return
+	}
+	apiError := logic.DeleteReserve(reserve.UserID, reserve.HouseID)
+	if apiError != nil {
+		zap.L().Error("DeleteAppointment: logic.DeleteReserve failed",
+			zap.Int("错误码", apiError.StatusCode.Int()),
+		)
+		ResponseError(c, *apiError)
+		return
+	}
+	ResponseSuccess(c, nil)
+	return
+}
