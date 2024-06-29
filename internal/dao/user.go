@@ -120,10 +120,10 @@ func GetAllUsers(includeDeleted ...bool) ([]model.User, error) {
 	var user []model.User
 	var result *gorm.DB
 	if len(includeDeleted) > 0 && includeDeleted[0] {
-		result = db.Unscoped().Find(&user)
+		result = db.Unscoped().Preload("Avatar").Find(&user)
 	} else {
 		// 默认不包含已删除的用户
-		result = db.Find(&user)
+		result = db.Preload("Avatar").Find(&user)
 	}
 	if result.Error != nil {
 		return nil, result.Error
