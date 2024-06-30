@@ -1,6 +1,8 @@
 package logic
 
 import (
+	"context"
+	"fmt"
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/dao"
 	"online-house-trading-platform/pkg/jwt"
@@ -24,10 +26,35 @@ func LoginHandle(req model.LoginRequest, loginIP string, loginMethod string) (*m
 		return nil, &model.Error{StatusCode: codes.GenerateJWTTokenError}
 	}
 
-	loginRecord := &model.LoginRecord{UserId: dbUser.ID, LoginIp: loginIP, LoginMethod: loginMethod, LoginTime: time.Now()}
-	err = dao.CreateLoginRecord(loginRecord)
-	if err != nil {
-		return nil, &model.Error{StatusCode: codes.LoginServerBusy}
+	// 使用 context 和 goroutine 并行处理 IP 信息查询和登录记录写入
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	resultCh := make(chan error, 1)
+
+	go func() {
+		loginIPAddress, loginOperator := GetIPInformationWithContext(ctx, loginIP)
+		loginRecord := &model.LoginRecord{
+			UserId:      dbUser.ID,
+			LoginIp:     loginIP,
+			LoginMethod: loginMethod,
+			LoginTime:   time.Now(),
+			Address:     loginIPAddress,
+			Operator:    loginOperator,
+		}
+		err := dao.CreateLoginRecord(loginRecord)
+		resultCh <- err
+	}()
+
+	select {
+	case err := <-resultCh:
+		if err != nil {
+			return nil, &model.Error{StatusCode: codes.LoginServerBusy}
+		}
+	case <-ctx.Done():
+		if ctx.Err() == context.DeadlineExceeded {
+			fmt.Println("Warning: IP information lookup and login record creation timed out")
+		}
 	}
 
 	return &model.LoginResponse{
@@ -59,10 +86,35 @@ func AdminLoginHandle(req model.LoginRequest, loginIP string, loginMethod string
 		return nil, &model.Error{StatusCode: codes.GenerateJWTTokenError}
 	}
 
-	loginRecord := &model.LoginRecord{UserId: dbUser.ID, LoginIp: loginIP, LoginMethod: loginMethod, LoginTime: time.Now()}
-	err = dao.CreateLoginRecord(loginRecord)
-	if err != nil {
-		return nil, &model.Error{StatusCode: codes.LoginServerBusy}
+	// 使用 context 和 goroutine 并行处理 IP 信息查询和登录记录写入
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	resultCh := make(chan error, 1)
+
+	go func() {
+		loginIPAddress, loginOperator := GetIPInformationWithContext(ctx, loginIP)
+		loginRecord := &model.LoginRecord{
+			UserId:      dbUser.ID,
+			LoginIp:     loginIP,
+			LoginMethod: loginMethod,
+			LoginTime:   time.Now(),
+			Address:     loginIPAddress,
+			Operator:    loginOperator,
+		}
+		err := dao.CreateLoginRecord(loginRecord)
+		resultCh <- err
+	}()
+
+	select {
+	case err := <-resultCh:
+		if err != nil {
+			return nil, &model.Error{StatusCode: codes.LoginServerBusy}
+		}
+	case <-ctx.Done():
+		if ctx.Err() == context.DeadlineExceeded {
+			fmt.Println("Warning: IP information lookup and login record creation timed out")
+		}
 	}
 
 	return &model.LoginResponse{
