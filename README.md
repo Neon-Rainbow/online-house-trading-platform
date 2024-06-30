@@ -1,5 +1,13 @@
 # 在线房屋交易平台
 
+# Online House Trading Platform
+
+![Top Language](https://img.shields.io/github/languages/top/Neon-Rainbow/online-house-trading-platform)
+![Language Count](https://img.shields.io/github/languages/count/Neon-Rainbow/online-house-trading-platform)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub contributors](https://img.shields.io/github/contributors/Neon-Rainbow/online-house-trading-platform)](https://github.com/Neon-Rainbow/online-house-trading-platform/graphs/contributors)
+
+
 ## Docker
 
 使用下列指令构建Docker镜像:
