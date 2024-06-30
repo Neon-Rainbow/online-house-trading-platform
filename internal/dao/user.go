@@ -85,7 +85,7 @@ func CreateUserAvatar(avatar *model.UserAvatar) error {
 func ModifyUserAvatar(avatar *model.UserAvatar) error {
 	db := database.Database
 	fmt.Print(avatar)
-	err := db.Raw("UPDATE user_avatars SET url = ? WHERE user_id = ?", avatar.URL, avatar.UserID).Error
+	err := db.Save(avatar).Error
 	return err
 }
 
