@@ -54,7 +54,8 @@ func RegisterHandle(req model.RegisterRequest) *model.Error {
 	if req.Avatar == nil {
 		return &model.Error{StatusCode: codes.RegisterInvalidParam, Message: "头像文件解析失败或者未携带头像文件.此时用户已经创建完成,无需再创建用户"}
 	}
-	dst := fmt.Sprintf("./uploads/user/%d/%d%v", user.ID, user.ID, filepath.Ext(req.Avatar.Filename))
+	fileName := generateRandomFileName()
+	dst := fmt.Sprintf("./uploads/user/%d/%s%v", user.ID, fileName, filepath.Ext(req.Avatar.Filename))
 	err = saveUploadedFile(req.Avatar, dst)
 	if err != nil {
 		return &model.Error{StatusCode: codes.RegisterSaveAvatarError}

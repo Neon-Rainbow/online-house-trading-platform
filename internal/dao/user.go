@@ -2,7 +2,6 @@ package dao
 
 import (
 	"errors"
-	"fmt"
 	"online-house-trading-platform/pkg/database"
 	"online-house-trading-platform/pkg/model"
 
@@ -84,7 +83,6 @@ func CreateUserAvatar(avatar *model.UserAvatar) error {
 // ModifyUserAvatar 用于修改用户的头像
 func ModifyUserAvatar(avatar *model.UserAvatar) error {
 	db := database.Database
-	fmt.Print(avatar)
 	err := db.Save(avatar).Error
 	return err
 }

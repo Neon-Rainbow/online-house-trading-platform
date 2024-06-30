@@ -6,7 +6,6 @@ import (
 	"online-house-trading-platform/internal/dao"
 	"online-house-trading-platform/pkg/model"
 	"os"
-	"path/filepath"
 	"reflect"
 	"regexp"
 	"strings"
@@ -15,7 +14,7 @@ import (
 )
 
 // ProcessHouseAndImages 用于处理房屋和图片
-func ProcessHouseAndImages(req *model.HouseRequest, c *gin.Context) *model.Error {
+func ProcessHouseAndImages(req *model.HouseRequest) *model.Error {
 
 	// 创建房屋记录
 	house := model.House{
@@ -42,7 +41,7 @@ func ProcessHouseAndImages(req *model.HouseRequest, c *gin.Context) *model.Error
 	//保存房屋图片
 	for _, img := range req.Images {
 		dst := fmt.Sprintf("./uploads/houses/%d/%s", house.ID, img.Filename)
-		err := c.SaveUploadedFile(img, dst)
+		err := saveUploadedFile(img, dst)
 		if err != nil {
 			return &model.Error{StatusCode: codes.CreateHouseImageError, Message: "保存房屋图片到./uploads/houses/文件夹下失败"}
 		}
@@ -94,6 +93,7 @@ func snakeCase(s string) string {
 	return strings.ToLower(snake)
 }
 
+// UpdateHouseAndImages 用于更新房屋信息和图片
 func UpdateHouseAndImages(req *model.HouseUpdateRequest, c *gin.Context) *model.Error {
 	// 更新房屋信息
 	existingHouse, err := dao.GetHouseInformationByID(req.HouseID)
@@ -139,9 +139,9 @@ func UpdateHouseAndImages(req *model.HouseUpdateRequest, c *gin.Context) *model.
 	// 保存新图片到文件夹并插入新的图片记录
 	for _, imgFile := range req.Images {
 		// 保存图片到 /upload 文件夹
-		filename := filepath.Base(imgFile.Filename)
+		filename := generateRandomFileName()
 		saveFilePath := fmt.Sprintf("./uploads/houses/%v/%s", house.ID, filename)
-		if err := c.SaveUploadedFile(imgFile, saveFilePath); err != nil {
+		if err := saveUploadedFile(imgFile, saveFilePath); err != nil {
 			return &model.Error{StatusCode: codes.UpdateHouseError, Message: "保存图片文件失败"}
 		}
 
@@ -158,6 +158,7 @@ func UpdateHouseAndImages(req *model.HouseUpdateRequest, c *gin.Context) *model.
 	return nil
 }
 
+// GetUserRelease 用于获取用户发布的房屋信息
 func GetUserRelease(userID uint) ([]model.House, *model.Error) {
 	houses, err := dao.GetUserRelease(userID)
 	if err != nil {

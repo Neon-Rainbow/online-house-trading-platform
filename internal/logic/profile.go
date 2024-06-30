@@ -2,8 +2,6 @@ package logic
 
 import (
 	"fmt"
-	"io"
-	"mime/multipart"
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/dao"
 	"online-house-trading-platform/pkg/model"
@@ -44,7 +42,8 @@ func ModifyUserAvatar(avatar *model.UserAvatarReq) *model.Error {
 	}
 	dst := userInfo.Avatar.URL
 	_ = os.Remove(dst)
-	dst = fmt.Sprintf("./uploads/user/%d/%d%v", avatar.UserID, avatar.UserID, filepath.Ext(avatar.Avatar.Filename))
+	fileName := generateRandomFileName()
+	dst = fmt.Sprintf("./uploads/user/%d/%s%v", avatar.UserID, fileName, filepath.Ext(avatar.Avatar.Filename))
 
 	err = saveUploadedFile(avatar.Avatar, dst)
 	if err != nil {
@@ -57,27 +56,4 @@ func ModifyUserAvatar(avatar *model.UserAvatarReq) *model.Error {
 	}
 
 	return nil
-}
-
-// saveUploadedFile 用于保存上传的文件
-// 代码来自Gin框架的源码c.SaveUploadedFile
-func saveUploadedFile(file *multipart.FileHeader, dst string) error {
-	src, err := file.Open()
-	if err != nil {
-		return err
-	}
-	defer src.Close()
-
-	if err = os.MkdirAll(filepath.Dir(dst), 0750); err != nil {
-		return err
-	}
-
-	out, err := os.Create(dst)
-	if err != nil {
-		return err
-	}
-	defer out.Close()
-
-	_, err = io.Copy(out, src)
-	return err
 }
