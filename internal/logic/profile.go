@@ -20,6 +20,7 @@ func GetUserProfile(idUint uint) (*model.User, *model.Error) {
 	return userProfile, nil
 }
 
+// ModifyUserProfile 用于修改用户的个人信息
 func ModifyUserProfile(m *model.UserReq, idUint uint) *model.Error {
 	user, err := dao.GetUserProfile(idUint)
 	if err != nil {
@@ -48,6 +49,11 @@ func ModifyUserAvatar(avatar *model.UserAvatarReq) *model.Error {
 	err = saveUploadedFile(avatar.Avatar, dst)
 	if err != nil {
 		return &model.Error{StatusCode: codes.ModifyUserProfileError}
+	}
+	a := &model.UserAvatar{URL: dst, UserID: avatar.UserID}
+	err = dao.ModifyUserAvatar(a)
+	if err != nil {
+		return &model.Error{StatusCode: codes.ModifyUserProfileError, Message: "修改用户头像信息失败"}
 	}
 
 	return nil

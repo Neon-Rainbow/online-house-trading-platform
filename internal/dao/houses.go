@@ -15,8 +15,7 @@ func CreateAppointment(reserve *model.Reserve) error {
 		// 已存在被软删除的记录，恢复该记录
 		return db.Unscoped().Model(&existReserve).UpdateColumn("deleted_at", nil).Error
 	}
-	err = db.Create(&model.Reserve{}).Error
-	return err
+	return db.Save(reserve).Error
 }
 
 // CreateFavorite 用于实现用户收藏房屋
@@ -29,7 +28,7 @@ func CreateFavorite(favorite *model.Favourite) error {
 		// 已存在被软删除的记录，恢复该记录
 		return db.Unscoped().Model(existFavorite).UpdateColumn("deleted_at", nil).Error
 	}
-	err = db.Create(&model.Favourite{}).Error
+	err = db.Save(favorite).Error
 	return err
 }
 
