@@ -54,7 +54,7 @@ func ReleasePost(c *gin.Context) {
 		return
 	}
 
-	apiError := logic.ProcessHouseAndImages(&req, c)
+	apiError := logic.ProcessHouseAndImages(&req)
 	if apiError != nil {
 		zap.L().Error("ReleasePost: logic.ProcessHouseAndImages failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
