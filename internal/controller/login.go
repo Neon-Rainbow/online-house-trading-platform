@@ -47,7 +47,7 @@ func LoginPost(c *gin.Context) {
 		return
 	}
 
-	loginResp, apiError := logic.LoginHandle(loginReq, getClientIP(c), c.Request.UserAgent())
+	loginResp, apiError := logic.LoginHandle(loginReq, c.Request.Header.Get("X-Real-IP"), c.Request.UserAgent())
 	if apiError != nil {
 		zap.L().Error("LoginPost: logic.LoginHandle failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
@@ -72,7 +72,7 @@ func AdminLogin(c *gin.Context) {
 		ResponseErrorWithCode(c, codes.LoginInvalidParam)
 		return
 	}
-	loginResp, apiError := logic.AdminLoginHandle(loginReq, getClientIP(c), c.Request.UserAgent())
+	loginResp, apiError := logic.AdminLoginHandle(loginReq, c.Request.Header.Get("X-Real-IP"), c.Request.UserAgent())
 	if apiError != nil {
 		zap.L().Error("LoginPost: logic.LoginHandle failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
