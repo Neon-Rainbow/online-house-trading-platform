@@ -12,11 +12,10 @@ import (
 // @param reserve *model.Reserve 预约信息
 // @param userID uint 用户ID
 // @return apiError *model.Error 错误信息
-func AppointmentHandle(reserve *model.Reserve, userID uint) (apiError *model.Error) {
+func AppointmentHandle(reserve *model.Reserve) (apiError *model.Error) {
 	if reserve.Time.IsZero() || reserve.HouseID == 0 {
 		return &model.Error{StatusCode: codes.ReserveInvalidParam}
 	}
-	reserve.UserID = userID
 	err := dao.CreateAppointment(reserve)
 	if err != nil {
 		return &model.Error{StatusCode: codes.ReserveError}
@@ -29,8 +28,8 @@ func AppointmentHandle(reserve *model.Reserve, userID uint) (apiError *model.Err
 // @description 获取用户的预约信息
 // @param userID uint 用户ID
 // @return reserve []model.Reserve 预约信息
-func GetReserve(userId uint) ([]model.Reserve, *model.Error) {
-	reserve, err := dao.GetReserve(userId)
+func GetReserve(userId uint, pageSize int, pageNum int) ([]model.Reserve, *model.Error) {
+	reserve, err := dao.GetReserve(userId, pageSize, pageNum)
 	if err != nil {
 		return nil, &model.Error{StatusCode: codes.GetReserveInformationError}
 	}

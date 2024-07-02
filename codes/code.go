@@ -55,6 +55,7 @@ const (
 	TokenExpiredError                                //token已过期
 	UnauthorizedAccessError                          //非法访问
 	TokenBlacklistedError                            //token已被列入黑名单
+	RequestTimeOut                                   //请求超时
 )
 
 // codeMessageMap 用于存放code和message的映射关系
@@ -106,6 +107,7 @@ var codeMessageMap = map[ResCode]string{
 	TokenExpiredError:          "token已过期",
 	UnauthorizedAccessError:    "非法访问",
 	TokenBlacklistedError:      "token已被列入黑名单",
+	RequestTimeOut:             "请求超时",
 }
 
 const (

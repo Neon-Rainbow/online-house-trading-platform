@@ -28,6 +28,7 @@ type Config struct {
 	JWTSecret              string   `json:"jwtSecret"`
 	PasswordSecret         string   `json:"passwordSecret"`
 	LogFilePath            string   `json:"logFilePath"`
+	Address                string   `json:"address"`
 	Port                   int      `json:"port"`
 	GinMode                string   `json:"ginMode"`
 	ZapLogLever            string   `json:"zapLogLever"`
@@ -38,10 +39,11 @@ type Config struct {
 var AppConfig *Config
 
 // LoadConfig 用于加载配置文件
-func LoadConfig(path string) {
+func LoadConfig(path string) error {
 	file, err := os.Open(path)
 	if err != nil {
 		log.Fatalf("无法打开配置文件: %v", err)
+		return err
 	}
 	defer func(file *os.File) {
 		err := file.Close()
@@ -53,9 +55,11 @@ func LoadConfig(path string) {
 	AppConfig = &Config{}
 	if err := json.NewDecoder(file).Decode(AppConfig); err != nil {
 		log.Fatalf("无法解析配置文件: %v", err)
+		return err
 	}
 
 	overrideWithEnvVariables(AppConfig)
+	return nil
 }
 
 // overrideWithEnvVariables 用于用环境变量覆盖配置文件中的值, 以便在容器中使用

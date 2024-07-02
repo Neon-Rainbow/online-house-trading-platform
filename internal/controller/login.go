@@ -1,11 +1,10 @@
 package controller
 
 import (
-	"net"
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/logic"
 	"online-house-trading-platform/pkg/model"
-	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -47,18 +46,47 @@ func LoginPost(c *gin.Context) {
 		return
 	}
 
-	loginResp, apiError := logic.LoginHandle(loginReq, c.Request.Header.Get("X-Real-IP"), c.Request.UserAgent())
-	if apiError != nil {
+	resultChannel := make(chan *model.LoginResponse, 1)
+	errorChannel := make(chan *model.Error, 1)
+
+	go func() {
+		defer close(resultChannel)
+		defer close(errorChannel)
+		loginResp, apiError := logic.LoginHandle(loginReq, c.Request.Header.Get("X-Real-IP"), c.Request.UserAgent())
+		if apiError != nil {
+			errorChannel <- apiError
+			return
+		}
+		resultChannel <- loginResp
+		return
+	}()
+
+	select {
+	case loginResp := <-resultChannel:
+		ResponseSuccess(c, loginResp)
+	case apiError := <-errorChannel:
 		zap.L().Error("LoginPost: logic.LoginHandle failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
 			zap.Any("loginReq", loginReq),
 		)
 		ResponseError(c, *apiError)
-		return
+	case <-time.After(10 * time.Second):
+		ResponseTimeout(c)
 	}
-
-	ResponseSuccess(c, loginResp)
 	return
+
+	//loginResp, apiError := logic.LoginHandle(loginReq, c.Request.Header.Get("X-Real-IP"), c.Request.UserAgent())
+	//if apiError != nil {
+	//	zap.L().Error("LoginPost: logic.LoginHandle failed",
+	//		zap.Int("错误码", apiError.StatusCode.Int()),
+	//		zap.Any("loginReq", loginReq),
+	//	)
+	//	ResponseError(c, *apiError)
+	//	return
+	//}
+	//
+	//ResponseSuccess(c, loginResp)
+	//return
 }
 
 // AdminLogin 用于处理管理员的登录界面的POST请求
@@ -72,41 +100,70 @@ func AdminLogin(c *gin.Context) {
 		ResponseErrorWithCode(c, codes.LoginInvalidParam)
 		return
 	}
-	loginResp, apiError := logic.AdminLoginHandle(loginReq, c.Request.Header.Get("X-Real-IP"), c.Request.UserAgent())
-	if apiError != nil {
+	resultCh := make(chan *model.LoginResponse, 1)
+	errorCh := make(chan *model.Error, 1)
+
+	go func() {
+		defer close(resultCh)
+		defer close(errorCh)
+		loginResp, apiError := logic.AdminLoginHandle(loginReq, c.Request.Header.Get("X-Real-IP"), c.Request.UserAgent())
+		if apiError != nil {
+			errorCh <- apiError
+			return
+		}
+		resultCh <- loginResp
+		return
+	}()
+
+	select {
+	case loginResp := <-resultCh:
+		ResponseSuccess(c, loginResp)
+	case apiError := <-errorCh:
 		zap.L().Error("LoginPost: logic.LoginHandle failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
 			zap.Any("loginReq", loginReq),
 		)
 		ResponseError(c, *apiError)
-		return
+	case <-time.After(10 * time.Second):
+		ResponseTimeout(c)
 	}
-
-	ResponseSuccess(c, loginResp)
 	return
+
+	//loginResp, apiError := logic.AdminLoginHandle(loginReq, c.Request.Header.Get("X-Real-IP"), c.Request.UserAgent())
+	//if apiError != nil {
+	//	zap.L().Error("LoginPost: logic.LoginHandle failed",
+	//		zap.Int("错误码", apiError.StatusCode.Int()),
+	//		zap.Any("loginReq", loginReq),
+	//	)
+	//	ResponseError(c, *apiError)
+	//	return
+	//}
+	//
+	//ResponseSuccess(c, loginResp)
+	//return
 }
 
 // 获取客户端 IP 的函数
-func getClientIP(c *gin.Context) string {
-	// 优先从 X-Forwarded-For 头部获取
-	ip := c.Request.Header.Get("X-Forwarded-For")
-	if ip != "" {
-		// X-Forwarded-For 可能包含多个 IP 地址，用逗号分隔，取第一个
-		ips := strings.Split(ip, ",")
-		if len(ips) > 0 {
-			ip = strings.TrimSpace(ips[0])
-		}
-	}
-
-	// 如果 X-Forwarded-For 为空，则尝试从 X-Real-IP 头部获取
-	if ip == "" {
-		ip = c.Request.Header.Get("X-Real-IP")
-	}
-
-	// 如果 X-Real-IP 也为空，则从 RemoteAddr 获取
-	if ip == "" {
-		ip, _, _ = net.SplitHostPort(c.Request.RemoteAddr)
-	}
-
-	return ip
-}
+//func getClientIP(c *gin.Context) string {
+//	// 优先从 X-Forwarded-For 头部获取
+//	ip := c.Request.Header.Get("X-Forwarded-For")
+//	if ip != "" {
+//		// X-Forwarded-For 可能包含多个 IP 地址，用逗号分隔，取第一个
+//		ips := strings.Split(ip, ",")
+//		if len(ips) > 0 {
+//			ip = strings.TrimSpace(ips[0])
+//		}
+//	}
+//
+//	// 如果 X-Forwarded-For 为空，则尝试从 X-Real-IP 头部获取
+//	if ip == "" {
+//		ip = c.Request.Header.Get("X-Real-IP")
+//	}
+//
+//	// 如果 X-Real-IP 也为空，则从 RemoteAddr 获取
+//	if ip == "" {
+//		ip, _, _ = net.SplitHostPort(c.Request.RemoteAddr)
+//	}
+//
+//	return ip
+//}
