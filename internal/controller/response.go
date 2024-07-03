@@ -49,3 +49,12 @@ func ResponseErrorWithCode(c *gin.Context, code codes.ResCode) {
 	}
 	c.JSON(http.StatusOK, responseData)
 }
+
+func ResponseTimeout(c *gin.Context) {
+	responseData := &ResponseData{
+		Code:    codes.RequestTimeOut,
+		Message: codes.RequestTimeOut.Message(),
+		Data:    nil,
+	}
+	c.JSON(http.StatusRequestTimeout, responseData)
+}

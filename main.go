@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
+	"go.uber.org/zap"
 	"online-house-trading-platform/config"
-	"online-house-trading-platform/logger" // 导入 logger 包
+	"online-house-trading-platform/logger"
 	"online-house-trading-platform/pkg/database"
 	"online-house-trading-platform/pkg/redis"
 	"online-house-trading-platform/router"
-
-	"go.uber.org/zap"
+	"sync"
 )
 
 // @title 在线房屋交易平台API文档
@@ -22,32 +22,55 @@ import (
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host localhost:8080
+// @host 0.0.0.0: config.AppConfig.Port
 // @BasePath /
 func main() {
-	// 加载配置文件
-	config.LoadConfig("config.json")
+	err := config.LoadConfig("config.json")
+	if err != nil {
+		zap.L().Error("加载配置文件失败", zap.Error(err))
+		return
+	}
 
-	// 初始化日志记录器
 	logFilePath := config.AppConfig.LogFilePath
 	logger := logger.InitLogger(logFilePath)
 	defer logger.Sync()
 	zap.ReplaceGlobals(logger)
 
-	_, err := database.InitializeDB()
-	if err != nil {
-		zap.L().Error("数据库连接失败")
-		return
-	}
+	errorChannel := make(chan error, 2)
+	var wg sync.WaitGroup
+	wg.Add(2)
 
-	_, err = redis.InitRedis()
-	if err != nil {
-		zap.L().Error("Redis连接失败", zap.Error(err))
+	go func() {
+		defer wg.Done()
+		_, err := database.InitializeDB()
+		if err != nil {
+			errorChannel <- err
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		_, err := redis.InitRedis()
+		if err != nil {
+			errorChannel <- err
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errorChannel)
+	}()
+
+	for err := range errorChannel {
+		if err != nil {
+			zap.L().Error("初始化数据库或Redis失败", zap.Error(err))
+			return
+		}
 	}
 
 	route := router.SetupRouters()
 
-	err = route.Run(fmt.Sprintf("0.0.0.0:%d", config.AppConfig.Port))
+	err = route.Run(fmt.Sprintf("%s:%d", config.AppConfig.Address, config.AppConfig.Port))
 	if err != nil {
 		zap.L().Error("服务器连接失败", zap.Error(err))
 		return

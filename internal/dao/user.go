@@ -67,10 +67,10 @@ func ModifyUserProfile(requestModel *model.UserReq, userID uint) error {
 }
 
 // GetReserve 用于获取用户的预约信息
-func GetReserve(idUint uint) ([]model.Reserve, error) {
+func GetReserve(idUint uint, pageSize int, pageNum int) ([]model.Reserve, error) {
 	db := database.Database
 	var reserve []model.Reserve
-	result := db.Where("user_id = ?", idUint).Find(&reserve)
+	result := db.Where("user_id = ?", idUint).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&reserve)
 	return reserve, result.Error
 }
 
