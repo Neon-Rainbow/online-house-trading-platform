@@ -1,9 +1,10 @@
 package dao
 
 import (
-	"gorm.io/gorm"
 	"online-house-trading-platform/pkg/database"
 	"online-house-trading-platform/pkg/model"
+
+	"gorm.io/gorm"
 )
 
 func CreateLoginRecord(record *model.LoginRecord) error {
@@ -15,6 +16,7 @@ func CreateLoginRecord(record *model.LoginRecord) error {
 	return nil
 }
 
+// GetLoginRecord 用于获取用户的登录记录
 func GetLoginRecord(id string, pageSize int, pageNum int) ([]model.LoginRecord, error) {
 	db := database.Database
 	var records []model.LoginRecord
@@ -28,6 +30,16 @@ func GetLoginRecord(id string, pageSize int, pageNum int) ([]model.LoginRecord, 
 		return nil, result.Error
 	}
 	return records, nil
+}
+
+func GetUserRecentlyLoginRecord(id string) (*model.LoginRecord, error) {
+	db := database.Database
+	var record model.LoginRecord
+	result := db.Where("user_id = ?", id).Limit(1).Order("update_at desc").First(&record)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &record, nil
 }
 
 func GetAllLoginRecords(pageSize int, pageNum int) ([]model.LoginRecord, error) {
