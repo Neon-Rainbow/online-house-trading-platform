@@ -1,8 +1,11 @@
 package controller
 
 import (
+	"context"
+	"errors"
 	"io/ioutil"
 	"online-house-trading-platform/codes"
+	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -10,28 +13,36 @@ import (
 )
 
 func DeleteLogFile(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
 	errorChannel := make(chan error, 2)
-	doneChannel := make(chan bool, 2)
+
+	var wg sync.WaitGroup
+	wg.Add(2)
 
 	go func() {
-		err := clearFileContent("./application.log")
+		defer wg.Done()
+		err := clearFileContent(ctx, "./application.log")
 		if err != nil {
 			errorChannel <- err
+			return
 		}
-		doneChannel <- true
+		return
 	}()
 
 	go func() {
-		err := clearFileContent("./formatted_application.log")
+		defer wg.Done()
+		err := clearFileContent(ctx, "./formatted_application.log")
 		if err != nil {
 			errorChannel <- err
+			return
 		}
-		doneChannel <- true
+		return
 	}()
 
 	go func() {
-		<-doneChannel
-		<-doneChannel
+		wg.Wait()
 		close(errorChannel)
 	}()
 
@@ -42,17 +53,27 @@ func DeleteLogFile(c *gin.Context) {
 			ResponseErrorWithCode(c, codes.LoginServerBusy)
 			return
 		}
-	case <-time.After(10 * time.Second):
-		zap.L().Error("DeleteLogFile exceeded time limit")
-		ResponseTimeout(c)
+	case <-ctx.Done():
+		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+			zap.L().Error("DeleteLogFile exceeded time limit")
+			ResponseTimeout(c)
+		} else {
+			zap.L().Error("DeleteLogFile context error", zap.Error(ctx.Err()))
+			ResponseErrorWithCode(c, codes.LoginServerBusy)
+		}
 		return
 	}
 
 	ResponseSuccess(c, nil)
-	return
 }
 
-func clearFileContent(filePath string) error {
+func clearFileContent(ctx context.Context, filePath string) error {
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	default:
+	}
+
 	content, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return err
