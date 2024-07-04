@@ -69,15 +69,17 @@ func HousesAppointmentPost(c *gin.Context) {
 	select {
 	case <-resultChannel:
 		ResponseSuccess(c, nil)
+		return
 	case apiError := <-errorChannel:
 		zap.L().Error("HousesAppointmentPost: logic.AppointmentHandle failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
 		)
 		ResponseError(c, *apiError)
+		return
 	case <-time.After(10 * time.Second):
 		ResponseTimeout(c)
+		return
 	}
-	return
 
 	//apiError := logic.AppointmentHandle(&reserve)
 

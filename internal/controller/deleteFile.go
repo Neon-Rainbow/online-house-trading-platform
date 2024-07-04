@@ -57,14 +57,16 @@ func DeleteLogFile(c *gin.Context) {
 		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
 			zap.L().Error("DeleteLogFile exceeded time limit")
 			ResponseTimeout(c)
+			return
 		} else {
 			zap.L().Error("DeleteLogFile context error", zap.Error(ctx.Err()))
 			ResponseErrorWithCode(c, codes.LoginServerBusy)
+			return
 		}
-		return
 	}
 
 	ResponseSuccess(c, nil)
+	return
 }
 
 func clearFileContent(ctx context.Context, filePath string) error {

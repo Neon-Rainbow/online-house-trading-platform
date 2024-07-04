@@ -118,14 +118,17 @@ func AdminLogin(c *gin.Context) {
 	select {
 	case loginResp := <-resultCh:
 		ResponseSuccess(c, loginResp)
+		return
 	case apiError := <-errorCh:
 		zap.L().Error("LoginPost: logic.LoginHandle failed",
 			zap.Int("错误码", apiError.StatusCode.Int()),
 			zap.Any("loginReq", loginReq),
 		)
 		ResponseError(c, *apiError)
+		return
 	case <-time.After(10 * time.Second):
 		ResponseTimeout(c)
+		return
 	}
 	return
 
