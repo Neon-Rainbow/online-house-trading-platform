@@ -17,23 +17,25 @@ import (
 func ProcessHouseAndImages(req *model.HouseRequest) *model.Error {
 
 	// 创建房屋记录
-	house := model.House{
-		Owner:            req.Owner,
-		OwnerID:          req.OwnerID,
-		Title:            req.Title,
-		Description:      req.Description,
-		Price:            req.Price,
-		Address:          req.Address,
-		HouseOrientation: req.HouseOrientation,
-		Layout:           req.Layout,
-		Area:             req.Area,
-		Floor:            req.Floor,
-		RentPrice:        req.RentPrice,
-		Type:             req.Type,
-		PostCode:         req.PostCode,
-	}
+	house := req.ConvertToHouseModel()
 
-	err := dao.CreateHouse(&house)
+	//house := model.House{
+	//	Owner:            req.Owner,
+	//	OwnerID:          req.OwnerID,
+	//	Title:            req.Title,
+	//	Description:      req.Description,
+	//	Price:            req.Price,
+	//	Address:          req.Address,
+	//	HouseOrientation: req.HouseOrientation,
+	//	Layout:           req.Layout,
+	//	Area:             req.Area,
+	//	Floor:            req.Floor,
+	//	RentPrice:        req.RentPrice,
+	//	Type:             req.Type,
+	//	PostCode:         req.PostCode,
+	//}
+
+	err := dao.CreateHouse(house)
 	if err != nil {
 		return &model.Error{StatusCode: codes.CreateHouseError, Message: "创建房屋记录失败"}
 	}

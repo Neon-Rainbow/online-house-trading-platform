@@ -32,21 +32,23 @@ func RegisterHandle(req model.RegisterRequest) *model.Error {
 	//	Role:     req.Role,
 	//}
 
-	user := model.User{
-		Username:     req.Username,
-		Password:     EncryptPassword(req.Password),
-		Email:        req.Email,
-		Role:         req.Role,
-		PhoneNumber:  req.PhoneNumber,
-		Sex:          req.Sex,
-		Province:     req.Province,
-		City:         req.City,
-		Identity:     req.Identity,
-		QQNumber:     req.QQNumber,
-		WechatNumber: req.WechatNumber,
-	}
+	user := req.ConvertUserModelWithoutAvatar()
 
-	err = dao.CreateUser(&user)
+	//user := model.User{
+	//	Username:     req.Username,
+	//	Password:     EncryptPassword(req.Password),
+	//	Email:        req.Email,
+	//	Role:         req.Role,
+	//	PhoneNumber:  req.PhoneNumber,
+	//	Sex:          req.Sex,
+	//	Province:     req.Province,
+	//	City:         req.City,
+	//	Identity:     req.Identity,
+	//	QQNumber:     req.QQNumber,
+	//	WechatNumber: req.WechatNumber,
+	//}
+
+	err = dao.CreateUser(user)
 	if err != nil {
 		return &model.Error{StatusCode: codes.RegisterCreateUserError}
 	}
