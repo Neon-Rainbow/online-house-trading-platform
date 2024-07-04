@@ -3,9 +3,12 @@ package controller
 import (
 	"context"
 	"errors"
+	"fmt"
 	"online-house-trading-platform/codes"
 	"online-house-trading-platform/internal/dao"
+	"online-house-trading-platform/internal/logic"
 	"online-house-trading-platform/pkg/model"
+	"os"
 	"strconv"
 	"time"
 
@@ -86,6 +89,40 @@ func GetAllLoginRecords(c *gin.Context) {
 			return
 		}
 	}
+	return
+}
 
+// GetLoginRecordToExcel 用于下载用户的excel的登录记录
+func GetLoginRecordToExcel(c *gin.Context) {
+	userID := c.Param("user_id")
+	pageSize, _ := strconv.Atoi(c.Query("page_size"))
+	pageNum, _ := strconv.Atoi(c.Query("page_num"))
+
+	loginRecords, err := dao.GetLoginRecord(userID, pageSize, pageNum)
+	if err != nil {
+		zap.L().Error("GetUserLoginRecordByUserID: dao.GetUserLoginRecordByUserID failed",
+			zap.Error(err),
+			zap.String("user_id", userID),
+		)
+		ResponseErrorWithCode(c, codes.LoginServerBusy)
+		return
+	}
+
+	filename := logic.ExportLoginRecordsToExcel(loginRecords)
+
+	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
+	c.Header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+	c.File(filename)
+	ResponseSuccess(c, nil)
+	// 返回excel文件后删除该文件
+	err = os.Remove(filename)
+	if err != nil {
+		ResponseError(c, model.Error{
+			StatusCode: codes.LoginServerBusy,
+			Message:    "删除文件失败",
+		})
+		zap.L().Error("GetLoginRecordToExcel: remove file failed")
+		return
+	}
 	return
 }

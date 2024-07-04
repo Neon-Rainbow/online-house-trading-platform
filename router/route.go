@@ -50,6 +50,7 @@ func setupUserAPI(r *gin.Engine) {
 		userGroup.POST("/delete_appointment", controller.DeleteAppointment)
 		userGroup.POST("/delete_account", controller.DeleteUserAccountByUserID)
 		userGroup.GET("/get_login_record", controller.GetUserLoginRecordByUserID)
+		userGroup.GET("/get_login_record_excel", controller.GetLoginRecordToExcel)
 		userGroup.GET("/get_viewing_record", controller.GetUserViewingRecordsByUserID)
 	}
 	userProfileGroup := r.Group("/user/:user_id/profile").Use(
