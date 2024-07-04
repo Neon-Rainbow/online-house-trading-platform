@@ -32,7 +32,7 @@ func GetAllHouses(c *gin.Context) {
 	return
 }
 
-// GetHouseInfomationByHouseID 用于获取某个房屋的详细信息
+// GetHouseInformationByHouseID 用于获取某个房屋的详细信息
 // @Summary 获取某个房屋的详细信息
 // @Description 获取某个房屋的详细信息
 // @Tags 房屋
@@ -43,11 +43,11 @@ func GetAllHouses(c *gin.Context) {
 // @Success 200 {object} controller.ResponseData "获取成功"
 // @failure 200 {object} controller.ResponseData "获取失败"
 // @Router /house/{house_id} [get]
-func GetHouseInfomationByHouseID(c *gin.Context) {
+func GetHouseInformationByHouseID(c *gin.Context) {
 	houseID := c.Param("house_id")
 	houseIDUint, err := strconv.ParseUint(houseID, 10, 64)
 	if err != nil {
-		zap.L().Error("GetHouseInfomationByHouseID: strconv.ParseUint failed",
+		zap.L().Error("GetHouseInformationByHouseID: strconv.ParseUint failed",
 			zap.String("错误码", strconv.FormatInt(int64(codes.HouseIDInvalid), 10)),
 			zap.String("house_id", houseID),
 		)

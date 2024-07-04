@@ -29,7 +29,7 @@ func setupHouseAPI(r *gin.Engine) {
 	housesGroup := r.Group("/houses")
 	{
 		housesGroup.GET("/", controller.GetAllHouses)
-		housesGroup.GET("/:house_id", middleware.JWTAuthMiddleware(), controller.GetHouseInfomationByHouseID)
+		housesGroup.GET("/:house_id", middleware.JWTAuthMiddleware(), controller.GetHouseInformationByHouseID)
 		housesGroup.POST("/appointment", middleware.JWTAuthMiddleware(), controller.HousesAppointmentPost)
 		housesGroup.POST("/collect", middleware.JWTAuthMiddleware(), controller.CollectPost)
 	}
@@ -78,7 +78,7 @@ func setupAdminAPI(r *gin.Engine) {
 		adminGroup.POST("/users/:user_id/delete_user_account", controller.DeleteUserAccountByUserID)
 
 		adminGroup.GET("/houses", controller.GetAllHousesInformation)
-		adminGroup.GET("/houses/:house_id", controller.GetHouseInfomationByHouseID)
+		adminGroup.GET("/houses/:house_id", controller.GetHouseInformationByHouseID)
 		adminGroup.POST("/houses/:house_id/delete_house", controller.DeleteHouseInformationByHouseID)
 
 		adminGroup.GET("/appointments", controller.GetAllAppointments)
