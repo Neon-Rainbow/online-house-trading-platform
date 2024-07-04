@@ -36,6 +36,22 @@ type RegisterRequest struct {
 	Avatar       *multipart.FileHeader `json:"avatar" form:"avatar" `
 }
 
+func (r *RegisterRequest) ConvertUserModelWithoutAvatar() *User {
+	return &User{
+		Username:     r.Username,
+		Password:     r.Password,
+		Email:        r.Email,
+		Role:         r.Role,
+		PhoneNumber:  r.PhoneNumber,
+		Sex:          r.Sex,
+		Province:     r.Province,
+		City:         r.City,
+		Identity:     r.Identity,
+		QQNumber:     r.QQNumber,
+		WechatNumber: r.WechatNumber,
+	}
+}
+
 type AdminRegisterRequest struct {
 	Username     string                `json:"username" form:"username"`
 	Password     string                `json:"password" form:"password"`
@@ -68,6 +84,26 @@ type HouseRequest struct {
 	Type             string                  `json:"type" form:"type"`                           // Type 房屋类型
 	PostCode         string                  `json:"post_code" form:"post_code"`                 // PostCode 房屋邮编
 	Images           []*multipart.FileHeader `json:"images" form:"images"`                       // 房屋相关的图片文件列表
+}
+
+// ConvertToHouseModel 将 HouseRequest 转换为 House 模型
+func (req *HouseRequest) ConvertToHouseModel() *House {
+	house := &House{
+		Owner:            req.Owner,
+		OwnerID:          req.OwnerID,
+		Title:            req.Title,
+		Description:      req.Description,
+		Price:            req.Price,
+		Address:          req.Address,
+		HouseOrientation: req.HouseOrientation,
+		Layout:           req.Layout,
+		Area:             req.Area,
+		Floor:            req.Floor,
+		RentPrice:        req.RentPrice,
+		Type:             req.Type,
+		PostCode:         req.PostCode,
+	}
+	return house
 }
 
 type HouseUpdateRequest struct {
