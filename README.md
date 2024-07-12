@@ -1,5 +1,16 @@
 # 在线房屋交易平台
 
+本项目为苏州大学 综合项目实践 SOEN2014 课程作业
+
+本人负责完成项目的后端部分
+
+马后炮的说,这个项目其实有点简陋.双token刷新是项目ddl一周之前完成的,项目本来初始设计时是有复杂的权限校验模块以及在线聊天模块的,可惜这两个在项目中都为能实现.其中权限校验模块中,由于管理员的一些接口是在项目ddl前一个月的时候做完的,在线聊天功能当时不会websocket,也没搞出来.可能因为这两个模块未完成导致最终这个项目的得分并不够高.在暑假时,我重新设计了权限校验模块以及使用websocket的在线交流模块,项目地址分别如下:
+
++   权限校验模块 [Github](https://github.com/Neon-Rainbow/JWT_authorization) [Gitee](https://gitee.com/Aspirin-Byte/JWT_authorization)
++   在线聊天模块 [GitHub](https://github.com/Neon-Rainbow/Gin_Websocket_Chat) [Gitee](https://gitee.com/Aspirin-Byte/Gin_Websocket_Chat)
+
+其中权限校验模块提供了完整的HTTP接口以及gRPC接口
+
 # Online House Trading Platform
 
 ![Top Language](https://img.shields.io/github/languages/top/Neon-Rainbow/online-house-trading-platform)
